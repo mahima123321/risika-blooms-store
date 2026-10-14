@@ -18,7 +18,7 @@ export default function InstagramFeed() {
     {
       id: 1,
       image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80",
-      caption: "50 Velvet Red Dutch Roses with Gold Edge Wrapping ✨ #RisikaBlooms #LuxuryFlowers",
+      caption: "50 Velvet Red Dutch Roses with Gold Edge Wrapping ✨ #RoshikaBlooms #LuxuryFlowers",
       likes: 1240,
       linkCategory: "rose-bouquets"
     },
@@ -63,7 +63,7 @@ export default function InstagramFeed() {
     <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-alt)' }}>
       <div className="container">
         <div className="section-header">
-          <span className="section-pretitle">@risikablooms on Instagram</span>
+          <span className="section-pretitle">@roshikablooms on Instagram</span>
           <h2 className="section-title">Follow Our Floral Odyssey</h2>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
@@ -71,7 +71,7 @@ export default function InstagramFeed() {
             <span className="floral-divider-line"></span>
           </div>
           <p className="section-subtitle">
-            Tag #RisikaBlooms to be featured in our curated floral gallery.
+            Tag #RoshikaBlooms to be featured in our curated floral gallery.
           </p>
         </div>
 
@@ -142,7 +142,7 @@ export default function InstagramFeed() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <span className="rose-badge">
-                  <InstagramIcon size={13} /> @risikablooms
+                  <InstagramIcon size={13} /> @roshikablooms
                 </span>
                 <button className="drawer-close-btn" onClick={() => setSelectedPost(null)}>
                   <X size={18} />

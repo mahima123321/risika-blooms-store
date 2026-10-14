@@ -118,7 +118,7 @@ export default function DeliveryInfoPage() {
             Temperature-Controlled Transit & Packaging Guarantee
           </h3>
           <p style={{ marginBottom: '1rem' }}>
-            At RISIKA BLOOMS, we treat every flower stem like a piece of fine jewelry. Unlike standard couriers who throw parcels into hot cargo vans, our orders travel in climate-controlled floral transport equipped with hydration gel caps on every stem.
+            At ROSHIKA BLOOMS, we treat every flower stem like a piece of fine jewelry. Unlike standard couriers who throw parcels into hot cargo vans, our orders travel in climate-controlled floral transport equipped with hydration gel caps on every stem.
           </p>
           <ul style={{ paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <li><strong>Hydration Pack:</strong> Keeps flowers drinking water throughout transit.</li>

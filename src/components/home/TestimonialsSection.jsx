@@ -23,7 +23,7 @@ export default function TestimonialsSection() {
       name: "Dr. Ananya Sen",
       location: "Indiranagar, Bengaluru",
       occasion: "Sister's Baby Shower",
-      quote: "The teddy combo and pastel blush flowers were so cute and meticulously crafted. You can immediately tell the difference between ordinary roadside florists and RISIKA BLOOMS.",
+      quote: "The teddy combo and pastel blush flowers were so cute and meticulously crafted. You can immediately tell the difference between ordinary roadside florists and ROSHIKA BLOOMS.",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
     }

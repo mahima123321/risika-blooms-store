@@ -1,20 +1,20 @@
-// Brand Configuration for RISIKA BLOOMS
+// Brand Configuration for ROSHIKA BLOOMS
 export const BRAND_CONFIG = {
-  name: "RISIKA BLOOMS",
+  name: "ROSHIKA BLOOMS",
   tagline: "Every Bloom Tells a Story.",
   taglineHindi: "हर फूल सुनाए एक अनूठी कहानी।",
   established: "2024",
   currency: "₹",
   phone: "+91 98765 43210",
   whatsappNumber: "919876543210", // International format without '+' for wa.me URL
-  email: "care@risikablooms.com",
-  conciergeEmail: "concierge@risikablooms.com",
+  email: "care@roshikablooms.com",
+  conciergeEmail: "concierge@roshikablooms.com",
   address: "Flagship Floral Atelier, Plot 42, Lotus Boulevard, Vasant Kunj, New Delhi, India - 110070",
   hours: "Mon - Sun: 7:00 AM - 11:30 PM (Midnight Delivery Available)",
   socials: {
-    instagram: "https://instagram.com/risikablooms",
-    facebook: "https://facebook.com/risikablooms",
-    pinterest: "https://pinterest.com/risikablooms",
+    instagram: "https://instagram.com/roshikablooms",
+    facebook: "https://facebook.com/roshikablooms",
+    pinterest: "https://pinterest.com/roshikablooms",
     whatsapp: "https://wa.me/919876543210"
   },
   delivery: {
@@ -48,9 +48,9 @@ export const TRANSLATIONS = {
     premiumCollection: "Premium Collection",
     shopByOccasion: "Shop by Occasion",
     shopByBudget: "Shop by Budget",
-    whyChooseUs: "The RISIKA BLOOMS Promise",
+    whyChooseUs: "The ROSHIKA BLOOMS Promise",
     testimonials: "What Our Patrons Say",
-    instagramTitle: "Follow Our Floral Journey @risikablooms",
+    instagramTitle: "Follow Our Floral Journey @roshikablooms",
     newsletterTitle: "Join the Bloom Concierge Club",
     newsletterSub: "Receive exclusive floral styling guides, secret sales & ₹200 off your first bouquet.",
     subscribe: "Subscribe",
@@ -107,9 +107,9 @@ export const TRANSLATIONS = {
     premiumCollection: "प्रीमियम संग्रह",
     shopByOccasion: "अवसर के अनुसार खरीदें",
     shopByBudget: "बजट के अनुसार खरीदें",
-    whyChooseUs: "ऋषिका ब्लूम्स का वादा",
+    whyChooseUs: "रोशिका ब्लूम्स का वादा",
     testimonials: "हमारे ग्राहकों के अनुभव",
-    instagramTitle: "इंस्टाग्राम पर हमसे जुड़ें @risikablooms",
+    instagramTitle: "इंस्टाग्राम पर हमसे जुड़ें @roshikablooms",
     newsletterTitle: "ब्लूम क्लब से जुड़ें",
     newsletterSub: "विशेष ऑफ़र और अपने पहले ऑर्डर पर ₹200 की छूट पाएं।",
     subscribe: "सब्सक्राइब करें",

@@ -66,10 +66,10 @@ export default function OwnerSettingsModal() {
     if (brandConfig) {
       setWhatsappNumber(brandConfig.whatsappNumber || '919876543210');
       setPhone(brandConfig.phone || '+91 98765 43210');
-      setEmail(brandConfig.email || 'care@risikablooms.com');
-      setUpiId(brandConfig.upiId || 'risikablooms@upi');
+      setEmail(brandConfig.email || 'care@roshikablooms.com');
+      setUpiId(brandConfig.upiId || 'roshikablooms@upi');
 
-      setStoreName(brandConfig.name || 'RISIKA BLOOMS');
+      setStoreName(brandConfig.name || 'ROSHIKA BLOOMS');
       setTagline(brandConfig.tagline || 'Every Bloom Tells a Story.');
       setTaglineHindi(brandConfig.taglineHindi || 'हर फूल सुनाए एक अनूठी कहानी।');
       setAddress(brandConfig.address || '');
@@ -112,7 +112,7 @@ export default function OwnerSettingsModal() {
   const handleSaveStore = (e) => {
     e.preventDefault();
     updateBrandConfig({
-      name: storeName.trim() || 'RISIKA BLOOMS',
+      name: storeName.trim() || 'ROSHIKA BLOOMS',
       tagline: tagline.trim(),
       taglineHindi: taglineHindi.trim(),
       address: address.trim(),
@@ -162,7 +162,7 @@ export default function OwnerSettingsModal() {
   // Test WhatsApp Link
   const handleTestWhatsApp = () => {
     const cleanWa = whatsappNumber.replace(/[^0-9]/g, '');
-    const url = createWhatsAppUrl('Hello! This is a test message from RISIKA BLOOMS Owner Studio.', cleanWa);
+    const url = createWhatsAppUrl('Hello! This is a test message from ROSHIKA BLOOMS Owner Studio.', cleanWa);
     window.open(url, '_blank');
   };
 
@@ -316,7 +316,7 @@ export default function OwnerSettingsModal() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="care@risikablooms.com"
+                  placeholder="care@roshikablooms.com"
                   className="owner-input-field"
                 />
               </div>
@@ -329,7 +329,7 @@ export default function OwnerSettingsModal() {
                   type="text"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
-                  placeholder="e.g. 9876543210@paytm or risikablooms@upi"
+                  placeholder="e.g. 9876543210@paytm or roshikablooms@upi"
                   className="owner-input-field"
                 />
                 <span className="owner-field-hint">
@@ -398,7 +398,7 @@ export default function OwnerSettingsModal() {
                   type="text"
                   value={storeName}
                   onChange={(e) => setStoreName(e.target.value)}
-                  placeholder="RISIKA BLOOMS"
+                  placeholder="ROSHIKA BLOOMS"
                   className="owner-input-field"
                   required
                 />

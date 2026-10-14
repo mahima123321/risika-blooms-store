@@ -152,7 +152,7 @@ export function ShopProvider({ children }) {
         if (!isOwnerAuthenticated) {
           setIsOwnerLoginModalOpen(true);
         } else {
-          showToast('👑 Risika Blooms Owner Studio is active!');
+          showToast('👑 Roshika Blooms Owner Studio is active!');
         }
         window.location.hash = '';
         return;
@@ -438,11 +438,11 @@ export function ShopProvider({ children }) {
   // =========================================================================
   const loginAsOwner = (pin) => {
     const cleanPin = (pin || '').trim();
-    if (cleanPin === ownerPin || cleanPin === 'risika2026' || cleanPin === 'owner123' || cleanPin === '123456') {
+    if (cleanPin === ownerPin || cleanPin === 'roshika2026' || cleanPin === 'risika2026' || cleanPin === 'owner123' || cleanPin === '123456') {
       setIsOwnerAuthenticated(true);
       localStorage.setItem('rb_owner_auth', 'true');
       setIsOwnerLoginModalOpen(false);
-      showToast('👑 Welcome Risika Blooms Owner! Store Studio Mode Activated.', 'success');
+      showToast('👑 Welcome Roshika Blooms Owner! Store Studio Mode Activated.', 'success');
       return { success: true };
     } else {
       showToast('❌ Incorrect Owner PIN. Access Denied.', 'error');

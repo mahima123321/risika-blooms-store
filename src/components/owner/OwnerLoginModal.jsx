@@ -48,7 +48,7 @@ export default function OwnerLoginModal() {
             <Sparkles size={11} /> Authorized Owner Access Only
           </span>
           <h2 className="font-serif-editorial" style={{ fontSize: '1.75rem', marginBottom: '0.3rem' }}>
-            RISIKA BLOOMS Owner Portal
+            ROSHIKA BLOOMS Owner Portal
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
             केवल ओनर ही बुके की नई तस्वीरें और कीमतें (Prices) जोड़ या बदल सकते हैं।

@@ -54,7 +54,7 @@ export function buildProductWhatsAppMessage({
 }) {
   const totalPrice = unitPrice * quantity + (addOns.reduce((acc, curr) => acc + curr.price, 0));
 
-  let msg = `🌸 *NEW ORDER INQUIRY — RISIKA BLOOMS* 🌸\n`;
+  let msg = `🌸 *NEW ORDER INQUIRY — ROSHIKA BLOOMS* 🌸\n`;
   msg += `─────────────────────────\n`;
   msg += `🌹 *Product:* ${product.name}\n`;
   if (selectedColor) msg += `🎨 *Selected Color:* ${selectedColor}\n`;
@@ -108,7 +108,7 @@ export function buildCartWhatsAppMessage({
   deliverySlot = "Standard Delivery (1 PM - 5 PM)",
   giftMessage = ""
 }) {
-  let msg = `🌸 *COMPLETE SHOPPING BAG ORDER — RISIKA BLOOMS* 🌸\n`;
+  let msg = `🌸 *COMPLETE SHOPPING BAG ORDER — ROSHIKA BLOOMS* 🌸\n`;
   msg += `─────────────────────────\n`;
   msg += `🛍️ *Order Items (${cartItems.length}):*\n\n`;
 
@@ -145,7 +145,7 @@ export function buildCartWhatsAppMessage({
   }
 
   msg += `─────────────────────────\n`;
-  msg += `_I would like to place this order with RISIKA BLOOMS. Please verify availability and share payment link._`;
+  msg += `_I would like to place this order with ROSHIKA BLOOMS. Please verify availability and share payment link._`;
 
   return msg;
 }
@@ -164,7 +164,7 @@ export function buildCustomBouquetWhatsAppMessage({
   pincode = "",
   deliveryDate = ""
 }) {
-  let msg = `🎨 *CUSTOM BESPOKE BOUQUET CREATION — RISIKA BLOOMS* 🎨\n`;
+  let msg = `🎨 *CUSTOM BESPOKE BOUQUET CREATION — ROSHIKA BLOOMS* 🎨\n`;
   msg += `─────────────────────────\n`;
   msg += `🌸 *Floral Composition:*\n`;
   stemsSummary.forEach(stem => {

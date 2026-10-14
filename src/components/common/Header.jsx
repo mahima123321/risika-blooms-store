@@ -312,7 +312,7 @@ export default function Header() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
               <h3 className="font-serif-editorial" style={{ fontSize: '1.4rem' }}>
-                Search RISIKA BLOOMS
+                Search ROSHIKA BLOOMS
               </h3>
               <button 
                 className="drawer-close-btn" 

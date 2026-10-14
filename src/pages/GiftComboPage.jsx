@@ -38,7 +38,7 @@ export default function GiftComboPage() {
   };
 
   const handleWhatsAppOrder = () => {
-    let msg = `🌸 *CUSTOM LUXURY GIFT COMBO ORDER — RISIKA BLOOMS* 🌸\n`;
+    let msg = `🌸 *CUSTOM LUXURY GIFT COMBO ORDER — ROSHIKA BLOOMS* 🌸\n`;
     msg += `─────────────────────────\n`;
     msg += `💐 *Flower Base:* ${selectedBase.name} (₹${selectedBase.price})\n`;
     msg += `🧸 *Teddy Bear:* ${selectedTeddy.name} (₹${selectedTeddy.price})\n`;

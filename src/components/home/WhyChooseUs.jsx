@@ -30,7 +30,7 @@ export default function WhyChooseUs() {
       <div className="container">
         <div className="section-header">
           <span className="section-pretitle">The Excellence Standard</span>
-          <h2 className="section-title">The RISIKA BLOOMS Promise</h2>
+          <h2 className="section-title">The ROSHIKA BLOOMS Promise</h2>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
             <span className="floral-divider-icon">👑</span>

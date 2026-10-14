@@ -61,7 +61,7 @@ export default function ContactPage() {
   };
 
   const handleWhatsAppChat = () => {
-    const url = createWhatsAppUrl("Hello RISIKA BLOOMS concierge! I would like to inquire about floral delivery.");
+    const url = createWhatsAppUrl("Hello ROSHIKA BLOOMS concierge! I would like to inquire about floral delivery.");
     window.open(url, '_blank');
   };
 
@@ -72,7 +72,7 @@ export default function ContactPage() {
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <span className="section-pretitle">Concierge & Assistance</span>
           <h1 className="font-serif-editorial" style={{ fontSize: '3.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-            Contact RISIKA BLOOMS
+            Contact ROSHIKA BLOOMS
           </h1>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>

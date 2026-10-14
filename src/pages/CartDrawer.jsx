@@ -407,7 +407,7 @@ export default function CartDrawer() {
                 </div>
 
                 <h3 className="font-serif-editorial" style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
-                  RISIKA BLOOMS Pay
+                  ROSHIKA BLOOMS Pay
                 </h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
                   Amount payable: <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>₹{cartTotal}</strong>

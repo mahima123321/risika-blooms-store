@@ -8,7 +8,7 @@ export default function AboutPage() {
   const { language, navigateTo, brandConfig } = useShop();
 
   const handleWhatsAppConsult = () => {
-    const url = createWhatsAppUrl("Hello RISIKA BLOOMS! I'd like to book a floral consultation with your master florist.");
+    const url = createWhatsAppUrl("Hello ROSHIKA BLOOMS! I'd like to book a floral consultation with your master florist.");
     window.open(url, '_blank');
   };
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
               Where Emotion Meets Botanical Haute Couture
             </h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: '1rem', fontSize: '1rem' }}>
-              Founded with the conviction that flowers are nature's most eloquent poetry, <strong>RISIKA BLOOMS</strong> was born to elevate gifting into an art form. We rejected mass-produced, tired roadside bouquets wrapped in flimsy plastic in favour of bespoke luxury aesthetics.
+              Founded with the conviction that flowers are nature's most eloquent poetry, <strong>ROSHIKA BLOOMS</strong> was born to elevate gifting into an art form. We rejected mass-produced, tired roadside bouquets wrapped in flimsy plastic in favour of bespoke luxury aesthetics.
             </p>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '1rem' }}>
               Every rose petal, lily blossom, and hydrangea cloud is hand-selected from sustainable, ethical greenhouses in the Netherlands, Ecuador, and the misty hills of the Nilgiris.
@@ -112,7 +112,7 @@ export default function AboutPage() {
             "When words fall short, the language of freshly unfurled petals speaks with timeless grace. Every bouquet we wrap carries someone's heartfelt devotion, apology, or joy."
           </p>
           <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-gold)', letterSpacing: '0.05em' }}>
-            RISIKA BLOOMS FLORAL ATELIER
+            ROSHIKA BLOOMS FLORAL ATELIER
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
             New Delhi • Mumbai • Bengaluru
