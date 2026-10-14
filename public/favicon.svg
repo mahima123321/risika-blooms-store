@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9D423" />
+      <stop offset="50%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#AA771C" />
+    </linearGradient>
+    <linearGradient id="rose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9A9E" />
+      <stop offset="50%" stop-color="#E892A2" />
+      <stop offset="100%" stop-color="#8B263E" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="#1A0A10" stroke="url(#gold)" stroke-width="2.5" />
+  <!-- Floral Petals -->
+  <path d="M50 20 C58 35 62 42 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.9" />
+  <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.75" transform="rotate(60 50 50)" />
+  <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.75" transform="rotate(120 50 50)" />
+  <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.75" transform="rotate(180 50 50)" />
+  <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.75" transform="rotate(240 50 50)" />
+  <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#rose)" opacity="0.75" transform="rotate(300 50 50)" />
+  <circle cx="50" cy="50" r="14" fill="#1A0A10" stroke="url(#gold)" stroke-width="1.5" />
+  <text x="50" y="55" font-family="'Cinzel', serif" font-size="13" font-weight="bold" fill="url(#gold)" text-anchor="middle" letter-spacing="1">RB</text>
+</svg>
