@@ -61,7 +61,7 @@ export default function HeroSection() {
   const currentSlide = FEATURED_HERO_SLIDES[activeSlide];
 
   const handleWhatsAppInquiry = () => {
-    const url = createWhatsAppUrl("Hello ROSHIKA BLOOMS! I'd like to consult with a master florist for a luxury handcrafted bouquet delivery.");
+    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS! I'd like to consult with a master florist for a luxury handcrafted bouquet delivery.");
     window.open(url, '_blank');
   };
 

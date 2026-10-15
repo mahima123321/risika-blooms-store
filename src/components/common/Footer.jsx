@@ -29,7 +29,7 @@ export default function Footer() {
   };
 
   const handleWhatsAppChat = () => {
-    const url = createWhatsAppUrl("Hello ROSHIKA BLOOMS concierge! I have a question regarding floral gifting.");
+    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS concierge! I have a question regarding floral gifting.");
     window.open(url, '_blank');
   };
 
