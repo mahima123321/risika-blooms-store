@@ -1,6 +1,6 @@
-// Brand Configuration for ROSHIKA BLOOMS
+// Brand Configuration for RISHIKA BLOOMS
 export const BRAND_CONFIG = {
-  name: "ROSHIKA BLOOMS",
+  name: "RISHIKA BLOOMS",
   tagline: "Every Bloom Tells a Story.",
   taglineHindi: "हर फूल सुनाए एक अनूठी कहानी।",
   established: "2024",
@@ -13,9 +13,9 @@ export const BRAND_CONFIG = {
   address: "Flagship Floral Atelier, Plot 42, Lotus Boulevard, Vasant Kunj, New Delhi, India - 110070",
   hours: "Mon - Sun: 7:00 AM - 11:30 PM (Midnight Delivery Available)",
   socials: {
-    instagram: "https://instagram.com/roshikablooms",
-    facebook: "https://facebook.com/roshikablooms",
-    pinterest: "https://pinterest.com/roshikablooms",
+    instagram: "https://instagram.com/rishikablooms",
+    facebook: "https://facebook.com/rishikablooms",
+    pinterest: "https://pinterest.com/rishikablooms",
     whatsapp: "https://wa.me/919876543210"
   },
   delivery: {
@@ -49,9 +49,9 @@ export const TRANSLATIONS = {
     premiumCollection: "Premium Collection",
     shopByOccasion: "Shop by Occasion",
     shopByBudget: "Shop by Budget",
-    whyChooseUs: "The ROSHIKA BLOOMS Promise",
+    whyChooseUs: "The RISHIKA BLOOMS Promise",
     testimonials: "What Our Patrons Say",
-    instagramTitle: "Follow Our Floral Journey @roshikablooms",
+    instagramTitle: "Follow Our Floral Journey @rishikablooms",
     newsletterTitle: "Join the Bloom Concierge Club",
     newsletterSub: "Receive exclusive floral styling guides, secret sales & ₹200 off your first bouquet.",
     subscribe: "Subscribe",
@@ -108,9 +108,9 @@ export const TRANSLATIONS = {
     premiumCollection: "प्रीमियम संग्रह",
     shopByOccasion: "अवसर के अनुसार खरीदें",
     shopByBudget: "बजट के अनुसार खरीदें",
-    whyChooseUs: "रोशिका ब्लूम्स का वादा",
+    whyChooseUs: "ऋषिका ब्लूम्स का वादा",
     testimonials: "हमारे ग्राहकों के अनुभव",
-    instagramTitle: "इंस्टाग्राम पर हमसे जुड़ें @roshikablooms",
+    instagramTitle: "इंस्टाग्राम पर हमसे जुड़ें @rishikablooms",
     newsletterTitle: "ब्लूम क्लब से जुड़ें",
     newsletterSub: "विशेष ऑफ़र और अपने पहले ऑर्डर पर ₹200 की छूट पाएं।",
     subscribe: "सब्सक्राइब करें",
