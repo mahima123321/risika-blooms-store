@@ -5,9 +5,10 @@ import { createWhatsAppUrl, buildCartWhatsAppMessage } from '../config/whatsapp'
 import { 
   X, Plus, Minus, Trash2, ShoppingBag, MessageCircle, 
   CreditCard, Sparkles, Tag, CheckCircle2, ChevronRight, 
-  Clock, Truck, Calendar, MapPin, User, Gift 
+  Clock, Truck, Calendar, MapPin, User, Gift, ShieldCheck 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { sendOrderVerificationNotification, DEFAULT_VERIFICATION_EMAIL } from '../services/emailService';
 
 export default function CartDrawer() {
   const { 
@@ -47,6 +48,26 @@ export default function CartDrawer() {
   const handleWhatsAppCheckout = () => {
     if (cart.length === 0) return;
 
+    const orderId = `RB-${Math.floor(100000 + Math.random() * 900000)}`;
+    const targetEmail = brandConfig?.email || DEFAULT_VERIFICATION_EMAIL;
+
+    // Dispatch verified order notification to mahimakk18@gmail.com
+    sendOrderVerificationNotification({
+      orderId,
+      customerName,
+      recipientName,
+      recipientPhone,
+      deliveryAddress,
+      pincode,
+      deliveryDate,
+      deliverySlot,
+      giftMessage,
+      cartItems: cart,
+      total: cartTotal,
+      paymentMethod: "WhatsApp Instant Checkout",
+      targetEmail
+    });
+
     const msg = buildCartWhatsAppMessage({
       cartItems: cart,
       subtotal: cartSubtotal,
@@ -64,6 +85,7 @@ export default function CartDrawer() {
       giftMessage
     });
 
+    showToast(`🌸 Order #${orderId} verified and forwarded to ${targetEmail}!`, 'success');
     const url = createWhatsAppUrl(msg);
     window.open(url, '_blank');
     setIsCartOpen(false);
@@ -71,10 +93,31 @@ export default function CartDrawer() {
 
   const handleDemoPayment = () => {
     setIsProcessingDemo(true);
+    const orderId = `RB-${Math.floor(100000 + Math.random() * 900000)}`;
+    const targetEmail = brandConfig?.email || DEFAULT_VERIFICATION_EMAIL;
+
+    // Dispatch verified order notification to mahimakk18@gmail.com
+    sendOrderVerificationNotification({
+      orderId,
+      customerName,
+      recipientName,
+      recipientPhone,
+      deliveryAddress,
+      pincode,
+      deliveryDate,
+      deliverySlot,
+      giftMessage,
+      cartItems: cart,
+      total: cartTotal,
+      paymentMethod: "Demo Online Gateway (Simulated UPI/Card)",
+      targetEmail
+    });
+
     setTimeout(() => {
       setIsProcessingDemo(false);
       setDemoSuccess(true);
       clearCart();
+      showToast(`🎉 Order #${orderId} confirmed & dispatched to ${targetEmail}!`, 'success');
       try {
         confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
       } catch {}
@@ -355,6 +398,11 @@ export default function CartDrawer() {
                 <CreditCard size={16} />
                 <span>{t('demoCheckout')}</span>
               </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                <ShieldCheck size={13} color="var(--text-gold)" />
+                <span>Verified Atelier Dispatch: {brandConfig?.email || DEFAULT_VERIFICATION_EMAIL}</span>
+              </div>
             </div>
           </div>
         )}

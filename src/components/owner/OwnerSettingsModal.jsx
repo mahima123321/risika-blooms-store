@@ -6,8 +6,14 @@ import {
   X, Phone, MessageCircle, Mail, MapPin, Clock, 
   Sparkles, Shield, Lock, Eye, EyeOff, Save, RotateCcw, 
   DollarSign, Truck, AlertCircle, CheckCircle2, Search, 
-  Edit3, Trash2, Plus, Bell, Store, CreditCard
+  Edit3, Trash2, Plus, Bell, Store, CreditCard, Send, 
+  RefreshCw, Inbox
 } from 'lucide-react';
+import { 
+  sendTestVerificationEmail, 
+  getStoredVerifiedMessages, 
+  DEFAULT_VERIFICATION_EMAIL 
+} from '../../services/emailService';
 
 export default function OwnerSettingsModal() {
   const {
@@ -61,12 +67,17 @@ export default function OwnerSettingsModal() {
   const [catalogSearch, setCatalogSearch] = useState('');
   const [catalogCategory, setCatalogCategory] = useState('all');
 
+  // Email & Message Verification states
+  const [isTestingEmail, setIsTestingEmail] = useState(false);
+  const [testEmailResult, setTestEmailResult] = useState(null);
+  const [verifiedMessages, setVerifiedMessages] = useState(() => getStoredVerifiedMessages());
+
   // Populate from active brandConfig when opened
   useEffect(() => {
     if (brandConfig) {
       setWhatsappNumber(brandConfig.whatsappNumber || '919876543210');
       setPhone(brandConfig.phone || '+91 98765 43210');
-      setEmail(brandConfig.email || 'care@roshikablooms.com');
+      setEmail(brandConfig.email || DEFAULT_VERIFICATION_EMAIL);
       setUpiId(brandConfig.upiId || 'roshikablooms@upi');
 
       setStoreName(brandConfig.name || 'ROSHIKA BLOOMS');
@@ -166,6 +177,28 @@ export default function OwnerSettingsModal() {
     window.open(url, '_blank');
   };
 
+  // Refresh verified message inbox
+  const refreshMessages = () => {
+    setVerifiedMessages(getStoredVerifiedMessages());
+  };
+
+  // Test Email Verification Ping to mahimakk18@gmail.com
+  const handleTestEmailVerification = async () => {
+    const target = email.trim() || DEFAULT_VERIFICATION_EMAIL;
+    setIsTestingEmail(true);
+    setTestEmailResult(null);
+    try {
+      const res = await sendTestVerificationEmail(target);
+      setTestEmailResult(res);
+      showToast(`✅ Verification test message sent to ${target}!`, 'success');
+      refreshMessages();
+    } catch (err) {
+      showToast(`❌ Verification error: ${err.message}`, 'error');
+    } finally {
+      setIsTestingEmail(false);
+    }
+  };
+
   // Filter products for Catalog Manager
   const filteredCatalog = products.filter((p) => {
     if (catalogCategory !== 'all' && p.category !== catalogCategory) return false;
@@ -254,6 +287,15 @@ export default function OwnerSettingsModal() {
 
           <button
             type="button"
+            className={`owner-settings-tab ${activeTab === 'verification' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('verification'); refreshMessages(); }}
+          >
+            <Mail size={15} />
+            <span>ईमेल व वेरिफिकेशन</span>
+          </button>
+
+          <button
+            type="button"
             className={`owner-settings-tab ${activeTab === 'security' ? 'active' : ''}`}
             onClick={() => setActiveTab('security')}
           >
@@ -316,7 +358,7 @@ export default function OwnerSettingsModal() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="care@roshikablooms.com"
+                  placeholder="mahimakk18@gmail.com"
                   className="owner-input-field"
                 />
               </div>
@@ -771,6 +813,163 @@ export default function OwnerSettingsModal() {
               </div>
             </div>
           </form>
+        )}
+
+        {/* Tab 6: Email & Message Verification (mahimakk18@gmail.com) */}
+        {activeTab === 'verification' && (
+          <div className="owner-tab-content animate-fade-in">
+            <div className="owner-section-intro">
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.4rem' }} className="gold-badge">
+                <CheckCircle2 size={13} color="#16A34A" /> Active Verification Endpoint: {email || DEFAULT_VERIFICATION_EMAIL}
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.3rem' }}>
+                ✉️ {email || DEFAULT_VERIFICATION_EMAIL} मैसेज वेरिफिकेशन सेंटर
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                वेबसाइट के Contact Page व Checkout से आने वाले सभी संदेश, इन्क्वायरी और ऑर्डर सीधे <strong>{email || DEFAULT_VERIFICATION_EMAIL}</strong> पर वेरिफाई होकर पहुँचते हैं।
+              </p>
+            </div>
+
+            {/* Test Email Verification Box */}
+            <div className="owner-preview-callout" style={{ marginBottom: '1.5rem', background: 'var(--bg-accent-soft)', border: '1.5px solid var(--border-gold)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Send size={16} color="var(--text-gold)" /> टेस्ट मैसेज वेरिफिकेशन भेजें (Test Message Ping)
+                  </h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0 }}>
+                    सत्यापित करें कि <strong>{email || DEFAULT_VERIFICATION_EMAIL}</strong> पर संदेश सही से पहुंच रहे हैं।
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn btn-gold btn-sm"
+                  onClick={handleTestEmailVerification}
+                  disabled={isTestingEmail}
+                >
+                  {isTestingEmail ? (
+                    <>
+                      <RefreshCw size={14} className="animate-spin" />
+                      <span>Sending Test Ping...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={14} />
+                      <span>Send Test Verification to {email || DEFAULT_VERIFICATION_EMAIL}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {testEmailResult && (
+                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '0.82rem', color: '#16A34A', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckCircle2 size={16} />
+                  <span>
+                    ✓ Test verification #{testEmailResult.testCode} dispatched successfully to <strong>{email || DEFAULT_VERIFICATION_EMAIL}</strong> at {testEmailResult.timestamp}.
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* 1-Time Setup & Activation Guide */}
+            <div className="glass-panel" style={{ padding: '1.25rem 1.5rem', marginBottom: '1.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)' }}>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Sparkles size={16} color="var(--text-gold)" /> पहली बार एक्टिवेशन की प्रक्रिया (1-Time Setup Guide)
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.85rem', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                <div style={{ padding: '0.75rem', background: 'var(--bg-alt)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                  <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.2rem' }}>1. टेस्ट या मैसेज भेजें</strong>
+                  ऊपर दिए गए बटन से टेस्ट मैसेज भेजें या कांटेक्ट पेज से फॉर्म सबमिट करें।
+                </div>
+                <div style={{ padding: '0.75rem', background: 'var(--bg-alt)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                  <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.2rem' }}>2. जीमेल इनबॉक्स चेक करें</strong>
+                  <strong>{email || DEFAULT_VERIFICATION_EMAIL}</strong> का इनबॉक्स या स्पैम (Spam/Junk) फोल्डर खोलें।
+                </div>
+                <div style={{ padding: '0.75rem', background: 'var(--bg-alt)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                  <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.2rem' }}>3. 'Activate Form' दबाएं</strong>
+                  FormSubmit के ईमेल में 'Activate Form' पर क्लिक करें। इसके बाद सभी संदेश बिना रुके आएंगे!
+                </div>
+              </div>
+            </div>
+
+            {/* Customer Verified Inquiries Inbox */}
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Inbox size={16} color="var(--text-gold)" /> ग्राहक संदेश व इन्क्वायरी इनबॉक्स ({verifiedMessages.length})
+                  </h4>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    वेबसाइट से प्राप्त सभी वेरिफाइड संदेशों का लाइव रिकॉर्ड
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn btn-outline btn-sm"
+                  onClick={refreshMessages}
+                >
+                  <RefreshCw size={13} />
+                  <span>Refresh Inbox</span>
+                </button>
+              </div>
+
+              {verifiedMessages.length === 0 ? (
+                <div style={{ padding: '2.5rem', textAlign: 'center', color: 'var(--text-muted)', background: 'var(--bg-alt)', borderRadius: 'var(--radius-md)' }}>
+                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📭</div>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.25rem' }}>अभी कोई नया संदेश नहीं है</div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                    कांटेक्ट पेज पर ग्राहक द्वारा भेजा गया हर संदेश यहाँ और <strong>{email || DEFAULT_VERIFICATION_EMAIL}</strong> पर दिखेगा।
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '360px', overflowY: 'auto', paddingRight: '4px' }}>
+                  {verifiedMessages.map((msg, index) => (
+                    <div 
+                      key={msg.id || index}
+                      style={{
+                        padding: '1rem 1.25rem',
+                        background: 'var(--bg-alt)',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid var(--border-subtle)',
+                        fontSize: '0.85rem'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <div>
+                          <strong style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>{msg.name}</strong>
+                          <span style={{ color: 'var(--text-muted)', marginLeft: '0.5rem', fontSize: '0.78rem' }}>({msg.email || 'No email'})</span>
+                        </div>
+                        <span className="rose-badge" style={{ fontSize: '0.7rem' }}>
+                          ✓ #{msg.id}
+                        </span>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                        {msg.phone && (
+                          <a 
+                            href={`https://wa.me/${msg.phone.replace(/[^0-9]/g, '')}`} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            style={{ color: '#25D366', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
+                          >
+                            <MessageCircle size={13} /> {msg.phone} (WhatsApp)
+                          </a>
+                        )}
+                        <span><strong>विषय:</strong> {msg.subject}</span>
+                        <span><strong>समय:</strong> {msg.timestamp}</span>
+                      </div>
+
+                      <p style={{ margin: 0, color: 'var(--text-primary)', background: 'var(--bg-surface)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', fontSize: '0.82rem', whiteSpace: 'pre-wrap' }}>
+                        {msg.message}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

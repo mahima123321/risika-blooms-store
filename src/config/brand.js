@@ -7,8 +7,9 @@ export const BRAND_CONFIG = {
   currency: "₹",
   phone: "+91 98765 43210",
   whatsappNumber: "919876543210", // International format without '+' for wa.me URL
-  email: "care@roshikablooms.com",
-  conciergeEmail: "concierge@roshikablooms.com",
+  email: "mahimakk18@gmail.com",
+  conciergeEmail: "mahimakk18@gmail.com",
+  verificationEmail: "mahimakk18@gmail.com",
   address: "Flagship Floral Atelier, Plot 42, Lotus Boulevard, Vasant Kunj, New Delhi, India - 110070",
   hours: "Mon - Sun: 7:00 AM - 11:30 PM (Midnight Delivery Available)",
   socials: {
