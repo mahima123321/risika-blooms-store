@@ -5,14 +5,18 @@ import { LUXURY_ADDONS } from '../data/products';
 import { createWhatsAppUrl, buildCustomBouquetWhatsAppMessage } from '../config/whatsapp';
 import { 
   Sparkles, Plus, Minus, ShoppingBag, MessageCircle, 
-  CheckCircle2, RefreshCw, Heart, Send 
+  CheckCircle2, RefreshCw, Heart, Send, ArrowLeft, ChevronRight, X 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function BuildBouquetPage() {
-  const { addToCart, showToast, navigateTo } = useShop();
+  const { addToCart, showToast, navigateTo, brandConfig } = useShop();
 
-  // Stem Quantities: { 'stem-red-rose': 6, 'stem-gypsophila': 2, ... }
+  // Mobile Stepper State (Flipkart / Meesho App Experience)
+  const [activeStep, setActiveStep] = useState(1);
+  const [showPriceSheet, setShowPriceSheet] = useState(false);
+
+  // Stem Quantities: { 'stem-red-rose': 6, 'stem-pink-rose': 4, ... }
   const [stemCounts, setStemCounts] = useState({
     'stem-red-rose': 6,
     'stem-pink-rose': 4,
@@ -83,7 +87,7 @@ export default function BuildBouquetPage() {
       pincode: deliveryPincode
     });
 
-    const url = createWhatsAppUrl(msg);
+    const url = createWhatsAppUrl(msg, brandConfig?.whatsappNumber);
     window.open(url, '_blank');
   };
 
@@ -118,14 +122,34 @@ export default function BuildBouquetPage() {
   };
 
   return (
-    <div className="build-bouquet-page animate-fade-in" style={{ padding: '3rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
+    <div className="build-bouquet-page animate-fade-in" style={{ padding: '2rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
+        {/* Breadcrumb Back Bar */}
+        <div className="product-detail-breadcrumbs" style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-sm)' }}>
+          <button 
+            type="button" 
+            className="breadcrumb-back-btn"
+            onClick={() => navigateTo('shop')}
+            title="Back to Shop"
+          >
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+          <div className="breadcrumb-trail">
+            <span className="breadcrumb-link" onClick={() => navigateTo('home')}>Home</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-link" onClick={() => navigateTo('shop')}>Shop</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-active">Build Your Own Bouquet</span>
+          </div>
+        </div>
+
         {/* Studio Title Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <span className="gold-badge" style={{ marginBottom: '0.5rem' }}>
             <Sparkles size={12} /> Interactive Floral Studio
           </span>
-          <h1 className="font-serif-editorial" style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          <h1 className="font-serif-editorial" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
             Build Your Own Bouquet
           </h1>
           <div className="floral-divider">
@@ -133,9 +157,52 @@ export default function BuildBouquetPage() {
             <span className="floral-divider-icon">🎨</span>
             <span className="floral-divider-line"></span>
           </div>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem' }}>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '650px', margin: '0 auto', fontSize: '0.95rem' }}>
             Curate your own bespoke flower masterpiece stem-by-stem. Choose your favorite blossoms, wrapping paper, silk ribbon, and personalized card.
           </p>
+        </div>
+
+        {/* Meesho / Flipkart Stepper Tabs Bar */}
+        <div className="builder-step-tabs-bar">
+          <button 
+            type="button" 
+            className={`builder-step-tab ${activeStep === 1 ? 'active' : ''}`}
+            onClick={() => setActiveStep(1)}
+          >
+            <span className="step-tab-num">1</span>
+            <span>🌸 Flowers ({totalStemsCount})</span>
+          </button>
+          <button 
+            type="button" 
+            className={`builder-step-tab ${activeStep === 2 ? 'active' : ''}`}
+            onClick={() => setActiveStep(2)}
+          >
+            <span className="step-tab-num">2</span>
+            <span>🎀 Wrap</span>
+          </button>
+          <button 
+            type="button" 
+            className={`builder-step-tab ${activeStep === 3 ? 'active' : ''}`}
+            onClick={() => setActiveStep(3)}
+          >
+            <span className="step-tab-num">3</span>
+            <span>🎗️ Ribbon</span>
+          </button>
+          <button 
+            type="button" 
+            className={`builder-step-tab ${activeStep === 4 ? 'active' : ''}`}
+            onClick={() => setActiveStep(4)}
+          >
+            <span className="step-tab-num">4</span>
+            <span>✨ Extras & Card</span>
+          </button>
+          <button 
+            type="button" 
+            className={`builder-step-tab ${activeStep === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveStep('all')}
+          >
+            <span>📋 All Steps</span>
+          </button>
         </div>
 
         {/* Studio Workspace Layout */}
@@ -143,7 +210,7 @@ export default function BuildBouquetPage() {
           {/* LEFT: Customizer Steps */}
           <div>
             {/* Step 1: Flower Stems */}
-            <div className="studio-panel" style={{ marginBottom: '2rem' }}>
+            <div className={`studio-panel ${activeStep !== 1 && activeStep !== 'all' ? 'step-hidden-mobile' : ''}`} style={{ marginBottom: '2rem' }}>
               <div className="studio-step-header">
                 <span className="studio-step-num">1</span>
                 <div>
@@ -185,10 +252,22 @@ export default function BuildBouquetPage() {
                   );
                 })}
               </div>
+
+              {/* Step 1 Next Button (Mobile) */}
+              <div className="mobile-only" style={{ marginTop: '1.25rem', width: '100%' }}>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  style={{ width: '100%', justifyContent: 'center' }}
+                  onClick={() => setActiveStep(2)}
+                >
+                  <span>Next: Choose Wrapping Paper (Step 2) →</span>
+                </button>
+              </div>
             </div>
 
             {/* Step 2: Wrapping Paper */}
-            <div className="studio-panel" style={{ marginBottom: '2rem' }}>
+            <div className={`studio-panel ${activeStep !== 2 && activeStep !== 'all' ? 'step-hidden-mobile' : ''}`} style={{ marginBottom: '2rem' }}>
               <div className="studio-step-header">
                 <span className="studio-step-num">2</span>
                 <div>
@@ -199,7 +278,7 @@ export default function BuildBouquetPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.8rem' }}>
+              <div className="builder-options-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.8rem' }}>
                 {WRAPPING_PAPERS.map((wrap) => (
                   <div
                     key={wrap.id}
@@ -222,10 +301,30 @@ export default function BuildBouquetPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Step 2 Navigation Buttons (Mobile) */}
+              <div className="mobile-only" style={{ marginTop: '1.25rem', display: 'flex', gap: '0.65rem', width: '100%' }}>
+                <button 
+                  type="button" 
+                  className="btn btn-outline" 
+                  style={{ flex: 1, justifyContent: 'center' }}
+                  onClick={() => setActiveStep(1)}
+                >
+                  <span>← Back</span>
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  style={{ flex: 1.5, justifyContent: 'center' }}
+                  onClick={() => setActiveStep(3)}
+                >
+                  <span>Next: Satin Ribbon (Step 3) →</span>
+                </button>
+              </div>
             </div>
 
             {/* Step 3: Satin Ribbon & Bow */}
-            <div className="studio-panel" style={{ marginBottom: '2rem' }}>
+            <div className={`studio-panel ${activeStep !== 3 && activeStep !== 'all' ? 'step-hidden-mobile' : ''}`} style={{ marginBottom: '2rem' }}>
               <div className="studio-step-header">
                 <span className="studio-step-num">3</span>
                 <div>
@@ -236,7 +335,7 @@ export default function BuildBouquetPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.8rem' }}>
+              <div className="builder-options-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.8rem' }}>
                 {SATIN_RIBBONS.map((ribbon) => (
                   <div
                     key={ribbon.id}
@@ -260,10 +359,30 @@ export default function BuildBouquetPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Step 3 Navigation Buttons (Mobile) */}
+              <div className="mobile-only" style={{ marginTop: '1.25rem', display: 'flex', gap: '0.65rem', width: '100%' }}>
+                <button 
+                  type="button" 
+                  className="btn btn-outline" 
+                  style={{ flex: 1, justifyContent: 'center' }}
+                  onClick={() => setActiveStep(2)}
+                >
+                  <span>← Back</span>
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  style={{ flex: 1.5, justifyContent: 'center' }}
+                  onClick={() => setActiveStep(4)}
+                >
+                  <span>Next: Add-ons & Card (Step 4) →</span>
+                </button>
+              </div>
             </div>
 
             {/* Step 4: Luxury Extras & Personalization */}
-            <div className="studio-panel">
+            <div className={`studio-panel ${activeStep !== 4 && activeStep !== 'all' ? 'step-hidden-mobile' : ''}`}>
               <div className="studio-step-header">
                 <span className="studio-step-num">4</span>
                 <div>
@@ -273,7 +392,7 @@ export default function BuildBouquetPage() {
               </div>
 
               {/* Addons Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.8rem', marginBottom: '1.5rem' }}>
+              <div className="builder-addons-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.8rem', marginBottom: '1.5rem' }}>
                 {LUXURY_ADDONS.map((addon) => {
                   const isChecked = selectedExtras.some((e) => e.id === addon.id);
                   return (
@@ -348,6 +467,26 @@ export default function BuildBouquetPage() {
                   resize: 'none'
                 }}
               />
+
+              {/* Step 4 Navigation Buttons (Mobile) */}
+              <div className="mobile-only" style={{ marginTop: '1.25rem', display: 'flex', gap: '0.65rem', width: '100%' }}>
+                <button 
+                  type="button" 
+                  className="btn btn-outline" 
+                  style={{ flex: 1, justifyContent: 'center' }}
+                  onClick={() => setActiveStep(3)}
+                >
+                  <span>← Back</span>
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-gold" 
+                  style={{ flex: 1.5, justifyContent: 'center' }}
+                  onClick={() => setShowPriceSheet(true)}
+                >
+                  <span>View Bill & Total 📋</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -433,25 +572,11 @@ export default function BuildBouquetPage() {
               </span>
             </div>
 
-            {/* Dual CTAs */}
+            {/* Studio Design Status */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <button 
-                className="btn btn-whatsapp btn-lg"
-                onClick={handleOrderWhatsApp}
-                style={{ width: '100%' }}
-              >
-                <MessageCircle size={18} />
-                <span>Order Custom Bouquet on WhatsApp</span>
-              </button>
-
-              <button 
-                className="btn btn-primary btn-lg"
-                onClick={handleAddToCart}
-                style={{ width: '100%' }}
-              >
-                <ShoppingBag size={18} />
-                <span>Add Custom Bouquet to Bag</span>
-              </button>
+              <div style={{ padding: '0.85rem', background: 'var(--bg-alt)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-gold)', fontWeight: 600 }}>
+                ✨ Custom Floral Arrangement Configured
+              </div>
             </div>
           </div>
         </div>

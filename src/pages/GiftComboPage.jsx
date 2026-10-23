@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { COMBO_ITEMS } from '../data/builderData';
-import { createWhatsAppUrl } from '../config/whatsapp';
-import { Sparkles, ShoppingBag, MessageCircle, Heart, Gift, Check, ArrowRight } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Sparkles, Heart, Gift, Check, ArrowRight, ArrowLeft, ChevronRight } from 'lucide-react';
 
 export default function GiftComboPage() {
-  const { addToCart, showToast } = useShop();
+  const { showToast, navigateTo } = useShop();
 
   const [selectedBase, setSelectedBase] = useState(COMBO_ITEMS.bases[0]);
   const [selectedTeddy, setSelectedTeddy] = useState(COMBO_ITEMS.teddies[0]);
@@ -17,52 +15,34 @@ export default function GiftComboPage() {
   const bundleDiscount = Math.round(rawTotal * 0.12); // 12% Combo Savings
   const comboTotal = rawTotal - bundleDiscount;
 
-  const handleAddToCart = () => {
-    const comboProduct = {
-      id: `custom-combo-${Date.now()}`,
-      name: `Luxury Gift Combo: ${selectedBase.name} + ${selectedTeddy.name}`,
-      category: 'flower-teddy-combos',
-      price: comboTotal,
-      image: selectedBase.image
-    };
-
-    addToCart(comboProduct, {
-      customDetails: `Combo Includes: [1] ${selectedBase.name}, [2] ${selectedTeddy.name}, [3] ${selectedChoc.name}, [4] ${selectedCard.name}`,
-      unitPrice: comboTotal,
-      quantity: 1
-    });
-
-    try {
-      confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
-    } catch {}
-  };
-
-  const handleWhatsAppOrder = () => {
-    let msg = `🌸 *CUSTOM LUXURY GIFT COMBO ORDER — ROSHIKA BLOOMS* 🌸\n`;
-    msg += `─────────────────────────\n`;
-    msg += `💐 *Flower Base:* ${selectedBase.name} (₹${selectedBase.price})\n`;
-    msg += `🧸 *Teddy Bear:* ${selectedTeddy.name} (₹${selectedTeddy.price})\n`;
-    msg += `🍫 *Chocolates:* ${selectedChoc.name} (₹${selectedChoc.price})\n`;
-    msg += `💌 *Greeting Card:* ${selectedCard.name}\n`;
-    msg += `─────────────────────────\n`;
-    msg += `🏷️ *Standard Price:* ₹${rawTotal}\n`;
-    msg += `🎉 *12% Combo Savings:* -₹${bundleDiscount}\n`;
-    msg += `💰 *Final Combo Total:* ₹${comboTotal}\n`;
-    msg += `─────────────────────────\n`;
-    msg += `_Please confirm this custom gift hamper order._`;
-
-    const url = createWhatsAppUrl(msg);
-    window.open(url, '_blank');
-  };
-
   return (
-    <div className="gift-combo-page animate-fade-in" style={{ padding: '3rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
+    <div className="gift-combo-page animate-fade-in" style={{ padding: '2rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        {/* Breadcrumb Back Bar */}
+        <div className="product-detail-breadcrumbs" style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-sm)' }}>
+          <button 
+            type="button" 
+            className="breadcrumb-back-btn"
+            onClick={() => navigateTo('shop')}
+            title="Back to Shop"
+          >
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+          <div className="breadcrumb-trail">
+            <span className="breadcrumb-link" onClick={() => navigateTo('home')}>Home</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-link" onClick={() => navigateTo('shop')}>Shop</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-active">Gift Combo Builder</span>
+          </div>
+        </div>
+
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <span className="gold-badge" style={{ marginBottom: '0.5rem' }}>
             <Sparkles size={12} /> Curate & Save 12%
           </span>
-          <h1 className="font-serif-editorial" style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          <h1 className="font-serif-editorial" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
             Gift Combo Builder
           </h1>
           <div className="floral-divider">
@@ -76,7 +56,7 @@ export default function GiftComboPage() {
         </div>
 
         {/* Combo Builder Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2.5rem', alignItems: 'start' }}>
+        <div className="combo-builder-grid" style={{ alignItems: 'start' }}>
           {/* LEFT: Selection Slots */}
           <div>
             {/* Slot 1: Flower Base */}
@@ -88,7 +68,7 @@ export default function GiftComboPage() {
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Selected: {selectedBase.name}</p>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+              <div className="combo-slot-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 {COMBO_ITEMS.bases.map((base) => (
                   <div
                     key={base.id}
@@ -120,7 +100,7 @@ export default function GiftComboPage() {
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Selected: {selectedTeddy.name}</p>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              <div className="combo-slot-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
                 {COMBO_ITEMS.teddies.map((ted) => (
                   <div
                     key={ted.id}
@@ -152,7 +132,7 @@ export default function GiftComboPage() {
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Selected: {selectedChoc.name}</p>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              <div className="combo-slot-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
                 {COMBO_ITEMS.chocolates.map((choc) => (
                   <div
                     key={choc.id}
@@ -228,25 +208,11 @@ export default function GiftComboPage() {
               </div>
             </div>
 
-            {/* CTAs */}
+            {/* Combo Status */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <button 
-                className="btn btn-whatsapp btn-lg"
-                onClick={handleWhatsAppOrder}
-                style={{ width: '100%' }}
-              >
-                <MessageCircle size={18} />
-                <span>Order Combo via WhatsApp</span>
-              </button>
-
-              <button 
-                className="btn btn-primary btn-lg"
-                onClick={handleAddToCart}
-                style={{ width: '100%' }}
-              >
-                <ShoppingBag size={18} />
-                <span>Add Combo to Shopping Bag</span>
-              </button>
+              <div style={{ padding: '0.85rem', background: 'var(--bg-alt)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-gold)', fontWeight: 600 }}>
+                ✨ Luxury Gift Combo Curated
+              </div>
             </div>
           </div>
         </div>

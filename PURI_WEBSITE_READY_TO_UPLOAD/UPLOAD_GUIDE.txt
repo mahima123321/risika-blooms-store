@@ -1,0 +1,40 @@
+================================================================================
+   RISHIKA BLOOMS - 100% LIVE MULTI-DEVICE CLOUD SYNC DEPLOYMENT GUIDE
+================================================================================
+
+Ye folder aapki PURI WEBSITE ka bilkul naya aur updated package hai jisme
+Google Firebase Cloud Database joda gaya hai.
+
+Is naye version se:
+- Jab aap apne PHONE se WhatsApp number, store details, PIN ya naya bouquet badlenge,
+  to wo turant DUSRE PHONES aur COMPUTERS par bina reload kiye 1 second me live badal jayega!
+
+--------------------------------------------------------------------------------
+STEP 1: NETLIFY PAR UPDATE / UPLOAD KAREIN (FREE & INSTANT)
+--------------------------------------------------------------------------------
+1. Apne browser me ye link kholein:
+   https://app.netlify.com/drop
+   (Ya apne Netlify dashboard me 'Deploys' tab me jayein)
+
+2. Is folder 'PURI_WEBSITE_READY_TO_UPLOAD' ko uthakar browser me
+   DRAG and DROP kar dein.
+
+3. 15-20 seconds me Netlify website ko live update kar dega!
+
+--------------------------------------------------------------------------------
+STEP 2: PEHLI BAAR PHONE SE CLOUD SYNC KAREIN (ONE-TIME)
+--------------------------------------------------------------------------------
+1. Apne phone me website kholein.
+2. URL ke aage #leader ya #owner lagayein:
+   (Example: https://rishika-blooms.netlify.app#leader)
+3. Apna Owner PIN daalein (Default PIN: risika2026).
+4. 'Store Settings & Management' modal me sabse aakhiri tab '☁️ Cloud' par jayein.
+5. 'Sync Catalog to Cloud' (क्लाउड सिंक) button par click karein.
+6. Bas! Ab saare 100+ bouquets aur categories Google Cloud Database par live ho jayenge.
+
+--------------------------------------------------------------------------------
+STEP 3: TEST KAREIN
+--------------------------------------------------------------------------------
+- Phone se WhatsApp number ya koi price badal kar 'Save' karein.
+- Kisi dusre phone ya laptop par website kholein — wahan turant naya number dikhai dega!
+================================================================================

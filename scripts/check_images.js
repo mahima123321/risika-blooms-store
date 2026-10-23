@@ -1,40 +1,21 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-function checkImages() {
-  const files = [
-    "src/data/products.js",
-    "src/data/categories.js",
-    "src/data/builderData.js"
-  ];
-  const urlRegex = /(https:\/\/[^"'\`\s,]+|\/images\/[^"'\`\s,]+)/g;
-  const counts = {};
-  const locations = {};
-
-  files.forEach(f => {
-    const fullPath = path.resolve(f);
-    if (fs.existsSync(fullPath)) {
-      const lines = fs.readFileSync(fullPath, "utf8").split("\n");
-      lines.forEach((line, idx) => {
-        const matches = line.match(urlRegex) || [];
-        matches.forEach(m => {
-          // clean up trailing commas or quotes
-          const clean = m.replace(/['",`]$/, "");
-          counts[clean] = (counts[clean] || 0) + 1;
-          if (!locations[clean]) locations[clean] = [];
-          locations[clean].push(`${f}:${idx + 1}`);
-        });
-      });
-    }
-  });
-
-  console.log("Total unique URLs found:", Object.keys(counts).length);
-  const duplicates = Object.entries(counts).filter(([url, count]) => count > 1);
-  console.log("Duplicate URLs count:", duplicates.length);
-  duplicates.forEach(([url, count]) => {
-    console.log(`\nDuplicate (${count}x): ${url}`);
-    locations[url].forEach(loc => console.log("  - " + loc));
-  });
+const content = fs.readFileSync(path.join(__dirname, '../src/data/products.js'), 'utf8');
+const regex = /image:\s*['"]([^'"]+)['"]/g;
+let match;
+const unique = new Set();
+while ((match = regex.exec(content)) !== null) {
+  unique.add(match[1]);
 }
 
-checkImages();
+console.log('Unique images count:', unique.size);
+for (const img of unique) {
+  const fullPath = path.join(__dirname, '../public', img.replace(/^\//, ''));
+  if (fs.existsSync(fullPath)) {
+    const stats = fs.statSync(fullPath);
+    console.log(`EXISTS: ${img} (${Math.round(stats.size / 1024)} KB)`);
+  } else {
+    console.log(`MISSING: ${img}`);
+  }
+}

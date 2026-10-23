@@ -26,8 +26,9 @@ export default function GiftFinderWidget() {
     setStep(3);
   };
 
-  const handleBudgetSelect = (val) => {
+  const handleBudgetSelect = async (val) => {
     setBudget(val);
+    const maxBudget = val === 'budget-low' ? 999 : val === 'budget-mid' ? 1999 : 5000;
     
     // Find matching products
     let matches = allProducts.filter((p) => {
@@ -36,6 +37,20 @@ export default function GiftFinderWidget() {
       if (val === 'budget-high' && p.price < 1999) return false;
       return true;
     });
+
+    try {
+      const res = await fetch('/api/ai/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipient, occasion, budget: maxBudget })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.recommendedProducts && data.recommendedProducts.length > 0) {
+          matches = data.recommendedProducts;
+        }
+      }
+    } catch (e) {}
 
     if (matches.length === 0) matches = allProducts.slice(0, 3);
 
@@ -62,8 +77,7 @@ export default function GiftFinderWidget() {
   return (
     <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-alt)' }}>
       <div className="container">
-        <div className="glass-panel" style={{
-          padding: '3rem 2rem',
+        <div className="glass-panel gift-finder-card" style={{
           maxWidth: '900px',
           margin: '0 auto',
           background: 'var(--bg-surface)',
@@ -114,7 +128,7 @@ export default function GiftFinderWidget() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
                 Step 1: Who is this special gift for?
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
                 {[
                   { label: "Wife / Girlfriend", icon: "❤️", val: "partner-female" },
                   { label: "Husband / Boyfriend", icon: "✨", val: "partner-male" },
@@ -142,7 +156,7 @@ export default function GiftFinderWidget() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
                 Step 2: What is the occasion?
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
                 {[
                   { label: "Birthday Milestone", icon: "🎂", val: "birthday" },
                   { label: "Anniversary / Love", icon: "💍", val: "anniversary" },
@@ -170,7 +184,7 @@ export default function GiftFinderWidget() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
                 Step 3: What is your preferred budget range?
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
                 {[
                   { label: "Sweet & Petite (Under ₹999)", icon: "💐", val: "budget-low" },
                   { label: "Popular Classics (₹999 – ₹1,999)", icon: "✨", val: "budget-mid" },

@@ -123,7 +123,7 @@ export default function DeliveryInfoPage() {
           <ul style={{ paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <li><strong>Hydration Pack:</strong> Keeps flowers drinking water throughout transit.</li>
             <li><strong>Hard-Box Casing:</strong> Prevents petal crushing, creasing, and wind burn.</li>
-            <li><strong>Real Photo Verification:</strong> Our florist shares a photo on WhatsApp before the dispatch rider sets off.</li>
+            <li><strong>Real Photo Verification:</strong> Our master florist completes a full photo quality inspection before the dispatch rider sets off.</li>
             <li><strong>Contactless Handover:</strong> Discreet and courteous delivery to the recipient.</li>
           </ul>
         </div>

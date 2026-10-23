@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { useShop } from '../../context/ShopContext';
-import { createWhatsAppUrl, buildProductWhatsAppMessage } from '../../config/whatsapp';
-import { Heart, ShoppingBag, MessageCircle, Star, Sparkles, Eye, Edit3, Trash2 } from 'lucide-react';
+import { Heart, Star, Sparkles, Eye, Edit3, Trash2, ArrowRight, ShoppingBag } from 'lucide-react';
 
 export default function ProductCard({ product }) {
   const { 
-    language, t, 
-    addToCart, 
     isInWishlist, toggleWishlist, 
     navigateTo, 
-    setQuickViewProduct,
+    addToCart,
     isOwnerAuthenticated,
     openEditProductModal,
     deleteOwnerProduct
@@ -19,30 +16,6 @@ export default function ProductCard({ product }) {
 
   const activeColor = product.colorOptions?.[selectedColorIndex] || null;
   const displayImage = activeColor?.image || product.image;
-
-  const handleWhatsAppOrder = (e) => {
-    e.stopPropagation();
-    const msg = buildProductWhatsAppMessage({
-      product,
-      selectedColor: activeColor?.name,
-      selectedSize: product.sizeOptions?.[0]?.name,
-      unitPrice: product.price,
-      quantity: 1
-    });
-    const url = createWhatsAppUrl(msg);
-    window.open(url, '_blank');
-  };
-
-  const handleAddToCart = (e) => {
-    e.stopPropagation();
-    addToCart(product, {
-      selectedColor: activeColor?.name,
-      selectedSize: product.sizeOptions?.[0]?.name,
-      unitPrice: product.price,
-      image: displayImage,
-      quantity: 1
-    });
-  };
 
   const handleCardClick = () => {
     navigateTo('product', { productSlug: product.slug });
@@ -61,6 +34,7 @@ export default function ProductCard({ product }) {
           alt={product.name} 
           className="product-card-image" 
           loading="lazy"
+          decoding="async"
         />
 
         {/* Badge Tag */}
@@ -105,11 +79,11 @@ export default function ProductCard({ product }) {
               className="owner-card-delete-quick-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                if (window.confirm(`क्या आप सचमुच "${product.name}" बुके को स्टोर से डिलीट करना चाहते हैं?\n(Are you sure you want to delete this bouquet?)`)) {
+                if (window.confirm(`Are you sure you want to delete "${product.name}" from the store catalog?`)) {
                   deleteOwnerProduct(product.id);
                 }
               }}
-              title="Delete Bouquet (ओनर डिलीट करें)"
+              title="Delete Bouquet"
             >
               <Trash2 size={11} />
             </button>
@@ -119,16 +93,22 @@ export default function ProductCard({ product }) {
 
       {/* Content */}
       <div className="product-card-content">
-        <span className="product-card-category">{product.categoryName}</span>
+        <span className="product-card-category">
+          {product.categoryName}
+        </span>
         
         <h3 className="product-card-title">
-          {language === 'hi' ? (product.nameHindi || product.name) : product.name}
+          {product.name}
         </h3>
 
-        {/* Star Rating */}
-        <div className="product-card-rating">
-          <Star size={13} fill="#F59E0B" color="#F59E0B" />
-          <span>{product.rating} ({product.reviewCount})</span>
+        {/* Rating Row */}
+        <div className="product-card-rating-row">
+          <div className="meesho-rating-pill">
+            <span>{product.rating}</span>
+            <Star size={10} fill="#FFFFFF" color="#FFFFFF" />
+          </div>
+          <span className="meesho-review-count">({product.reviewCount || 120})</span>
+          <span className="meesho-assured-badge">⚡ Handcrafted</span>
         </div>
 
         {/* Color Swatch Dots */}
@@ -156,27 +136,34 @@ export default function ProductCard({ product }) {
             <span className="product-price-original">₹{product.originalPrice}</span>
           )}
           {discountPercent > 0 && (
-            <span className="product-price-save">{discountPercent}% OFF</span>
+            <span className="product-price-save">
+              {discountPercent}% OFF
+            </span>
           )}
         </div>
 
-        {/* Dual Actions: WhatsApp Direct Buy + Add to Cart */}
-        <div className="product-card-actions">
+        {/* Details & Quick Add Action Buttons */}
+        <div className="product-card-actions" style={{ marginTop: '0.65rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           <button 
-            className="btn btn-whatsapp btn-sm"
-            onClick={handleWhatsAppOrder}
-            title="Instant Order via WhatsApp"
+            type="button"
+            className="btn btn-outline btn-sm"
+            onClick={handleCardClick}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.78rem', padding: '0.45rem 0.5rem' }}
           >
-            <MessageCircle size={15} />
-            <span>WhatsApp</span>
+            <Eye size={13} />
+            <span>Details</span>
           </button>
-          
           <button 
-            className="btn btn-primary btn-sm"
-            onClick={handleAddToCart}
-            title="Add to Shopping Bag"
+            type="button"
+            className="btn btn-gold btn-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product, { selectedColor: activeColor?.name });
+            }}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.78rem', padding: '0.45rem 0.5rem' }}
           >
-            <ShoppingBag size={15} />
+            <ShoppingBag size={13} />
+            <span>Add to Bag</span>
           </button>
         </div>
       </div>

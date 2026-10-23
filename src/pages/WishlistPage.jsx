@@ -6,10 +6,18 @@ import { Heart, ShoppingBag, ArrowRight, Trash2, X } from 'lucide-react';
 
 export default function WishlistPage() {
   const { 
+    currentView,
     isWishlistOpen, setIsWishlistOpen, 
     wishlist, toggleWishlist, addToCart, 
     navigateTo, t, products 
   } = useShop();
+
+  const isFullPageView = currentView?.page === 'wishlist';
+
+  // If not open as drawer and not the active route, render nothing
+  if (!isWishlistOpen && !isFullPageView) {
+    return null;
+  }
 
   const allProducts = products || PRODUCTS;
   const savedProducts = allProducts.filter((p) => wishlist.includes(p.id));

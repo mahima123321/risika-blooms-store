@@ -21,11 +21,7 @@ export default function SpotlightSection() {
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2.5rem'
-        }}>
+        <div className="spotlight-grid">
           {/* Spotlight 1: Korean Velvet Trio Bouquet */}
           <div className="glass-panel" style={{
             padding: '2rem',

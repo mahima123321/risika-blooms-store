@@ -30,7 +30,7 @@ export default function WhyChooseUs() {
       <div className="container">
         <div className="section-header">
           <span className="section-pretitle">The Excellence Standard</span>
-          <h2 className="section-title">The ROSHIKA BLOOMS Promise</h2>
+          <h2 className="section-title">The RISHIKA BLOOMS Promise</h2>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
             <span className="floral-divider-icon">👑</span>
@@ -38,7 +38,7 @@ export default function WhyChooseUs() {
           </div>
         </div>
 
-        <div style={{
+        <div className="why-choose-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '2rem'

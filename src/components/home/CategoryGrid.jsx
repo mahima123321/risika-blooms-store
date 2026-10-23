@@ -4,15 +4,20 @@ import { CATEGORIES } from '../../data/categories';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function CategoryGrid() {
-  const { language, t, navigateTo } = useShop();
+  const { language, t, navigateTo, categories } = useShop();
+  const allCategories = categories || CATEGORIES;
 
   return (
     <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <span className="section-pretitle">The Botanical Collections</span>
-          <h2 className="section-title">Shop by Category</h2>
+          <span className="section-pretitle">
+            The Botanical Collections
+          </span>
+          <h2 className="section-title">
+            Shop by Category
+          </h2>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
             <span className="floral-divider-icon">🌸</span>
@@ -23,9 +28,9 @@ export default function CategoryGrid() {
           </p>
         </div>
 
-        {/* 14 Categories Grid */}
+        {/* Categories Grid */}
         <div className="category-grid">
-          {CATEGORIES.map((cat) => (
+          {allCategories.map((cat) => (
             <div 
               key={cat.id} 
               className="category-card"
@@ -42,7 +47,7 @@ export default function CategoryGrid() {
                   {cat.itemCount}
                 </span>
                 <h3 className="category-card-name">
-                  {language === 'hi' ? cat.nameHindi : cat.name}
+                  {cat.name}
                 </h3>
                 <div className="category-card-meta">
                   <span>{cat.tagline}</span>

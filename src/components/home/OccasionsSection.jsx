@@ -22,11 +22,7 @@ export default function OccasionsSection() {
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-          gap: '1.25rem'
-        }}>
+        <div className="occasions-grid">
           {OCCASIONS.map((occ) => (
             <div
               key={occ.id}

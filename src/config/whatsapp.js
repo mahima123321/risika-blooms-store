@@ -5,19 +5,28 @@ import { BRAND_CONFIG } from './brand';
  */
 export function getActiveWhatsAppNumber() {
   if (typeof window !== 'undefined') {
+    // 1. Check runtime global override
+    if (window.__rb_active_whatsapp) {
+      const clean = String(window.__rb_active_whatsapp).replace(/[^0-9]/g, '');
+      if (clean) return clean.length === 10 ? `91${clean}` : clean;
+    }
+    // 2. Check local storage saved brand config
     try {
       const saved = localStorage.getItem('rb_brand_config');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.whatsappNumber) {
-          return String(parsed.whatsappNumber).trim();
+        const raw = parsed.whatsappNumber || parsed.phone;
+        if (raw) {
+          const clean = String(raw).replace(/[^0-9]/g, '');
+          if (clean) return clean.length === 10 ? `91${clean}` : clean;
         }
       }
     } catch (e) {
       console.warn('Error reading stored WhatsApp number:', e);
     }
   }
-  return BRAND_CONFIG.whatsappNumber;
+  const defaultRaw = String(BRAND_CONFIG.whatsappNumber || '919305371705').replace(/[^0-9]/g, '');
+  return defaultRaw.length === 10 ? `91${defaultRaw}` : defaultRaw;
 }
 
 /**
@@ -25,21 +34,22 @@ export function getActiveWhatsAppNumber() {
  * International number without '+' as required by WhatsApp wa.me format.
  */
 export function createWhatsAppUrl(messageText, overrideNumber = null) {
-  const targetNumber = overrideNumber || getActiveWhatsAppNumber();
-  const cleanNumber = String(targetNumber).replace(/[^0-9]/g, '');
+  let targetNumber = overrideNumber || getActiveWhatsAppNumber();
+  let cleanNumber = String(targetNumber).replace(/[^0-9]/g, '');
+  if (cleanNumber.length === 10) {
+    cleanNumber = `91${cleanNumber}`;
+  }
   const encodedText = encodeURIComponent((messageText || '').trim());
   return `https://wa.me/${cleanNumber}?text=${encodedText}`;
 }
 
 /**
- * Generates an inquiry message for direct product order.
+ * Generates a concise, clean order message for direct product order.
  */
 export function buildProductWhatsAppMessage({
+  orderId = "",
   product,
   selectedColor,
-  selectedSize,
-  selectedWrap,
-  selectedRibbon,
   quantity = 1,
   unitPrice,
   customerName = "",
@@ -47,144 +57,89 @@ export function buildProductWhatsAppMessage({
   recipientPhone = "",
   deliveryAddress = "",
   pincode = "",
-  deliveryDate = "",
-  deliverySlot = "Standard Delivery (1 PM - 5 PM)",
-  giftMessage = "",
+  deliverySlot = "",
   addOns = []
 }) {
-  const totalPrice = unitPrice * quantity + (addOns.reduce((acc, curr) => acc + curr.price, 0));
+  const totalPrice = unitPrice * quantity + (addOns?.reduce((acc, curr) => acc + curr.price, 0) || 0);
+  const client = recipientName || customerName || "Customer";
+  const id = orderId || `RB-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  let msg = `🌸 *NEW ORDER INQUIRY — ROSHIKA BLOOMS* 🌸\n`;
-  msg += `─────────────────────────\n`;
-  msg += `🌹 *Product:* ${product.name}\n`;
-  if (selectedColor) msg += `🎨 *Selected Color:* ${selectedColor}\n`;
-  if (selectedSize) msg += `📏 *Bouquet Size:* ${selectedSize}\n`;
-  if (selectedWrap) msg += `📜 *Wrapping Paper:* ${selectedWrap}\n`;
-  if (selectedRibbon) msg += `🎀 *Ribbon Style:* ${selectedRibbon}\n`;
-  msg += `🔢 *Quantity:* ${quantity}\n`;
-  msg += `💰 *Item Price:* ₹${unitPrice} (Subtotal: ₹${unitPrice * quantity})\n`;
-
-  if (addOns && addOns.length > 0) {
-    msg += `✨ *Add-ons:* ${addOns.map(a => `${a.name} (+₹${a.price})`).join(', ')}\n`;
-  }
-
-  msg += `💵 *Total Estimated Amount:* ₹${totalPrice}\n`;
-  msg += `─────────────────────────\n`;
-  msg += `👤 *Customer Name:* ${customerName || "Customer"}\n`;
-  if (recipientName) msg += `🎁 *Recipient Name:* ${recipientName}\n`;
-  if (recipientPhone) msg += `📞 *Recipient Phone:* ${recipientPhone}\n`;
-  if (deliveryAddress) msg += `📍 *Delivery Address:* ${deliveryAddress}\n`;
-  if (pincode) msg += `📮 *PIN Code:* ${pincode}\n`;
-  if (deliveryDate) msg += `📅 *Preferred Date:* ${deliveryDate}\n`;
-  if (deliverySlot) msg += `⏰ *Time Slot:* ${deliverySlot}\n`;
-
-  if (giftMessage && giftMessage.trim()) {
-    msg += `💌 *Personal Gift Message:*\n"${giftMessage.trim()}"\n`;
-  }
-
-  msg += `─────────────────────────\n`;
-  msg += `✨ *Tagline:* "Every Bloom Tells a Story."\n`;
-  msg += `_Note: Please confirm flower availability, delivery slot, and final payment details._`;
+  let msg = `🌸 *New Order #${id}*\n`;
+  msg += `💐 *Bouquet:* ${product.name} (Qty: ${quantity}${selectedColor ? `, ${selectedColor}` : ''})\n`;
+  msg += `💰 *Total Amount:* ₹${totalPrice}\n`;
+  msg += `👤 *Customer:* ${client}${recipientPhone ? ` (${recipientPhone})` : ''}\n`;
+  if (deliveryAddress || pincode) msg += `📍 *Address:* ${deliveryAddress || ''}${pincode ? ` (${pincode})` : ''}\n`;
+  if (deliverySlot) msg += `⏰ *Slot:* ${deliverySlot}\n`;
+  msg += `_Please confirm my order!_`;
 
   return msg;
 }
 
 /**
- * Generates an inquiry message for full cart checkout.
+ * Generates a concise, clean message for full cart checkout.
  */
 export function buildCartWhatsAppMessage({
-  cartItems,
-  subtotal,
-  discount = 0,
-  deliveryFee = 0,
+  orderId = "",
+  cartItems = [],
   total,
-  couponCode = "",
   customerName = "",
   recipientName = "",
   recipientPhone = "",
   deliveryAddress = "",
   pincode = "",
-  deliveryDate = "",
-  deliverySlot = "Standard Delivery (1 PM - 5 PM)",
-  giftMessage = ""
+  deliverySlot = ""
 }) {
-  let msg = `🌸 *COMPLETE SHOPPING BAG ORDER — ROSHIKA BLOOMS* 🌸\n`;
-  msg += `─────────────────────────\n`;
-  msg += `🛍️ *Order Items (${cartItems.length}):*\n\n`;
+  const client = recipientName || customerName || "Customer";
+  const id = orderId || `RB-${Math.floor(100000 + Math.random() * 900000)}`;
+  const itemsText = cartItems.map((item) => `${item.name} (x${item.quantity})`).join(', ');
 
-  cartItems.forEach((item, idx) => {
-    msg += `${idx + 1}. *${item.name}* (Qty: ${item.quantity})\n`;
-    if (item.selectedColor) msg += `   • Color: ${item.selectedColor}\n`;
-    if (item.selectedSize) msg += `   • Size: ${item.selectedSize}\n`;
-    if (item.selectedWrap) msg += `   • Wrap: ${item.selectedWrap}\n`;
-    if (item.selectedRibbon) msg += `   • Ribbon: ${item.selectedRibbon}\n`;
-    if (item.customDetails) msg += `   • Custom: ${item.customDetails}\n`;
-    msg += `   • Price: ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}\n\n`;
-  });
-
-  msg += `─────────────────────────\n`;
-  msg += `💳 *BILLING SUMMARY*\n`;
-  msg += `• Subtotal: ₹${subtotal}\n`;
-  if (discount > 0) {
-    msg += `• Discount (${couponCode || "Coupon"}): -₹${discount}\n`;
-  }
-  msg += `• Delivery Fee: ₹${deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}\n`;
-  msg += `• *Grand Total:* ₹${total}\n`;
-  msg += `─────────────────────────\n`;
-  msg += `📍 *DELIVERY & RECIPIENT DETAILS*\n`;
-  msg += `• Customer: ${customerName || "Customer"}\n`;
-  if (recipientName) msg += `• Recipient: ${recipientName}\n`;
-  if (recipientPhone) msg += `• Phone: ${recipientPhone}\n`;
-  if (deliveryAddress) msg += `• Address: ${deliveryAddress}\n`;
-  if (pincode) msg += `• PIN Code: ${pincode}\n`;
-  if (deliveryDate) msg += `• Delivery Date: ${deliveryDate}\n`;
-  if (deliverySlot) msg += `• Slot: ${deliverySlot}\n`;
-
-  if (giftMessage && giftMessage.trim()) {
-    msg += `\n💌 *Gift Card Message:*\n"${giftMessage.trim()}"\n`;
-  }
-
-  msg += `─────────────────────────\n`;
-  msg += `_I would like to place this order with ROSHIKA BLOOMS. Please verify availability and share payment link._`;
+  let msg = `🌸 *New Order #${id}*\n`;
+  msg += `🛍️ *Items:* ${itemsText}\n`;
+  msg += `💰 *Total Amount:* ₹${total}\n`;
+  msg += `👤 *Customer:* ${client}${recipientPhone ? ` (${recipientPhone})` : ''}\n`;
+  if (deliveryAddress || pincode) msg += `📍 *Address:* ${deliveryAddress || ''}${pincode ? ` (${pincode})` : ''}\n`;
+  if (deliverySlot) msg += `⏰ *Slot:* ${deliverySlot}\n`;
+  msg += `_Please confirm my order!_`;
 
   return msg;
 }
 
 /**
- * Builds WhatsApp message for Custom "Build Your Own Bouquet".
+ * Builds a short, clean WhatsApp message for Custom "Build Your Own Bouquet".
  */
 export function buildCustomBouquetWhatsAppMessage({
-  stemsSummary,
-  wrapping,
-  ribbon,
-  extras = [],
-  giftMessage,
+  orderId = "",
+  stemsSummary = [],
   totalPrice,
   customerName = "",
-  pincode = "",
-  deliveryDate = ""
+  pincode = ""
 }) {
-  let msg = `🎨 *CUSTOM BESPOKE BOUQUET CREATION — ROSHIKA BLOOMS* 🎨\n`;
-  msg += `─────────────────────────\n`;
-  msg += `🌸 *Floral Composition:*\n`;
-  stemsSummary.forEach(stem => {
-    msg += ` • ${stem.name} (${stem.color}): ${stem.count} stems (₹${stem.price * stem.count})\n`;
-  });
-  msg += `📜 *Wrapping Paper:* ${wrapping.name}\n`;
-  msg += `🎀 *Ribbon Style:* ${ribbon.name}\n`;
+  const id = orderId || `RB-${Math.floor(100000 + Math.random() * 900000)}`;
+  const stemsText = stemsSummary.map(s => `${s.count}x ${s.name}`).join(', ');
 
-  if (extras.length > 0) {
-    msg += `✨ *Luxury Add-ons:* ${extras.map(e => `${e.name} (+₹${e.price})`).join(', ')}\n`;
-  }
-
-  msg += `💰 *Calculated Price:* ₹${totalPrice}\n`;
-  msg += `─────────────────────────\n`;
-  if (customerName) msg += `👤 *Customer Name:* ${customerName}\n`;
-  if (pincode) msg += `📮 *Delivery PIN:* ${pincode}\n`;
-  if (deliveryDate) msg += `📅 *Target Date:* ${deliveryDate}\n`;
-  if (giftMessage) msg += `💌 *Card Message:*\n"${giftMessage}"\n`;
-  msg += `─────────────────────────\n`;
-  msg += `_Please review my custom bouquet design and confirm master florist preparation._`;
+  let msg = `🌸 *Custom Bouquet #${id}*\n`;
+  msg += `💐 *Flowers:* ${stemsText}\n`;
+  msg += `💰 *Total:* ₹${totalPrice}\n`;
+  if (customerName) msg += `👤 *Customer:* ${customerName}\n`;
+  if (pincode) msg += `📮 *PIN:* ${pincode}\n`;
+  msg += `_Please confirm my order!_`;
 
   return msg;
+}
+
+/**
+ * Builds short, clean 4-digit OTP dispatch message for customer WhatsApp.
+ */
+export function buildCustomerDeliveryOtpWhatsAppMessage({ order }) {
+  const id = order.orderId || order.id;
+  const pin = order.deliveryOtp || '4892';
+  return `🌸 *RISHIKA BLOOMS*\nOrder #${id} Handover OTP:\n👉 *${pin}* 👈\n\nPlease share this 4-digit code with our delivery rider at your doorstep.`;
+}
+
+/**
+ * Builds short post-handover celebration message.
+ */
+export function buildDeliveryConfirmationWhatsAppMessage({ order }) {
+  const id = order.orderId || order.id;
+  return `🎉 *Order #${id} Delivered!*\nYour bouquet has been handed over successfully. Thank you for choosing Rishika Blooms! 🌸✨`;
 }

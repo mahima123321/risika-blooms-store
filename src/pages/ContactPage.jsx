@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { BRAND_CONFIG } from '../config/brand';
-import { createWhatsAppUrl } from '../config/whatsapp';
 import { 
   sendMessageVerification, 
   DEFAULT_VERIFICATION_EMAIL 
@@ -9,11 +8,12 @@ import {
 import { 
   MapPin, Phone, Mail, Clock, MessageCircle, 
   Send, ChevronDown, CheckCircle2, ShieldCheck, 
-  Copy, Check, Sparkles, RefreshCw, AlertCircle
+  Copy, Check, Sparkles, RefreshCw, AlertCircle,
+  ArrowLeft, ChevronRight
 } from 'lucide-react';
 
 export default function ContactPage() {
-  const { showToast, brandConfig } = useShop();
+  const { showToast, brandConfig, navigateTo } = useShop();
 
   const targetEmail = brandConfig?.email || DEFAULT_VERIFICATION_EMAIL;
 
@@ -39,19 +39,19 @@ export default function ContactPage() {
     },
     {
       q: "What is the cutoff time for Same-Day Flower Delivery?",
-      a: "Orders placed before 7:00 PM are eligible for guaranteed same-day delivery across Delhi NCR, Mumbai, Bengaluru, Hyderabad, and major metros. Express 3-hour courier slots are also available on WhatsApp inquiry."
+      a: "Orders placed before 7:00 PM are eligible for guaranteed same-day delivery across Delhi NCR, Mumbai, Bengaluru, Hyderabad, and major metros. Express 3-hour courier slots are also available on inquiry."
     },
     {
       q: "How does Midnight Surprise Delivery work?",
-      a: "Midnight orders are dispatched in specialized climate-controlled floral vehicles and delivered between 11:15 PM and 12:00 AM sharp. Our delivery concierge discreetly coordinates with you to make the surprise magical."
+      a: "Midnight deliveries are dispatched in specialized climate-controlled floral vehicles and delivered between 11:15 PM and 12:00 AM sharp. Our delivery team discreetly coordinates to make the surprise magical."
     },
     {
       q: "Can I customize flower colors, wrapping paper, or ribbon?",
-      a: "Absolutely! You can choose your color, wrapping style, ribbon, and add-ons directly on our product detail pages or use our 'Build Your Own Bouquet' studio. You can also chat directly on WhatsApp for bespoke requests."
+      a: "Absolutely! You can choose your color, wrapping style, ribbon, and add-ons directly on our product detail pages or use our 'Build Your Own Bouquet' studio. You can also reach out via our contact form for bespoke requests."
     },
     {
-      q: "How does direct WhatsApp ordering work?",
-      a: "Clicking 'Order on WhatsApp' opens WhatsApp with a pre-formatted message containing your selected flowers, customization, delivery address, and date. Our concierge immediately verifies flower availability and shares photos before dispatch."
+      q: "How does bespoke floral consultation work?",
+      a: "Send us a note with your preferred flower varieties, color theme, and occasion. Our master florists review flower availability and handcraft your luxury arrangement."
     },
     {
       q: "What is your 100% Freshness Guarantee?",
@@ -59,7 +59,7 @@ export default function ContactPage() {
     },
     {
       q: "Do you undertake bulk wedding varmalas and stage decor?",
-      a: "Yes! We craft royal Rajwada varmalas, bridal cascade bouquets, and entrance jhalars for weddings across India. Contact our wedding desk on WhatsApp for custom themes."
+      a: "Yes! We craft royal Rajwada varmalas, bridal cascade bouquets, and entrance jhalars for weddings across India. Contact our wedding desk for custom themes."
     }
   ];
 
@@ -112,25 +112,35 @@ export default function ContactPage() {
     setFormData({ name: '', email: '', phone: '', subject: 'General Inquiry', message: '' });
   };
 
-  const handleWhatsAppChat = () => {
-    const text = verificationReceipt 
-      ? `Hello ROSHIKA BLOOMS! I just sent a verified message with Reference ID: ${verificationReceipt.referenceId}. Could you please assist me?`
-      : "Hello ROSHIKA BLOOMS concierge! I would like to inquire about floral delivery.";
-    const url = createWhatsAppUrl(text, brandConfig?.whatsappNumber);
-    window.open(url, '_blank');
-  };
-
   return (
-    <div className="contact-page animate-fade-in" style={{ padding: '3rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
+    <div className="contact-page animate-fade-in" style={{ padding: '2rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
+        {/* Breadcrumb Back Bar */}
+        <div className="product-detail-breadcrumbs" style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-sm)' }}>
+          <button 
+            type="button" 
+            className="breadcrumb-back-btn"
+            onClick={() => navigateTo('home')}
+            title="Back to Home"
+          >
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+          <div className="breadcrumb-trail">
+            <span className="breadcrumb-link" onClick={() => navigateTo('home')}>Home</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-active">Contact Atelier</span>
+          </div>
+        </div>
+
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem' }} className="gold-badge">
             <ShieldCheck size={14} color="var(--text-gold)" />
             <span>Verified Atelier Inbox: {targetEmail}</span>
           </div>
-          <h1 className="font-serif-editorial" style={{ fontSize: '3.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-            Contact ROSHIKA BLOOMS
+          <h1 className="font-serif-editorial" style={{ fontSize: '2.6rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+            Contact {brandConfig?.name || BRAND_CONFIG.name}
           </h1>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
@@ -143,10 +153,7 @@ export default function ContactPage() {
         </div>
 
         {/* Contact Split: Form + Info Box */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 0.8fr',
-          gap: '3rem',
+        <div className="contact-split-grid" style={{
           alignItems: 'start',
           marginBottom: '5rem'
         }}>
@@ -227,14 +234,6 @@ export default function ContactPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <button 
-                    type="button" 
-                    className="btn btn-whatsapp btn-md"
-                    onClick={handleWhatsAppChat}
-                  >
-                    <MessageCircle size={16} />
-                    <span>Follow Up on WhatsApp</span>
-                  </button>
                   <button 
                     type="button" 
                     className="btn btn-outline btn-md"
@@ -416,17 +415,6 @@ export default function ContactPage() {
                   <Clock size={18} color="var(--text-gold)" style={{ flexShrink: 0 }} />
                   <span>{brandConfig?.hours || BRAND_CONFIG.hours}</span>
                 </div>
-              </div>
-
-              <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-subtle)' }}>
-                <button 
-                  className="btn btn-whatsapp"
-                  onClick={handleWhatsAppChat}
-                  style={{ width: '100%' }}
-                >
-                  <MessageCircle size={18} />
-                  <span>Instant WhatsApp Concierge</span>
-                </button>
               </div>
             </div>
 

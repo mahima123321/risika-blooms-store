@@ -8,10 +8,12 @@ import { Search, Filter, SlidersHorizontal, Sparkles, X, ChevronDown, Plus } fro
 export default function ShopPage() {
   const { 
     currentView, searchQuery, setSearchQuery, language, t, 
-    products, isOwnerAuthenticated, openAddProductModal 
+    products, isOwnerAuthenticated, openAddProductModal,
+    categories
   } = useShop();
 
   const allProducts = products || PRODUCTS;
+  const allCategories = categories || CATEGORIES;
 
   // Active Filter states initialized from route params if any
   const [selectedCategory, setSelectedCategory] = useState(
@@ -142,7 +144,7 @@ export default function ShopPage() {
                 title="Add a new bouquet (Owner Only)"
               >
                 <Plus size={14} />
-                <span>Add Bouquet (नया बुके जोड़ें)</span>
+                <span>Add New Bouquet</span>
               </button>
             )}
             <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
@@ -177,15 +179,48 @@ export default function ShopPage() {
           </div>
         </div>
 
+        {/* Mobile Filter & Sort Bar (Visible on mobile screens) */}
+        <div className="shop-mobile-filter-bar mobile-only">
+          <button 
+            type="button" 
+            className={`shop-mobile-filter-trigger ${hasActiveFilters ? 'active' : ''}`}
+            onClick={() => setShowMobileFilters(true)}
+          >
+            <SlidersHorizontal size={15} />
+            <span>Filters {hasActiveFilters && `(Active)`}</span>
+          </button>
+
+          <div className="shop-mobile-sort-wrapper">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="shop-mobile-sort-select"
+            >
+              <option value="featured">✨ Featured</option>
+              <option value="price-low">Price: Low-High</option>
+              <option value="price-high">Price: High-Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="newest">New Arrivals</option>
+            </select>
+          </div>
+
+          {hasActiveFilters && (
+            <button 
+              type="button" 
+              className="shop-mobile-reset-btn"
+              onClick={resetFilters}
+            >
+              Reset
+            </button>
+          )}
+        </div>
+
         {/* Main Shop Layout: Sidebar Filters + Products Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '260px 1fr',
-          gap: '2.5rem',
+        <div className="shop-layout-grid" style={{
           alignItems: 'start'
         }}>
           {/* Sidebar Filter Panel */}
-          <aside className="glass-panel" style={{ padding: '1.8rem' }}>
+          <aside className="glass-panel desktop-filter-aside" style={{ padding: '1.8rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)' }}>
               <h3 className="font-serif-editorial" style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Filter size={16} color="var(--text-gold)" /> Filters
@@ -213,17 +248,17 @@ export default function ShopPage() {
                     checked={selectedCategory === 'all'} 
                     onChange={() => setSelectedCategory('all')} 
                   />
-                  <span>All Categories ({PRODUCTS.length})</span>
+                  <span>All Categories ({allProducts.length})</span>
                 </label>
-                {CATEGORIES.map((cat) => (
-                  <label key={cat.id} style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                {allCategories.map((cat) => (
+                  <label key={cat.id || cat.slug} style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                     <input 
                       type="radio" 
                       name="category" 
                       checked={selectedCategory === cat.slug} 
                       onChange={() => setSelectedCategory(cat.slug)} 
                     />
-                    <span>{language === 'hi' ? cat.nameHindi : cat.name}</span>
+                    <span>{cat.name}</span>
                   </label>
                 ))}
               </div>
@@ -299,7 +334,7 @@ export default function ShopPage() {
                       checked={selectedOccasion === occ.id} 
                       onChange={() => setSelectedOccasion(occ.id)} 
                     />
-                    <span>{language === 'hi' ? occ.nameHindi : occ.name}</span>
+                    <span>{occ.name}</span>
                   </label>
                 ))}
               </div>
@@ -330,6 +365,144 @@ export default function ShopPage() {
             )}
           </main>
         </div>
+
+        {/* FULLSCREEN MOBILE FILTER MODAL / SHEET */}
+        {showMobileFilters && (
+          <div className="shop-mobile-filter-modal-overlay" onClick={() => setShowMobileFilters(false)}>
+            <div className="shop-mobile-filter-modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="shop-mobile-filter-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Filter size={18} color="var(--text-gold)" />
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0 }}>Filter Collections</h3>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  {hasActiveFilters && (
+                    <button 
+                      onClick={resetFilters}
+                      style={{ fontSize: '0.8rem', color: 'var(--text-accent)', fontWeight: 700, background: 'none' }}
+                    >
+                      Reset All
+                    </button>
+                  )}
+                  <button 
+                    className="drawer-close-btn" 
+                    onClick={() => setShowMobileFilters(false)}
+                    aria-label="Close Filters"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="shop-mobile-filter-body">
+                {/* 1. Category */}
+                <div className="mobile-filter-section">
+                  <h4>Category</h4>
+                  <div className="mobile-filter-chips">
+                    <button
+                      type="button"
+                      className={`mobile-filter-chip ${selectedCategory === 'all' ? 'active' : ''}`}
+                      onClick={() => setSelectedCategory('all')}
+                    >
+                      All ({allProducts.length})
+                    </button>
+                    {allCategories.map((cat) => (
+                      <button
+                        key={cat.id || cat.slug}
+                        type="button"
+                        className={`mobile-filter-chip ${selectedCategory === cat.slug ? 'active' : ''}`}
+                        onClick={() => setSelectedCategory(cat.slug)}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Price Range */}
+                <div className="mobile-filter-section">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <h4>Max Price</h4>
+                    <span style={{ fontWeight: 800, color: 'var(--text-accent)', fontSize: '1rem' }}>₹{maxPrice}</span>
+                  </div>
+                  <input 
+                    type="range"
+                    min="499"
+                    max="5000"
+                    step="100"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                    style={{ width: '100%', accentColor: 'var(--rb-rose-600)' }}
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                    <span>₹499</span>
+                    <span>₹2,500</span>
+                    <span>₹5,000</span>
+                  </div>
+                </div>
+
+                {/* 3. Budget Bracket */}
+                <div className="mobile-filter-section">
+                  <h4>Budget Brackets</h4>
+                  <div className="mobile-filter-chips">
+                    {[
+                      { id: 'all', label: 'All' },
+                      { id: 'under-499', label: 'Under ₹499' },
+                      { id: 'under-999', label: 'Under ₹999' },
+                      { id: 'under-1499', label: 'Under ₹1,499' },
+                      { id: 'luxury-2499', label: 'Luxury (₹1,500+)' }
+                    ].map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        className={`mobile-filter-chip ${selectedBudget === b.id ? 'active' : ''}`}
+                        onClick={() => setSelectedBudget(b.id)}
+                      >
+                        {b.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Occasions */}
+                <div className="mobile-filter-section">
+                  <h4>Occasion</h4>
+                  <div className="mobile-filter-chips">
+                    <button
+                      type="button"
+                      className={`mobile-filter-chip ${selectedOccasion === 'all' ? 'active' : ''}`}
+                      onClick={() => setSelectedOccasion('all')}
+                    >
+                      All
+                    </button>
+                    {OCCASIONS.map((occ) => (
+                      <button
+                        key={occ.id}
+                        type="button"
+                        className={`mobile-filter-chip ${selectedOccasion === occ.id ? 'active' : ''}`}
+                        onClick={() => setSelectedOccasion(occ.id)}
+                      >
+                        {occ.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Sticky Apply Button */}
+              <div className="shop-mobile-filter-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-gold btn-lg" 
+                  style={{ width: '100%' }}
+                  onClick={() => setShowMobileFilters(false)}
+                >
+                  <span>Show {filteredProducts.length} Bouquets</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

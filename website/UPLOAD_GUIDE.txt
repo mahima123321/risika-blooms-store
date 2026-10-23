@@ -1,0 +1,45 @@
+================================================================================
+   RISHIKA BLOOMS - COMPLETE WEBSITE DEPLOYMENT FOLDER
+================================================================================
+
+Ye folder aapki PURI WEBSITE ka final ready-to-run package hai.
+Isme sabhi HTML, CSS, JavaScript, Images, aur Routing files shaamil hain.
+
+Aap is folder ko 3 tariko se 24/7 hamesha ke liye online chala sakte hain:
+
+--------------------------------------------------------------------------------
+TARIKA 1: NETLIFY (SABSE AASAN & 100% FREE FOREVER)
+--------------------------------------------------------------------------------
+1. Apne browser me ye link kholein:
+   https://app.netlify.com/drop
+
+2. Is pure 'PURI_WEBSITE_READY_TO_UPLOAD' folder ko uthakar browser window me
+   DRAG and DROP kar dein.
+
+3. 10-20 seconds me Netlify aapko ek free live link de dega:
+   (Jaise: https://rishika-blooms.netlify.app)
+
+4. Website 24 ghante, 365 din hamesha ke liye bina ruke chalti rahegi!
+
+--------------------------------------------------------------------------------
+TARIKA 2: HOSTINGER / CPANEL (AGAR AAPKE PAAS DOMAIN & HOSTING HAI)
+--------------------------------------------------------------------------------
+1. Apne Hostinger hPanel ya cPanel me login karein.
+2. 'File Manager' me jayein aur 'public_html' folder kholein.
+3. Bahar bani hui 'PURI_WEBSITE_READY_TO_UPLOAD.zip' file ko upload karein.
+4. Upload hone ke baad wahi par 'Extract' (Unzip) kar dein.
+5. Saari files seedha public_html ke andar honi chahiye (jaise index.html, assets, images).
+6. Aapki website aapke custom domain (e.g. yourname.com) par hamesha ke liye shuru ho jayegi!
+
+--------------------------------------------------------------------------------
+TARIKA 3: VERCEL (FREE FOREVER & SUPER FAST)
+--------------------------------------------------------------------------------
+1. https://vercel.com par jayein aur apna free account banayein.
+2. 'Add New Project' par click karke is folder ko upload/connect karein.
+3. 30 seconds me website live ho jayegi.
+
+--------------------------------------------------------------------------------
+NOTE:
+- Is folder me '.htaccess' aur '_redirects' pehle se shamil hain,
+  jisse koi bhi page refresh karne par 404 error nahi aayega!
+================================================================================

@@ -3,26 +3,28 @@ import { useShop } from '../context/ShopContext';
 import { CATEGORIES } from '../data/categories';
 import { PRODUCTS } from '../data/products';
 import ProductCard from '../components/common/ProductCard';
-import { ChevronRight, Sparkles, ArrowLeft, Plus } from 'lucide-react';
+import { ChevronRight, Sparkles, ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
-export default function CategoryPage() {
+export default function CategoryPage({ overrideCategory }) {
   const { 
     currentView, language, navigateTo, 
-    products, isOwnerAuthenticated, openAddProductModal 
+    products, categories, isOwnerAuthenticated, openAddProductModal,
+    deleteOwnerCategory 
   } = useShop();
-  const slug = currentView.params?.categorySlug;
+  const slug = overrideCategory || currentView.params?.categorySlug;
 
-  const category = CATEGORIES.find((c) => c.slug === slug) || CATEGORIES[0];
+  const allCategories = categories || CATEGORIES;
+  const category = allCategories.find((c) => c.slug === slug || c.id === slug) || allCategories[0];
   const allProducts = products || PRODUCTS;
-  const categoryProducts = allProducts.filter((p) => p.category === category.slug);
+  const categoryProducts = allProducts.filter((p) => p.category === category?.slug || p.category === category?.id);
 
   return (
     <div className="category-page animate-fade-in" style={{ paddingBottom: '6rem', backgroundColor: 'var(--bg-primary)' }}>
       {/* Category Banner Hero */}
       <div 
+        className="category-banner-hero"
         style={{
           position: 'relative',
-          height: '340px',
           backgroundImage: `linear-gradient(rgba(18, 8, 11, 0.55), rgba(18, 8, 11, 0.85)), url(${category.bannerImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -30,13 +32,12 @@ export default function CategoryPage() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#FFFFFF',
-          textAlign: 'center',
-          marginBottom: '3.5rem'
+          textAlign: 'center'
         }}
       >
         <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           {/* Breadcrumb */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', marginBottom: '1rem' }}>
+          <div className="category-breadcrumb-trail">
             <span style={{ cursor: 'pointer' }} onClick={() => navigateTo('home')}>Home</span>
             <ChevronRight size={14} />
             <span style={{ cursor: 'pointer' }} onClick={() => navigateTo('shop')}>Categories</span>
@@ -48,11 +49,11 @@ export default function CategoryPage() {
             <Sparkles size={12} /> {category.itemCount}
           </span>
 
-          <h1 className="font-serif-editorial" style={{ fontSize: '3.2rem', fontWeight: 700, marginBottom: '0.75rem' }}>
-            {language === 'hi' ? category.nameHindi : category.name}
+          <h1 className="font-serif-editorial category-banner-title">
+            {category.name}
           </h1>
 
-          <p style={{ maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6 }}>
+          <p className="category-banner-desc">
             {category.description}
           </p>
         </div>
@@ -68,18 +69,35 @@ export default function CategoryPage() {
             <ArrowLeft size={14} />
             <span>Back to All Collections</span>
           </button>
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
             {isOwnerAuthenticated && (
-              <button 
-                className="btn btn-gold btn-sm"
-                onClick={() => openAddProductModal(category.slug)}
-                title={`Add a new bouquet to ${category.name}`}
-              >
-                <Plus size={14} />
-                <span>Add Bouquet Here (नया बुके जोड़ें)</span>
-              </button>
+              <>
+                <button 
+                  className="btn btn-gold btn-sm"
+                  onClick={() => openAddProductModal(category.slug)}
+                  title={`Add a new bouquet with custom photo to ${category.name}`}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <Plus size={14} />
+                  <span>+ Add Bouquet Here</span>
+                </button>
+                <button 
+                  className="btn btn-outline btn-sm"
+                  onClick={() => {
+                    if (window.confirm(`Are you sure you want to delete category "${category.name}"?`)) {
+                      deleteOwnerCategory(category.id || category.slug);
+                      navigateTo('shop');
+                    }
+                  }}
+                  title="Delete this heading"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#EF4444', borderColor: '#EF4444' }}
+                >
+                  <Trash2 size={13} />
+                  <span>Delete Category</span>
+                </button>
+              </>
             )}
-            <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
               {categoryProducts.length} Exclusive Styles
             </span>
           </div>

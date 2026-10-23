@@ -23,7 +23,7 @@ export default function TestimonialsSection() {
       name: "Dr. Ananya Sen",
       location: "Indiranagar, Bengaluru",
       occasion: "Sister's Baby Shower",
-      quote: "The teddy combo and pastel blush flowers were so cute and meticulously crafted. You can immediately tell the difference between ordinary roadside florists and ROSHIKA BLOOMS.",
+      quote: "The teddy combo and pastel blush flowers were so cute and meticulously crafted. You can immediately tell the difference between ordinary roadside florists and RISIKA BLOOMS.",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
     }
@@ -41,15 +41,11 @@ export default function TestimonialsSection() {
             <span className="floral-divider-line"></span>
           </div>
           <p className="section-subtitle">
-            Trusted by over 10,000+ patrons for memorable romantic gestures, midnight surprises, and royal wedding florals.
+            Curated client experiences & feedback. (Customer demo reviews — live photo reviews appear on product details).
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem'
-        }}>
+        <div className="testimonials-grid">
           {testimonials.map((t, idx) => (
             <div 
               key={idx}

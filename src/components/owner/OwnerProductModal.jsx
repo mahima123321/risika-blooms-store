@@ -5,13 +5,16 @@ import {
   Upload, Image as ImageIcon, Sparkles, X, Check, 
   Trash2, DollarSign, Tag, FileText, AlertCircle 
 } from 'lucide-react';
+import { compressImageFile } from '../../utils/imageCompressor';
 
 export default function OwnerProductModal() {
   const { 
     isOwnerProductModalOpen, 
+    isOwnerAuthenticated,
     closeOwnerProductModal, 
     editingProduct, 
     ownerModalDefaultCategory,
+    categories,
     saveOwnerProduct, 
     deleteOwnerProduct 
   } = useShop();
@@ -60,27 +63,31 @@ export default function OwnerProductModal() {
     setError('');
   }, [editingProduct, ownerModalDefaultCategory, isOwnerProductModalOpen]);
 
-  if (!isOwnerProductModalOpen) return null;
+  if (!isOwnerProductModalOpen || !isOwnerAuthenticated) return null;
 
-  // Handle local file upload (converts to Base64 data URL)
-  const handleFileChange = (e) => {
+  // Handle local file upload (converts to Base64 data URL with auto compression)
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      setError('कृपया केवल इमेज फ़ाइल (JPG, PNG, WebP) चुनें');
+      setError('Please select an image file (JPG, PNG, WebP)');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImage(event.target.result);
+    try {
       setError('');
-    };
-    reader.onerror = () => {
-      setError('फ़ाइल पढ़ने में त्रुटि हुई। कृपया दोबारा प्रयास करें।');
-    };
-    reader.readAsDataURL(file);
+      // Studio Ultra-Clear HD (1600px) with stepped downsampling & unsharp mask sharpening
+      // Guarantees phone camera bouquet photos are razor-sharp while remaining light for cloud sync
+      const compressed = await compressImageFile(file, 1600, 1600, 0.88);
+      setImage(compressed);
+    } catch (err) {
+      console.warn('Compression note, falling back to standard read:', err);
+      const reader = new FileReader();
+      reader.onload = (event) => setImage(event.target.result);
+      reader.onerror = () => setError('Error reading file. Please try again.');
+      reader.readAsDataURL(file);
+    }
   };
 
   // Pricing calculations
@@ -94,19 +101,20 @@ export default function OwnerProductModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('कृपया बुके का नाम दर्ज करें (Please enter Bouquet Name)');
+      setError('Please enter Bouquet Name');
       return;
     }
     if (!price || parsedPrice <= 0) {
-      setError('कृपया मान्य सेलिंग प्राइस दर्ज करें (Please enter a valid Price)');
+      setError('Please enter a valid Selling Price');
       return;
     }
     if (!image.trim()) {
-      setError('कृपया बुके की तस्वीर अपलोड करें या URL डालें (Please provide Bouquet Image)');
+      setError('Please provide a Bouquet Image or photo');
       return;
     }
 
-    const selectedCategoryObj = CATEGORIES.find((c) => c.slug === category);
+    const allAvailableCats = categories || CATEGORIES;
+    const selectedCategoryObj = allAvailableCats.find((c) => c.slug === category || c.id === category);
     const categoryName = selectedCategoryObj ? selectedCategoryObj.name : 'Floral Bouquets';
 
     const flowerTypes = flowerTypesStr
@@ -118,9 +126,10 @@ export default function OwnerProductModal() {
       id: editingProduct?.id || `velvet-custom-${Date.now()}`,
       slug: editingProduct?.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
       name: name.trim(),
-      nameHindi: nameHindi.trim() || name.trim(),
+      nameHindi: name.trim(),
       category,
       categoryName,
+      categoryNameHindi: categoryName,
       price: parsedPrice,
       originalPrice: parsedOriginalPrice || (parsedPrice + 400),
       image,
@@ -137,7 +146,7 @@ export default function OwnerProductModal() {
   };
 
   const handleDelete = () => {
-    if (editingProduct && window.confirm(`क्या आप सचमुच "${editingProduct.name}" बुके को हटाना चाहते हैं? (Delete this bouquet?)`)) {
+    if (editingProduct && window.confirm(`Are you sure you want to delete "${editingProduct.name}" bouquet?`)) {
       deleteOwnerProduct(editingProduct.id);
     }
   };
@@ -163,7 +172,7 @@ export default function OwnerProductModal() {
               {editingProduct ? 'Edit Bouquet Image & Price' : 'Add New Bouquet & Set Price'}
             </h2>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              यहाँ आप बुके की फोटो अपलोड कर सकते हैं और सेलिंग प्राइस बदल सकते हैं।
+              Upload bespoke photography, adjust pricing points, and manage catalog availability.
             </p>
           </div>
 
@@ -189,7 +198,7 @@ export default function OwnerProductModal() {
             {/* Left Column: Image Upload & Live Preview */}
             <div className="owner-image-column">
               <label className="owner-field-label">
-                <ImageIcon size={15} /> Bouquet Photo / बुके की तस्वीर *
+                <ImageIcon size={15} /> Bouquet Photo *
               </label>
 
               {/* Upload Mode Switcher */}
@@ -199,7 +208,7 @@ export default function OwnerProductModal() {
                   className={`owner-tab-btn ${uploadMode === 'file' ? 'active' : ''}`}
                   onClick={() => setUploadMode('file')}
                 >
-                  <Upload size={13} /> Upload from Device (फ़ोन/लैपटॉप)
+                  <Upload size={13} /> Upload from Device
                 </button>
                 <button
                   type="button"
@@ -249,7 +258,17 @@ export default function OwnerProductModal() {
                 <span className="preview-label">Live Customer Card Preview:</span>
                 <div className="preview-card-mockup">
                   {image ? (
-                    <img src={image} alt="Bouquet Preview" className="preview-mockup-img" />
+                    <div style={{ position: 'relative' }}>
+                      <img 
+                        src={image} 
+                        alt="Bouquet Preview" 
+                        className="preview-mockup-img" 
+                        style={{ imageRendering: '-webkit-optimize-contrast' }}
+                      />
+                      <span className="gold-badge" style={{ position: 'absolute', top: '8px', right: '8px', fontSize: '0.68rem', padding: '2px 7px', background: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(6px)', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+                        <Sparkles size={10} /> Ultra-HD Clear
+                      </span>
+                    </div>
                   ) : (
                     <div className="preview-mockup-placeholder">
                       <ImageIcon size={32} color="var(--text-muted)" />
@@ -281,13 +300,13 @@ export default function OwnerProductModal() {
               {/* Pricing Section (Highlighted) */}
               <div className="owner-pricing-group-card">
                 <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-gold)', fontSize: '0.95rem', marginBottom: '0.85rem' }}>
-                  <DollarSign size={16} /> Price Settings / कीमत सेट करें *
+                  <DollarSign size={16} /> Price Settings *
                 </h4>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
                     <label className="owner-field-label">
-                      Selling Price (₹) / बिक्री मूल्य *
+                      Selling Price (₹) *
                     </label>
                     <div style={{ position: 'relative' }}>
                       <span className="price-rupee-symbol">₹</span>
@@ -331,7 +350,7 @@ export default function OwnerProductModal() {
               {/* Title & Language */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
                 <div>
-                  <label className="owner-field-label">Bouquet Name (English) *</label>
+                  <label className="owner-field-label">Bouquet Name *</label>
                   <input
                     type="text"
                     value={name}
@@ -342,12 +361,12 @@ export default function OwnerProductModal() {
                   />
                 </div>
                 <div>
-                  <label className="owner-field-label">नाम (हिन्दी)</label>
+                  <label className="owner-field-label">Bespoke Tagline / Subtitle</label>
                   <input
                     type="text"
                     value={nameHindi}
                     onChange={(e) => setNameHindi(e.target.value)}
-                    placeholder="e.g. रॉयल ब्लू वेलवेट रोज़ बुके"
+                    placeholder="e.g. Handcrafted Midnight Keepsake"
                     className="owner-input-field"
                   />
                 </div>
@@ -356,21 +375,21 @@ export default function OwnerProductModal() {
               {/* Category & Badge */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
                 <div>
-                  <label className="owner-field-label">Category / श्रेणी *</label>
+                  <label className="owner-field-label">Category / Heading *</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="owner-input-field"
                   >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat.slug} value={cat.slug}>
+                    {(categories || CATEGORIES).map((cat) => (
+                      <option key={cat.slug || cat.id} value={cat.slug || cat.id}>
                         {cat.name}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="owner-field-label">Badge Tag (बैज)</label>
+                  <label className="owner-field-label">Badge Tag</label>
                   <input
                     type="text"
                     value={badge}
@@ -383,7 +402,7 @@ export default function OwnerProductModal() {
 
               {/* Description */}
               <div style={{ marginTop: '1rem' }}>
-                <label className="owner-field-label">Description / विवरण</label>
+                <label className="owner-field-label">Description</label>
                 <textarea
                   rows="3"
                   value={description}
@@ -434,7 +453,7 @@ export default function OwnerProductModal() {
                 type="submit"
                 className="btn btn-gold btn-md"
               >
-                <Check size={16} /> {editingProduct ? 'Save Changes / सेव करें' : 'Publish Bouquet / पब्लिश करें'}
+                <Check size={16} /> {editingProduct ? 'Save Changes' : 'Publish Bouquet'}
               </button>
             </div>
           </div>

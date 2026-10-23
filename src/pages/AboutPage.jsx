@@ -1,28 +1,40 @@
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { BRAND_CONFIG } from '../config/brand';
-import { createWhatsAppUrl } from '../config/whatsapp';
-import { Sparkles, Heart, Award, ShieldCheck, Truck, MessageCircle, ArrowRight } from 'lucide-react';
+import { Sparkles, Heart, Award, ShieldCheck, Truck, ArrowRight, ArrowLeft, ChevronRight, Mail } from 'lucide-react';
 
 export default function AboutPage() {
   const { language, navigateTo, brandConfig } = useShop();
 
-  const handleWhatsAppConsult = () => {
-    const url = createWhatsAppUrl("Hello ROSHIKA BLOOMS! I'd like to book a floral consultation with your master florist.");
-    window.open(url, '_blank');
-  };
-
   return (
-    <div className="about-page animate-fade-in" style={{ padding: '3rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
+    <div className="about-page animate-fade-in" style={{ padding: '2rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
+        {/* Breadcrumb Back Bar */}
+        <div className="product-detail-breadcrumbs" style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-sm)' }}>
+          <button 
+            type="button" 
+            className="breadcrumb-back-btn"
+            onClick={() => navigateTo('home')}
+            title="Back to Home"
+          >
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+          <div className="breadcrumb-trail">
+            <span className="breadcrumb-link" onClick={() => navigateTo('home')}>Home</span>
+            <ChevronRight size={12} className="breadcrumb-sep" />
+            <span className="breadcrumb-active">About Atelier</span>
+          </div>
+        </div>
+
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span className="section-pretitle">The Atelier Story</span>
-          <h1 className="font-serif-editorial" style={{ fontSize: '3.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          <h1 className="font-serif-editorial" style={{ fontSize: '2.6rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
             About {brandConfig?.name || BRAND_CONFIG.name}
           </h1>
           <p className="font-script" style={{ fontSize: '1.8rem', color: 'var(--text-accent)' }}>
-            "{language === 'hi' ? (brandConfig?.taglineHindi || BRAND_CONFIG.taglineHindi) : (brandConfig?.tagline || BRAND_CONFIG.tagline)}"
+            "{brandConfig?.tagline || BRAND_CONFIG.tagline}"
           </p>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
@@ -32,14 +44,14 @@ export default function AboutPage() {
         </div>
 
         {/* Narrative Split 1 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3.5rem', alignItems: 'center', marginBottom: '5rem' }}>
+        <div className="about-split-grid" style={{ alignItems: 'center', marginBottom: '4rem' }}>
           <div>
             <span className="gold-badge" style={{ marginBottom: '1rem' }}>Our Heritage</span>
-            <h2 className="font-serif-editorial" style={{ fontSize: '2.2rem', fontWeight: 700, marginBottom: '1.25rem', color: 'var(--text-primary)' }}>
+            <h2 className="font-serif-editorial" style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1.25rem', color: 'var(--text-primary)' }}>
               Where Emotion Meets Botanical Haute Couture
             </h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: '1rem', fontSize: '1rem' }}>
-              Founded with the conviction that flowers are nature's most eloquent poetry, <strong>ROSHIKA BLOOMS</strong> was born to elevate gifting into an art form. We rejected mass-produced, tired roadside bouquets wrapped in flimsy plastic in favour of bespoke luxury aesthetics.
+              Founded with the conviction that flowers are nature's most eloquent poetry, <strong>RISHIKA BLOOMS</strong> (also celebrated as <strong>Rishhika Bloom</strong>) was born to elevate gifting into an art form. We rejected mass-produced, tired roadside bouquets wrapped in flimsy plastic in favour of bespoke luxury aesthetics.
             </p>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '1rem' }}>
               Every rose petal, lily blossom, and hydrangea cloud is hand-selected from sustainable, ethical greenhouses in the Netherlands, Ecuador, and the misty hills of the Nilgiris.
@@ -123,9 +135,9 @@ export default function AboutPage() {
               <span>Explore The Collection</span>
               <ArrowRight size={16} />
             </button>
-            <button className="btn btn-whatsapp" onClick={handleWhatsAppConsult}>
-              <MessageCircle size={18} />
-              <span>Consult with Master Florist</span>
+            <button className="btn btn-outline" onClick={() => navigateTo('contact')}>
+              <Mail size={16} />
+              <span>Contact Atelier</span>
             </button>
           </div>
         </div>

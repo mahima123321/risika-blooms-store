@@ -35,19 +35,19 @@ const FEATURED_HERO_SLIDES = [
     slug: "silent-confession-midnight-blue-birthday-velvet-bouquet"
   },
   {
-    id: "velvet-bday-daisy-pink-lily-wrap",
-    title: "Enchanted Garden Velvet Lily & Daisy Bouquet",
-    subtitle: "Pearl Beaded Trim, Pink Velvet Lily & Lemon Daisy",
+    id: "velvet-bday-pink-tulip-lily-pearl",
+    title: "Enchanted Garden Velvet Lily & Pearl Bouquet",
+    subtitle: "Pearl Beaded Trim, Pink Velvet Lily & Floral Accents",
     price: 1299,
     originalPrice: 1699,
     tag: "Artisan Choice",
-    image: "/images/bday_daisy_pink_lily_wrap.jpg",
-    slug: "enchanted-garden-velvet-lily-daisy-bouquet"
+    image: "/images/bday_pink_tulip_lily_pearl.jpg",
+    slug: "enchanted-garden-velvet-lily-pearl-bouquet"
   }
 ];
 
 export default function HeroSection() {
-  const { language, t, navigateTo } = useShop();
+  const { language, t, navigateTo, brandConfig } = useShop();
   const [activeSlide, setActiveSlide] = useState(0);
 
   // Auto-advance slides every 5 seconds
@@ -61,7 +61,7 @@ export default function HeroSection() {
   const currentSlide = FEATURED_HERO_SLIDES[activeSlide];
 
   const handleWhatsAppInquiry = () => {
-    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS! I'd like to consult with a master florist for a luxury handcrafted bouquet delivery.");
+    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS! I'd like to consult with a master florist for a luxury handcrafted bouquet delivery.", brandConfig?.whatsappNumber);
     window.open(url, '_blank');
   };
 
@@ -69,25 +69,24 @@ export default function HeroSection() {
     <section className="hero-section">
       <div className="container hero-grid">
         {/* Left Column: Hero Editorial Copy */}
-        <div>
+        <div className="hero-editorial-col">
           <div className="hero-subtitle-pill">
             <Sparkles size={14} />
-            <span>Luxury Handcrafted Floral Atelier • Never Wilts</span>
+            <span>
+              Luxury Handcrafted Floral Atelier • Never Wilts
+            </span>
           </div>
 
           <h1 className="hero-title">
-            Make Every Moment <em>Bloom</em> with Splendour.
+            Make Every Moment <em>Bloom</em>.
           </h1>
 
           <p className="hero-description">
-            {language === 'hi'
-              ? "डच गुलाब, वायरल हैंडक्राफ्टेड वेलवेट बुके, कोरियन फ्रॉस्टेड रैप्स, टेडी कॉम्बो और मनमोहक गिफ्ट हैंपर्स। उसी दिन व मध्यरात्रि एक्सप्रेस डिलीवरी।"
-              : "Discover viral handcrafted velvet floral keepsakes, Seoul-inspired frosted mesh wraps, Ecuadorian roses, and bespoke gift hampers crafted to create timeless memories."
-            }
+            Beautiful flowers and thoughtful gifts, delivered with love. Discover handcrafted velvet floral keepsakes, fresh Dutch roses, and celebratory gift hampers crafted to create timeless memories.
           </p>
 
           {/* Social Proof Counter */}
-          <div className="hero-rating-strip" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.75rem', background: 'var(--bg-accent-soft)', padding: '0.45rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-gold)' }}>
+          <div className="hero-rating-strip">
             <div style={{ display: 'flex', gap: '2px' }}>
               {[...Array(5)].map((_, i) => (
                 <Star key={i} size={14} fill="#F59E0B" color="#F59E0B" />
@@ -96,47 +95,44 @@ export default function HeroSection() {
             <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               4.9 / 5.0 Rating
             </span>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            <span className="desktop-only" style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               (2,850+ Verified Gifting Celebrations)
+            </span>
+            <span className="mobile-only" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+              (2,850+ Reviews)
             </span>
           </div>
 
           <div className="hero-cta-group">
             <button 
-              className="btn btn-primary btn-lg"
+              className="btn btn-primary btn-lg hero-cta-btn"
               onClick={() => navigateTo('shop')}
             >
               <ShoppingBag size={18} />
-              <span>{t('exploreCollection')}</span>
+              <span>Shop Now</span>
               <ArrowRight size={16} />
             </button>
 
             <button 
-              className="btn btn-gold btn-lg"
+              className="btn btn-gold btn-lg hero-cta-btn"
               onClick={() => navigateTo('build-bouquet')}
             >
               <Sparkles size={18} />
-              <span>{t('buildBouquet')}</span>
-            </button>
-
-            <button 
-              className="btn btn-whatsapp btn-lg"
-              onClick={handleWhatsAppInquiry}
-            >
-              <MessageCircle size={18} />
-              <span>{t('orderWhatsApp')}</span>
+              <span>Explore Collections</span>
             </button>
           </div>
 
-          {/* Value Pillars */}
-          <div className="hero-guarantees">
+          {/* Value Pillars (Desktop) */}
+          <div className="hero-guarantees hero-guarantees-desktop">
             <div className="hero-guarantee-item">
               <div className="hero-guarantee-icon">
                 <Truck size={16} />
               </div>
               <div>
                 <strong>Same-Day Dispatch</strong>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Order by 7:00 PM</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Order by 7:00 PM
+                </p>
               </div>
             </div>
 
@@ -146,7 +142,9 @@ export default function HeroSection() {
               </div>
               <div>
                 <strong>Midnight Surprise</strong>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>11:15 PM – 12:00 AM</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  11:15 PM – 12:00 AM
+                </p>
               </div>
             </div>
 
@@ -156,7 +154,9 @@ export default function HeroSection() {
               </div>
               <div>
                 <strong>Forever Keepsake</strong>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Never Wilts Guarantee</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Never Wilts Guarantee
+                </p>
               </div>
             </div>
           </div>
@@ -247,6 +247,47 @@ export default function HeroSection() {
                 aria-label={`Slide ${idx + 1}`}
               />
             ))}
+          </div>
+        </div>
+
+        {/* Value Pillars (Mobile: Placed right after the visual card so bouquet image is seen immediately) */}
+        <div className="hero-mobile-guarantees mobile-only" style={{ width: '100%', marginTop: '0.75rem' }}>
+          <div className="hero-guarantees" style={{ width: '100%', borderTop: 'none', paddingTop: 0 }}>
+            <div className="hero-guarantee-item">
+              <div className="hero-guarantee-icon">
+                <Truck size={16} />
+              </div>
+              <div>
+                <strong>Same-Day Dispatch</strong>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Order by 7:00 PM
+                </p>
+              </div>
+            </div>
+
+            <div className="hero-guarantee-item">
+              <div className="hero-guarantee-icon">
+                <Clock size={16} />
+              </div>
+              <div>
+                <strong>Midnight Surprise</strong>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  11:15 PM – 12:00 AM
+                </p>
+              </div>
+            </div>
+
+            <div className="hero-guarantee-item">
+              <div className="hero-guarantee-icon">
+                <ShieldCheck size={16} />
+              </div>
+              <div>
+                <strong>Forever Keepsake</strong>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Never Wilts Guarantee
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

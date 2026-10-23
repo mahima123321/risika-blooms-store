@@ -29,11 +29,7 @@ export default function BudgetBar() {
           </div>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '1.5rem'
-        }}>
+        <div className="budget-bar-grid">
           {budgetOptions.map((opt) => (
             <div
               key={opt.bracket}

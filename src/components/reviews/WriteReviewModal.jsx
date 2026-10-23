@@ -7,11 +7,11 @@ import {
 import confetti from 'canvas-confetti';
 
 const RATING_LABELS = {
-  1: { label: 'Poor', labelHi: 'खराब', color: '#EF4444' },
-  2: { label: 'Fair', labelHi: 'ठीक-ठाक', color: '#F97316' },
-  3: { label: 'Good', labelHi: 'अच्छा', color: '#EAB308' },
-  4: { label: 'Very Good', labelHi: 'बहुत बढ़िया', color: '#10B981' },
-  5: { label: 'Excellent!', labelHi: 'शानदार / लाजवाब!', color: '#059669' }
+  1: { label: 'Poor', color: '#EF4444' },
+  2: { label: 'Fair', color: '#F97316' },
+  3: { label: 'Good', color: '#EAB308' },
+  4: { label: 'Very Good', color: '#10B981' },
+  5: { label: 'Exceptional Quality', color: '#059669' }
 };
 
 export default function WriteReviewModal({ isOpen, onClose, product }) {
@@ -35,7 +35,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
     if (!files.length) return;
 
     if (images.length + files.length > 4) {
-      setError('आप अधिकतम 4 तस्वीरें (Max 4 Photos) अपलोड कर सकते हैं');
+      setError('You can upload up to 4 showcase photos.');
       return;
     }
 
@@ -66,11 +66,11 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!rating) {
-      setError('कृपया स्टार रेटिंग चुनें (Please select a rating)');
+      setError('Please select an overall star rating.');
       return;
     }
     if (!comment.trim()) {
-      setError('कृपया अपना फीडबैक / समीक्षा लिखें (Please write your feedback)');
+      setError('Please share your thoughts and feedback.');
       return;
     }
 
@@ -95,12 +95,13 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
     setImages([]);
     setError('');
     onClose();
+    showToast('✨ Thank you! Your review has been published.', 'success');
   };
 
   const activeRatingInfo = RATING_LABELS[hoverRating || rating] || RATING_LABELS[5];
 
   return (
-    <div className="drawer-backdrop open owner-modal-backdrop" onClick={onClose} style={{ zIndex: 160 }}>
+    <div className="drawer-backdrop open owner-modal-backdrop" onClick={onClose} style={{ zIndex: 100020 }}>
       <div 
         className="glass-panel write-review-modal-card animate-fade-in"
         onClick={(e) => e.stopPropagation()}
@@ -121,7 +122,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
                 Rate & Review: {product.name}
               </h3>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>
-                अपना अनुभव और गुलदस्ते (Bouquet) की असली फोटो साझा करें
+                Share your personal experience, floral presentation, and authentic photos
               </p>
             </div>
           </div>
@@ -144,10 +145,10 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
         )}
 
         <form onSubmit={handleSubmit} className="review-form">
-          {/* 1. Star Rating Selector (Flipkart/Meesho style) */}
+          {/* 1. Star Rating Selector */}
           <div className="review-rating-box">
             <label className="review-field-label">
-              1. Rate this Bouquet (रेटिंग दें) *
+              1. Overall Bouquet Rating *
             </label>
 
             <div className="review-stars-interactive">
@@ -170,16 +171,16 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
               ))}
 
               <div className="rating-feedback-text" style={{ color: activeRatingInfo.color }}>
-                <strong>{activeRatingInfo.label}</strong> ({activeRatingInfo.labelHi})
+                <strong>{activeRatingInfo.label}</strong>
               </div>
             </div>
           </div>
 
-          {/* 2. Photo Upload Box (Flipkart/Meesho real user photos) */}
+          {/* 2. Photo Upload Box */}
           <div className="review-photos-box">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <label className="review-field-label" style={{ margin: 0 }}>
-                2. Add Photos of Bouquet (गुलदस्ते की असली फोटो जोड़ें)
+                2. Add Photos of Bouquet (Optional)
               </label>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 {images.length}/4 Photos added
@@ -187,7 +188,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
             </div>
 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-              📸 जैसे Flipkart / Meesho पर असली खरीदार की फोटो दिखती हैं, वैसे ही आप भी अपने गुलदस्ते की फोटो यहाँ अपलोड कर सकते हैं।
+              Showcase authentic photos of your delivered bouquet to feature in our customer gallery.
             </p>
 
             {/* Hidden file input */}
@@ -237,23 +238,23 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
 
           {/* 3. Review Title & Detailed Feedback */}
           <div className="form-group" style={{ marginBottom: '1rem' }}>
-            <label className="review-field-label">Review Headline / शीर्षक</label>
+            <label className="review-field-label">Review Headline</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Mind-blowing flower freshness! Worth every rupee"
+              placeholder="e.g. Breathtaking flower freshness & stunning presentation!"
               className="owner-input-field"
             />
           </div>
 
           <div className="form-group" style={{ marginBottom: '1rem' }}>
-            <label className="review-field-label">Detailed Review / पूरा फीडबैक *</label>
+            <label className="review-field-label">Detailed Review *</label>
             <textarea
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="फूलों की ताजगी, रैपिंग की फिनिशिंग, और डिलीवरी समय के बारे में बताएं..."
+              placeholder="Describe flower freshness, petal quality, wrapping artistry, and on-time delivery experience..."
               className="owner-input-field"
               required
             />
@@ -262,17 +263,17 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
           {/* 4. Reviewer Name & City */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
             <div>
-              <label className="review-field-label">Your Name / आपका नाम</label>
+              <label className="review-field-label">Your Name</label>
               <input
                 type="text"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                placeholder="e.g. Pooja Sharma"
+                placeholder="e.g. Priya Sharma"
                 className="owner-input-field"
               />
             </div>
             <div>
-              <label className="review-field-label">City / शहर (e.g. Delhi, Jaipur)</label>
+              <label className="review-field-label">City / Region</label>
               <input
                 type="text"
                 value={location}
@@ -287,7 +288,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
           <div className="certified-buyer-badge-note">
             <CheckCircle2 size={16} color="#10B981" />
             <span>
-              <strong>Verified Purchase (प्रमाणित खरीदार)</strong> — आपकी समीक्षा पर प्रमाणित खरीदार का हरा बैज दिखेगा।
+              <strong>Verified Buyer Review</strong> — Authenticated patron badge will be displayed alongside your review.
             </span>
           </div>
 
@@ -297,7 +298,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
               Cancel
             </button>
             <button type="submit" className="btn btn-gold btn-md" style={{ minWidth: '180px' }}>
-              <CheckCircle2 size={16} /> Submit Review (रिव्यू डालें)
+              <CheckCircle2 size={16} /> Submit Review
             </button>
           </div>
         </form>

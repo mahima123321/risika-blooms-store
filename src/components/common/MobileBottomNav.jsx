@@ -1,15 +1,12 @@
 import React from 'react';
 import { useShop } from '../../context/ShopContext';
-import { Home, Sparkles, ShoppingBag, Heart, Layers } from 'lucide-react';
+import { Home, Sparkles, ShoppingBag, Layers, Truck } from 'lucide-react';
 
 export default function MobileBottomNav() {
   const { 
     currentView, 
     navigateTo, 
-    cartCount, 
-    wishlist, 
-    setIsCartOpen, 
-    setIsWishlistOpen 
+    cartCount 
   } = useShop();
 
   const activePage = currentView?.page || 'home';
@@ -51,30 +48,27 @@ export default function MobileBottomNav() {
 
       <button 
         type="button"
-        className={`mobile-nav-btn ${activePage === 'wishlist' ? 'active' : ''}`}
-        onClick={() => setIsWishlistOpen(true)}
-      >
-        <div className="mobile-nav-icon-wrapper">
-          <Heart size={20} />
-          {wishlist.length > 0 && (
-            <span className="mobile-nav-badge">{wishlist.length}</span>
-          )}
-        </div>
-        <span>Wishlist</span>
-      </button>
-
-      <button 
-        type="button"
-        className="mobile-nav-btn"
-        onClick={() => setIsCartOpen(true)}
+        className={`mobile-nav-btn ${activePage === 'cart' ? 'active' : ''}`}
+        onClick={() => navigateTo('cart')}
       >
         <div className="mobile-nav-icon-wrapper">
           <ShoppingBag size={20} />
           {cartCount > 0 && (
-            <span className="mobile-nav-badge mobile-nav-badge-gold">{cartCount}</span>
+            <span className="mobile-nav-badge">{cartCount}</span>
           )}
         </div>
         <span>Bag</span>
+      </button>
+
+      <button 
+        type="button"
+        className={`mobile-nav-btn ${activePage === 'my-orders' || activePage === 'order-tracking' ? 'active' : ''}`}
+        onClick={() => navigateTo('my-orders')}
+      >
+        <div className="mobile-nav-icon-wrapper">
+          <Truck size={20} />
+        </div>
+        <span>Orders</span>
       </button>
     </nav>
   );

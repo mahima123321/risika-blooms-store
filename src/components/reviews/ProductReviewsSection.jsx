@@ -132,21 +132,21 @@ export default function ProductReviewsSection({ product }) {
             onClick={() => setIsWriteModalOpen(true)}
           >
             <Camera size={16} />
-            <span>Rate Product (फोटो व रिव्यू दें)</span>
+            <span>Write a Review</span>
           </button>
           <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '0.4rem' }}>
-            Have this bouquet? Share photos & get discount coupon
+            Have this bouquet? Share photos & feedback
           </span>
         </div>
       </div>
 
-      {/* 2. Customer Photos Gallery Row (Flipkart / Meesho style) */}
+      {/* 2. Customer Photos Gallery Row */}
       {allCustomerPhotos.length > 0 && (
         <div className="customer-photos-showcase">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', margin: 0 }}>
               <Camera size={18} color="var(--text-gold)" />
-              <span>Customer Photos (ग्राहकों द्वारा ली गई तस्वीरें)</span>
+              <span>Customer Photos</span>
               <span className="photos-count-pill">{allCustomerPhotos.length}</span>
             </h4>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -274,7 +274,7 @@ export default function ProductReviewsSection({ product }) {
                   {rev.isVerified && (
                     <span className="certified-buyer-badge">
                       <CheckCircle2 size={13} color="#10B981" />
-                      <span>Certified Buyer (प्रमाणित खरीदार)</span>
+                      <span>Verified Buyer</span>
                     </span>
                   )}
                   <span className="review-date-bullet">•</span>
@@ -316,7 +316,7 @@ export default function ProductReviewsSection({ product }) {
 
       {/* 5. Photo Lightbox Modal (Clicking any customer photo zooms it) */}
       {lightboxImage && (
-        <div className="drawer-backdrop open lightbox-backdrop" onClick={() => setLightboxImage(null)} style={{ zIndex: 180 }}>
+        <div className="drawer-backdrop open lightbox-backdrop" onClick={() => setLightboxImage(null)} style={{ zIndex: 100030 }}>
           <div className="lightbox-content-card glass-panel" onClick={(e) => e.stopPropagation()}>
             <button 
               type="button" 
@@ -361,7 +361,7 @@ export default function ProductReviewsSection({ product }) {
 
                   <div className="certified-buyer-badge" style={{ display: 'inline-flex' }}>
                     <CheckCircle2 size={13} color="#10B981" />
-                    <span>Certified Buyer (प्रमाणित खरीदार)</span>
+                    <span>Verified Buyer</span>
                   </div>
                 </div>
               </div>

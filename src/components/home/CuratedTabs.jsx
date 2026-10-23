@@ -5,7 +5,7 @@ import ProductCard from '../common/ProductCard';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function CuratedTabs() {
-  const { t, navigateTo, products } = useShop();
+  const { t, navigateTo, products, language } = useShop();
   const [activeTab, setActiveTab] = useState('trending');
 
   const allProducts = products || PRODUCTS;
@@ -22,8 +22,12 @@ export default function CuratedTabs() {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <span className="section-pretitle">Handpicked Masterpieces</span>
-          <h2 className="section-title">Curated Floral Wonders</h2>
+          <span className="section-pretitle">
+            Handpicked Masterpieces
+          </span>
+          <h2 className="section-title">
+            Curated Floral Wonders
+          </h2>
           <div className="floral-divider">
             <span className="floral-divider-line"></span>
             <span className="floral-divider-icon">✨</span>

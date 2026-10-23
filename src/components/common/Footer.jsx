@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useShop } from '../../context/ShopContext';
 import { CATEGORIES } from '../../data/categories';
 import { BRAND_CONFIG } from '../../config/brand';
+import BrandLogo from './BrandLogo';
 import { createWhatsAppUrl } from '../../config/whatsapp';
 import { 
   Heart, Sparkles, MessageCircle, Mail, MapPin, 
@@ -17,6 +18,25 @@ export default function Footer() {
   const [emailInput, setEmailInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
+  const footerTapCountRef = React.useRef(0);
+  const footerLastTapRef = React.useRef(0);
+
+  const handleFooterSecretTap = () => {
+    const now = Date.now();
+    if (now - footerLastTapRef.current < 1500) {
+      footerTapCountRef.current += 1;
+    } else {
+      footerTapCountRef.current = 1;
+    }
+    footerLastTapRef.current = now;
+
+    if (footerTapCountRef.current >= 3) {
+      footerTapCountRef.current = 0;
+      openOwnerLogin();
+      showToast('👑 Owner Studio: Enter Security PIN (risika2026)', 'info');
+    }
+  };
+
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (!emailInput || !emailInput.includes('@')) {
@@ -29,7 +49,7 @@ export default function Footer() {
   };
 
   const handleWhatsAppChat = () => {
-    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS concierge! I have a question regarding floral gifting.");
+    const url = createWhatsAppUrl("Hello RISHIKA BLOOMS concierge! I have a question regarding floral gifting.", brandConfig?.whatsappNumber);
     window.open(url, '_blank');
   };
 
@@ -37,14 +57,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="container">
         {/* Top Trust Banner */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '1.5rem',
-          paddingBottom: '3.5rem',
-          marginBottom: '3.5rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
+        <div className="footer-trust-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div className="hero-guarantee-icon" style={{ width: '46px', height: '46px', background: 'rgba(212, 175, 55, 0.15)', color: '#F9E79F' }}>
               <Truck size={22} />
@@ -90,22 +103,15 @@ export default function Footer() {
         <div className="footer-grid">
           {/* Col 1: Brand Story & Concierge */}
           <div>
-            <h3 className="footer-brand-title">{brandConfig?.name || BRAND_CONFIG.name}</h3>
+            <div style={{ marginBottom: '1rem' }}>
+              <BrandLogo variant="footer" size="lg" />
+            </div>
             <p className="footer-tagline">
               "{language === 'hi' ? (brandConfig?.taglineHindi || BRAND_CONFIG.taglineHindi) : (brandConfig?.tagline || BRAND_CONFIG.tagline)}"
             </p>
             <p style={{ fontSize: '0.88rem', lineHeight: 1.7, color: '#C2AEB4', marginBottom: '1.5rem' }}>
               India's premier luxury floral atelier, curating fresh exotic blossoms, Korean-style wraps, bespoke teddy bouquets, and artisanal hampers for life's most unforgettable celebrations.
             </p>
-
-            <button 
-              className="btn btn-whatsapp btn-sm"
-              onClick={handleWhatsAppChat}
-              style={{ display: 'inline-flex', marginBottom: '1rem' }}
-            >
-              <MessageCircle size={16} />
-              <span>WhatsApp Concierge (24/7)</span>
-            </button>
           </div>
 
           {/* Col 2: Luxury Collections */}
@@ -198,20 +204,33 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Legal & Copyright */}
+        {/* Bottom Legal & Copyright (Secret 3-tap trigger for store owner) */}
         <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} {brandConfig?.name || BRAND_CONFIG.name}. All rights reserved. Handcrafted with passion in India.</p>
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+          <p 
+            onClick={handleFooterSecretTap}
+            style={{ cursor: 'default', userSelect: 'none', touchAction: 'manipulation' }}
+            title="RISHIKA BLOOMS — Rishhika Bloom"
+          >
+            © {new Date().getFullYear()} {brandConfig?.name || BRAND_CONFIG.name} (Rishhika Bloom). All rights reserved. Handcrafted with passion in India.
+          </p>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <span className="footer-link" onClick={() => navigateTo('delivery-info')}>{t('deliveryInfo')}</span>
+            <span className="footer-link" onClick={() => navigateTo('shipping-policy')}>Shipping Policy</span>
+            <span className="footer-link" onClick={() => navigateTo('return-policy')}>Refunds & Returns</span>
+            <span className="footer-link" onClick={() => navigateTo('faq')}>FAQs</span>
             <span className="footer-link" onClick={() => navigateTo('privacy')}>{t('privacyPolicy')}</span>
             <span className="footer-link" onClick={() => navigateTo('terms')}>{t('terms')}</span>
-            <span 
-              className="footer-link owner-footer-link" 
-              onClick={() => isOwnerAuthenticated ? openOwnerSettingsModal('numbers') : openOwnerLogin()}
-              style={{ color: '#F9E79F', display: 'inline-flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-            >
-              👑 Owner Portal
-            </span>
+            <span className="footer-link" onClick={() => navigateTo('admin')} style={{ color: '#F9E79F', cursor: 'pointer' }}>Seller Login</span>
+            {isOwnerAuthenticated && (
+              <span 
+                className="footer-link owner-footer-link" 
+                onClick={() => openOwnerSettingsModal('numbers')}
+                style={{ color: '#F9E79F', display: 'inline-flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontWeight: 600 }}
+                title="Open Owner Control Center"
+              >
+                👑 Owner Studio (Settings)
+              </span>
+            )}
           </div>
         </div>
       </div>

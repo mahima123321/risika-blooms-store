@@ -8,7 +8,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-royal-blue-tulip-lily-card",
     name: "Royal Azure 'Happy Birthday' Velvet Tulip & Lily Card Bouquet",
-    nameHindi: "रॉयल ब्लू 'हैप्पी बर्थडे' वेलवेट ट्यूलिप व लिली कार्ड बुके",
+    nameHindi: "Royal Azure 'Happy Birthday' Velvet Tulip & Lily Card Bouquet",
     slug: "royal-azure-happy-birthday-velvet-tulip-lily-card-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -49,7 +49,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-silent-confession-midnight-blue",
     name: "'Silent Confession' Midnight Blue Birthday Velvet Bouquet",
-    nameHindi: "'साइलेंट कन्फेशन' मिडनाइट ब्लू बर्थडे वेलवेट बुके",
+    nameHindi: "'Silent Confession' Midnight Blue Birthday Velvet Bouquet",
     slug: "silent-confession-midnight-blue-birthday-velvet-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -89,7 +89,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-enchanted-lavender-lilac-symphony",
     name: "Enchanted Lavender & Lilac Velvet Birthday Symphony Bouquet",
-    nameHindi: "एंजेलिक लैवेंडर व लिलाक वेलवेट बर्थडे सिम्फनी बुके",
+    nameHindi: "Enchanted Lavender & Lilac Velvet Birthday Symphony Bouquet",
     slug: "enchanted-lavender-lilac-velvet-birthday-symphony-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -129,7 +129,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-magenta-lily-tulip",
     name: "Chic Blush Pink Velvet Lily & Magenta Tulip Birthday Bouquet",
-    nameHindi: "चिक ब्लश पिंक लिली व मैजेंटा ट्यूलिप बर्थडे बुके",
+    nameHindi: "Chic Blush Pink Velvet Lily & Magenta Tulip Birthday Bouquet",
     slug: "chic-blush-pink-lily-magenta-tulip-birthday-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -163,7 +163,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-sunshine-tulips-outdoor",
     name: "Blush Velvet Lilies & Tulips 'Happy Birthday' Card Bouquet",
-    nameHindi: "ब्लश वेलवेट लिली व ट्यूलिप्स 'हैप्पी बर्थडे' कार्ड बुके",
+    nameHindi: "Blush Velvet Lilies & Tulips 'Happy Birthday' Card Bouquet",
     slug: "blush-velvet-lilies-tulips-happy-birthday-card-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -199,7 +199,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-zenun-tulip-lily-card",
     name: "Personalized 'Happy Birthday' Velvet Tulip & Lily Card Bouquet",
-    nameHindi: "कस्टम 'हैप्पी बर्थडे' वेलवेट ट्यूलिप व लिली कार्ड बुके",
+    nameHindi: "Personalized 'Happy Birthday' Velvet Tulip & Lily Card Bouquet",
     slug: "personalized-happy-birthday-velvet-tulip-lily-card-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -240,7 +240,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-blush-tulip-lily-pearl-bow",
     name: "Blush Pink Velvet Tulip & Lily with Pearl Beaded Bow",
-    nameHindi: "ब्लश पिंक वेलवेट ट्यूलिप व लिली पर्ल बो बुके",
+    nameHindi: "Blush Pink Velvet Tulip & Lily with Pearl Beaded Bow",
     slug: "blush-pink-velvet-tulip-lily-pearl-bow",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -278,7 +278,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-sunshine-card-tulips-lilies",
     name: "Grand 'Happy Birthday My Sunshine' 5-Bloom Velvet Bouquet",
-    nameHindi: "ग्रैंड 'हैप्पी बर्थडे माय सनशाइन' वेलवेट बुके",
+    nameHindi: "Grand 'Happy Birthday My Sunshine' 5-Bloom Velvet Bouquet",
     slug: "grand-happy-birthday-my-sunshine-velvet-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -314,7 +314,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-noir-wine-gold-lily",
     name: "Velvet Noir Midnight Wine Tulip & Gold-Edge Lily Birthday Bouquet",
-    nameHindi: "वेलवेट नोयर वाइन ट्यूलिप व गोल्ड-एज लिली बर्थडे बुके",
+    nameHindi: "Velvet Noir Midnight Wine Tulip & Gold-Edge Lily Birthday Bouquet",
     slug: "velvet-noir-midnight-wine-tulip-gold-edge-lily-birthday-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -348,7 +348,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-sunflower-pink-lily-fan",
     name: "Golden Velvet Sunflower & Pink Lily Birthday Fan Bouquet",
-    nameHindi: "गोल्डन वेलवेट सनफ्लावर व पिंक लिली बर्थडे फैन बुके",
+    nameHindi: "Golden Velvet Sunflower & Pink Lily Birthday Fan Bouquet",
     slug: "golden-velvet-sunflower-pink-lily-birthday-fan-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -382,7 +382,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-sunflower-gold-topper",
     name: "Golden Velvet Sunflowers with 'Happy Birthday' Acrylic Topper",
-    nameHindi: "गोल्डन वेलवेट सनफ्लावर व 'हैप्पी बर्थडे' टॉपर बुके",
+    nameHindi: "Golden Velvet Sunflowers with 'Happy Birthday' Acrylic Topper",
     slug: "golden-velvet-sunflowers-happy-birthday-topper",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -419,7 +419,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-kraft-sunflower-rainbow",
     name: "Rustic Kraft Velvet Sunflower & Rainbow Tulips Bouquet",
-    nameHindi: "रस्टिक क्राफ्ट वेलवेट सनफ्लावर व रेनबो ट्यूलिप्स बुके",
+    nameHindi: "Rustic Kraft Velvet Sunflower & Rainbow Tulips Bouquet",
     slug: "rustic-kraft-velvet-sunflower-rainbow-tulips-bouquet",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -453,7 +453,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-bday-solo-pink-tulip",
     name: "Petite Blush Pink Velvet Tulip Keepsake Cone",
-    nameHindi: "पेटाइट ब्लश पिंक वेलवेट ट्यूलिप कोन",
+    nameHindi: "Petite Blush Pink Velvet Tulip Keepsake Cone",
     slug: "petite-blush-pink-velvet-tulip-keepsake-cone",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -485,7 +485,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "bday-midnight-celebration-box",
     name: "Midnight Sparkle Birthday Box with Fairy Lights",
-    nameHindi: "मिडनाइट स्पार्कल बर्थडे बॉक्स",
+    nameHindi: "Midnight Sparkle Birthday Box with Fairy Lights",
     slug: "bday-midnight-celebration-box",
     category: "birthday-anniversary-bouquets",
     categoryName: "Birthday Specials",
@@ -497,14 +497,14 @@ export const INITIAL_PRODUCTS = [
     isTrending: true,
     budgetBracket: "under-2499",
     occasions: ["birthday"],
-    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1464047736614-af63643285bf?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1464047736614-af63643285bf?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Ruby Red & Gold", hex: "#C62828", image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80" },
-      { name: "Blush Pink & White", hex: "#F48FB1", image: "https://images.unsplash.com/photo-1464047736614-af63643285bf?auto=format&fit=crop&w=800&q=80" }
+      { name: "Ruby Red & Gold", hex: "#C62828", image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Blush Pink & White", hex: "#F48FB1", image: "https://images.unsplash.com/photo-1464047736614-af63643285bf?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Round Hat Box (16 Blooms + Fairy Lights)", stems: 16, priceOffset: 0 },
@@ -527,7 +527,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "classic-velvet-scarlet-roses",
     name: "24 Dutch Velvet Red Roses & Baby's Breath",
-    nameHindi: "24 डच वेलवेट लाल गुलाब",
+    nameHindi: "24 Dutch Velvet Red Roses & Baby's Breath",
     slug: "classic-velvet-scarlet-roses",
     category: "rose-bouquets",
     categoryName: "Rose Bouquets",
@@ -540,14 +540,14 @@ export const INITIAL_PRODUCTS = [
     isTrending: true,
     budgetBracket: "under-1499",
     occasions: ["romance", "anniversary"],
-    image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80",
+    image: "/images/red_roses_luxury_bouquet.jpg",
     images: [
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80"
+      "/images/red_roses_luxury_bouquet.jpg",
+      "/images/red_roses_macro_dew.jpg"
     ],
     colorOptions: [
-      { name: "Imperial Crimson Red", hex: "#9E1B32", image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80" },
-      { name: "Velvet Bordeaux", hex: "#4A0E17", image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80" }
+      { name: "Imperial Crimson Red", hex: "#9E1B32", image: "/images/red_roses_luxury_bouquet.jpg" },
+      { name: "Velvet Bordeaux", hex: "#4A0E17", image: "/images/red_roses_macro_dew.jpg" }
     ],
     sizeOptions: [
       { name: "Classic 12 Roses", stems: 12, priceOffset: -500 },
@@ -567,7 +567,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "blush-pastoral-elegance-roses",
     name: "Blush Pink & Ivory Ecuadorian Roses",
-    nameHindi: "ब्लश पिंक व आइवरी इक्वाडोरियन गुलाब",
+    nameHindi: "Blush Pink & Ivory Ecuadorian Roses",
     slug: "blush-pastoral-elegance-roses",
     category: "rose-bouquets",
     categoryName: "Rose Bouquets",
@@ -579,14 +579,14 @@ export const INITIAL_PRODUCTS = [
     isTrending: true,
     budgetBracket: "under-2499",
     occasions: ["romance", "anniversary"],
-    image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Blush Pink & Ivory", hex: "#F8BBD0", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80" },
-      { name: "Porcelain Ivory White", hex: "#FFFDF7", image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80" }
+      { name: "Blush Pink & Ivory", hex: "#F8BBD0", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Porcelain Ivory White", hex: "#FFFDF7", image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Standard (18 Stems)", stems: 18, priceOffset: 0 },
@@ -605,7 +605,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "budget-petite-rose-trio",
     name: "Petite Scarlet Rose Trio",
-    nameHindi: "पेटाइट स्कार्लेट रोज़ तिकड़ी",
+    nameHindi: "Petite Scarlet Rose Trio",
     slug: "budget-petite-rose-trio",
     category: "rose-bouquets",
     categoryName: "Rose Bouquets",
@@ -616,10 +616,10 @@ export const INITIAL_PRODUCTS = [
     badge: "Under ₹499",
     budgetBracket: "under-499",
     occasions: ["gratitude", "romance"],
-    image: "https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=800&q=80",
-    images: ["https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=800&q=80"],
+    image: "https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=1600&q=95",
+    images: ["https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=1600&q=95"],
     colorOptions: [
-      { name: "Scarlet Red", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=800&q=80" }
+      { name: "Scarlet Red", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1548094878-84ced0f68b08?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "3 Long-Stem Roses", stems: 3, priceOffset: 0 }
@@ -641,7 +641,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-trio-lavender-ruffle",
     name: "Signature 3 Velvet Lilies & Purple Lavender in Pearl Ruffle Skirt",
-    nameHindi: "3 वेलवेट लिली व पर्ल रफल स्कर्ट बुके",
+    nameHindi: "Signature 3 Velvet Lilies & Purple Lavender in Pearl Ruffle Skirt",
     slug: "signature-3-velvet-lilies-purple-lavender-pearl-ruffle-skirt",
     category: "korean-style-bouquets",
     categoryName: "Korean-Style & Velvet Bouquets",
@@ -681,7 +681,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "whimsical-korean-pastel-symphony",
     name: "Korean Pastel Symphony Bouquet",
-    nameHindi: "कोरियन पेस्टल सिम्फनी बुके",
+    nameHindi: "Korean Pastel Symphony Bouquet",
     slug: "whimsical-korean-pastel-symphony",
     category: "korean-style-bouquets",
     categoryName: "Korean-Style & Velvet Bouquets",
@@ -695,14 +695,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "under-2499",
     occasions: ["anniversary", "surprise"],
-    image: "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Pastel Cotton Candy", hex: "#E1BEE7", image: "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=800&q=80" },
-      { name: "Spring Garden Mix", hex: "#C8E6C9", image: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=800&q=80" }
+      { name: "Pastel Cotton Candy", hex: "#E1BEE7", image: "https://images.unsplash.com/photo-1599732497645-0d32f281ce1d?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Spring Garden Mix", hex: "#C8E6C9", image: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Petite Korean (12 Stems)", stems: 12, priceOffset: -400 },
@@ -725,7 +725,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "oriental-lily-hydrangea-wonder",
     name: "Regal Oriental Lily & Blue Hydrangea Grandeur",
-    nameHindi: "ओरिएंटल लिली व ब्लू हाइड्रेंजिया ग्रैंड्योर",
+    nameHindi: "Regal Oriental Lily & Blue Hydrangea Grandeur",
     slug: "oriental-lily-hydrangea-wonder",
     category: "mixed-flower-bouquets",
     categoryName: "Mixed Flower Bouquets",
@@ -737,14 +737,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "under-2499",
     occasions: ["anniversary", "congratulations", "housewarming"],
-    image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Sky Blue & Snow White", hex: "#BBDEFB", image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80" },
-      { name: "Lilac Purple & Ivory", hex: "#D1C4E9", image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=800&q=80" }
+      { name: "Sky Blue & Snow White", hex: "#BBDEFB", image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Lilac Purple & Ivory", hex: "#D1C4E9", image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Grand Majestic (16 Stems)", stems: 16, priceOffset: 0 }
@@ -762,7 +762,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "budget-yellow-sunshine-cheer",
     name: "Sunshine Yellow Daisy & Rose Cheer",
-    nameHindi: "सनशाइन येलो डेज़ी व रोज़ बुके",
+    nameHindi: "Sunshine Yellow Daisy & Rose Cheer",
     slug: "budget-yellow-sunshine-cheer",
     category: "mixed-flower-bouquets",
     categoryName: "Mixed Flower Bouquets",
@@ -773,10 +773,10 @@ export const INITIAL_PRODUCTS = [
     badge: "Under ₹999",
     budgetBracket: "under-999",
     occasions: ["congratulations", "gratitude"],
-    image: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=800&q=80",
-    images: ["https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=800&q=80"],
+    image: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=1600&q=95",
+    images: ["https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=1600&q=95"],
     colorOptions: [
-      { name: "Golden Sunshine", hex: "#FDD835", image: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=800&q=80" }
+      { name: "Golden Sunshine", hex: "#FDD835", image: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Cheer Bunch (8 Stems)", stems: 8, priceOffset: 0 }
@@ -798,7 +798,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "teddy-cuddle-rose-hug",
     name: "Velvet Teddy & Red Rose Haven",
-    nameHindi: "टेडी बियर व लाल गुलाब हेवन",
+    nameHindi: "Velvet Teddy & Red Rose Haven",
     slug: "teddy-cuddle-rose-hug",
     category: "teddy-bear-bouquets",
     categoryName: "Teddy Bear Bouquets",
@@ -809,14 +809,14 @@ export const INITIAL_PRODUCTS = [
     badge: "Sweetest Gift",
     budgetBracket: "under-1499",
     occasions: ["romance", "surprise"],
-    image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Honey Brown Bear", hex: "#8D6E63", image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=800&q=80" },
-      { name: "Snow White Bear", hex: "#FAFAFA", image: "https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=800&q=80" }
+      { name: "Honey Brown Bear", hex: "#8D6E63", image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Snow White Bear", hex: "#FAFAFA", image: "https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "6-Inch Teddy + 10 Roses", stems: 10, priceOffset: 0 }
@@ -838,7 +838,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "money-prosperity-fan",
     name: "Imperial Currency & Red Rose Fan",
-    nameHindi: "इंपीरियल मनी व रोज़ बुके",
+    nameHindi: "Imperial Currency & Red Rose Fan",
     slug: "money-prosperity-fan",
     category: "money-bouquets",
     categoryName: "Money Bouquets",
@@ -850,14 +850,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "luxury-2499",
     occasions: ["wedding", "congratulations"],
-    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Royal Gold & Red", hex: "#D4AF37", image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80" },
-      { name: "Matte Black & Gold", hex: "#212121", image: "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=800&q=80" }
+      { name: "Royal Gold & Red", hex: "#D4AF37", image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Matte Black & Gold", hex: "#212121", image: "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "10 Currency Sleeves + 12 Roses", stems: 12, priceOffset: 0 }
@@ -879,7 +879,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "chocolate-ferrero-golden-tower",
     name: "Ferrero Rocher Golden Temptation",
-    nameHindi: "फेरेरो रोशर गोल्डन टेम्पटेशन",
+    nameHindi: "Ferrero Rocher Golden Temptation",
     slug: "chocolate-ferrero-golden-tower",
     category: "chocolate-bouquets",
     categoryName: "Chocolate Bouquets",
@@ -891,14 +891,14 @@ export const INITIAL_PRODUCTS = [
     isBestSeller: true,
     budgetBracket: "under-2499",
     occasions: ["anniversary", "congratulations"],
-    image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Golden Ferrero & Red Roses", hex: "#D4AF37", image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=800&q=80" },
-      { name: "Cadbury Silk & Pink Blooms", hex: "#E91E63", image: "https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=800&q=80" }
+      { name: "Golden Ferrero & Red Roses", hex: "#D4AF37", image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Cadbury Silk & Pink Blooms", hex: "#E91E63", image: "https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "16 Ferrero Rochers + 10 Roses", stems: 10, priceOffset: 0 }
@@ -920,7 +920,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "jhalar-marigold-jasmine-royal",
     name: "Vedic Marigold & Mogra Festive Jhalar (10 Ft)",
-    nameHindi: "वैदिक गेंदा व मोगरा झालर (10 फीट)",
+    nameHindi: "Vedic Marigold & Mogra Festive Jhalar (10 Ft)",
     slug: "jhalar-marigold-jasmine-royal",
     category: "flower-jhalar-garlands",
     categoryName: "Flower Jhalar & Decorative Garlands",
@@ -931,14 +931,14 @@ export const INITIAL_PRODUCTS = [
     badge: "Festive Heritage",
     budgetBracket: "under-1499",
     occasions: ["housewarming", "wedding", "congratulations"],
-    image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1609137144820-22c608f43058?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1609137144820-22c608f43058?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Saffron Orange & Yellow", hex: "#FF9800", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=800&q=80" },
-      { name: "Rose Petal & White Jasmine", hex: "#E91E63", image: "https://images.unsplash.com/photo-1609137144820-22c608f43058?auto=format&fit=crop&w=800&q=80" }
+      { name: "Saffron Orange & Yellow", hex: "#FF9800", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Rose Petal & White Jasmine", hex: "#E91E63", image: "https://images.unsplash.com/photo-1609137144820-22c608f43058?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "10-Foot Entry Jhalar", stems: 1, priceOffset: 0 }
@@ -960,7 +960,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-bridal-pink-lily-lace-scallop",
     name: "Bridal Blush Pink Lily & Lace Scalloped Velvet Bouquet",
-    nameHindi: "ब्राइडल ब्लश पिंक लिली व लेस स्कैलप्ड वेलवेट बुके",
+    nameHindi: "Bridal Blush Pink Lily & Lace Scalloped Velvet Bouquet",
     slug: "bridal-blush-pink-lily-lace-scalloped-velvet-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1000,7 +1000,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-champagne-cream-lilies-pearl-ruffle",
     name: "Bridal Champagne Cream Velvet Lilies with Pearl Ruffle Collar",
-    nameHindi: "ब्राइडल शैम्पेन क्रीम वेलवेट लिलीज पर्ल रफल बुके",
+    nameHindi: "Bridal Champagne Cream Velvet Lilies with Pearl Ruffle Collar",
     slug: "bridal-champagne-cream-velvet-lilies-pearl-ruffle",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1039,7 +1039,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-pink-lily-heart-wire-keepsake",
     name: "Sacred Love Pink Velvet Lily & Heart-Wire Engagement Bouquet",
-    nameHindi: "सैक्रेड लव पिंक वेलवेट लिली व हार्ट-वायर सगाई बुके",
+    nameHindi: "Sacred Love Pink Velvet Lily & Heart-Wire Engagement Bouquet",
     slug: "sacred-love-pink-velvet-lily-heart-wire-engagement-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1077,7 +1077,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-violet-lavender-nuptial-symphony",
     name: "Royal Violet & Lavender Velvet Nuptial Symphony Bouquet",
-    nameHindi: "रॉयल वॉयलेट व लैवेंडर वेलवेट विवाह सिम्फनी बुके",
+    nameHindi: "Royal Violet & Lavender Velvet Nuptial Symphony Bouquet",
     slug: "royal-violet-lavender-velvet-nuptial-symphony-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1115,7 +1115,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-azure-sky-blue-lilies-gold-wrap",
     name: "Aura Azure Sky Blue Velvet Lilies with Gold-Lined Wrap",
-    nameHindi: "ऑरा एज़्योर स्काई ब्लू वेलवेट लिलीज गोल्ड-लाइन बुके",
+    nameHindi: "Aura Azure Sky Blue Velvet Lilies with Gold-Lined Wrap",
     slug: "aura-azure-sky-blue-velvet-lilies-gold-wrap",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1152,7 +1152,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-starry-night-bokeh-velvet-lilies",
     name: "Starry Night Fairy Lights Velvet Lily Wedding Bouquet",
-    nameHindi: "स्टारी नाइट फेयरी लाइट्स वेलवेट लिली वेडिंग बुके",
+    nameHindi: "Starry Night Fairy Lights Velvet Lily Wedding Bouquet",
     slug: "starry-night-fairy-lights-velvet-lily-wedding-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1191,7 +1191,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-teddy-pearl-collar-lilies",
     name: "Bridal Petite Teddy & Pearl-Ruffle Velvet Lilies Bouquet",
-    nameHindi: "ब्राइडल पेटाइट टेडी व पर्ल-रफल वेलवेट लिलीज बुके",
+    nameHindi: "Bridal Petite Teddy & Pearl-Ruffle Velvet Lilies Bouquet",
     slug: "bridal-petite-teddy-pearl-ruffle-velvet-lilies-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1230,7 +1230,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-sunlit-garden-marble-blooms",
     name: "Sunlit Marble Garden Blooms Velvet Wedding Bouquet",
-    nameHindi: "सनलिट मार्बल गार्डन वेलवेट वेडिंग बुके",
+    nameHindi: "Sunlit Marble Garden Blooms Velvet Wedding Bouquet",
     slug: "sunlit-marble-garden-blooms-velvet-wedding-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1267,7 +1267,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-empress-cone-purple-roses-carnations",
     name: "Empress Cone Royal Purple Roses & Pink Carnations Bouquet",
-    nameHindi: "एम्प्रेस कोन रॉयल पर्पल रोज़ेज़ व पिंक कार्नेशन बुके",
+    nameHindi: "Empress Cone Royal Purple Roses & Pink Carnations Bouquet",
     slug: "empress-cone-royal-purple-roses-pink-carnations-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1306,7 +1306,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-imperial-pure-white-bridal-lilies",
     name: "Imperial Pure White Bridal Velvet Lilies Keepsake Bouquet",
-    nameHindi: "इंपीरियल प्योर व्हाइट ब्राइडल वेलवेट लिलीज बुके",
+    nameHindi: "Imperial Pure White Bridal Velvet Lilies Keepsake Bouquet",
     slug: "imperial-pure-white-bridal-velvet-lilies-keepsake-bouquet",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1345,7 +1345,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "wedding-royal-varmala-pair",
     name: "Royal Rajwada Orchid & Rose Varmala Set (Pair)",
-    nameHindi: "राजवाड़ा ऑर्किड व रोज़ वरमाला सेट (जोड़ी)",
+    nameHindi: "Royal Rajwada Orchid & Rose Varmala Set (Pair)",
     slug: "wedding-royal-varmala-pair",
     category: "wedding-engagement-flowers",
     categoryName: "Wedding & Engagement Flowers",
@@ -1357,14 +1357,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "luxury-2499",
     occasions: ["wedding"],
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Ivory & Pastel Rose", hex: "#FFF8E1", image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" },
-      { name: "Crimson & Gold Pearl", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Ivory & Pastel Rose", hex: "#FFF8E1", image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Crimson & Gold Pearl", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Royal Standard (Pair of 2 Garlands)", stems: 2, priceOffset: 0 }
@@ -1386,7 +1386,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "hamper-imperial-bloom-luxe",
     name: "The Imperial Rose & Botanical Hamper",
-    nameHindi: "इंपीरियल रोज़ व बॉटनिकल हैंपर",
+    nameHindi: "The Imperial Rose & Botanical Hamper",
     slug: "hamper-imperial-bloom-luxe",
     category: "luxury-gift-hampers",
     categoryName: "Luxury Gift Hampers",
@@ -1398,14 +1398,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "luxury-2499",
     occasions: ["anniversary", "wedding", "congratulations"],
-    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Wine Red Velvet Box", hex: "#4A0E17", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" },
-      { name: "Emerald Gold Box", hex: "#1B5E20", image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=800&q=80" }
+      { name: "Wine Red Velvet Box", hex: "#4A0E17", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Emerald Gold Box", hex: "#1B5E20", image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Standard Royale Hamper", stems: 1, priceOffset: 0 }
@@ -1427,7 +1427,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-single-wine-lily-cone",
     name: "Single Handcrafted Wine Velvet Lily in Gold-Trimmed Cone Wrap",
-    nameHindi: "सिंगल वाइन वेलवेट लिली कोन बुके",
+    nameHindi: "Single Handcrafted Wine Velvet Lily in Gold-Trimmed Cone Wrap",
     slug: "single-handcrafted-wine-velvet-lily-gold-trimmed-cone",
     category: "artificial-flower-bouquets",
     categoryName: "Handcrafted Velvet & Preserved Flowers",
@@ -1463,7 +1463,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "preserved-eternal-rose-dome",
     name: "Eternal Beauty Preserved Rose in Glass Dome",
-    nameHindi: "इटरनल ब्यूटी प्रिजर्व्ड रोज़ ग्लास डोम",
+    nameHindi: "Eternal Beauty Preserved Rose in Glass Dome",
     slug: "preserved-eternal-rose-dome",
     category: "artificial-flower-bouquets",
     categoryName: "Handcrafted Velvet & Preserved Flowers",
@@ -1474,16 +1474,16 @@ export const INITIAL_PRODUCTS = [
     badge: "Lasts 3+ Years",
     budgetBracket: "under-2499",
     occasions: ["romance", "anniversary"],
-    image: "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Midnight Red Rose", hex: "#880E4F", image: "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=800&q=80" },
-      { name: "Royal Sapphire Blue", hex: "#0D47A1", image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80" },
-      { name: "Enchanted Purple", hex: "#4A148C", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80" }
+      { name: "Midnight Red Rose", hex: "#880E4F", image: "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Royal Sapphire Blue", hex: "#0D47A1", image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Enchanted Purple", hex: "#4A148C", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Classic Glass Dome (1 Rose + LED Base)", stems: 1, priceOffset: 0 }
@@ -1505,7 +1505,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "velvet-pink-lily-money-scroll-tubes",
     name: "Blush Pink Velvet Lilies with Cash / Love Note Scroll Cylinders",
-    nameHindi: "पिंक वेलवेट लिली व मनी स्क्रोल ट्यूब बुके",
+    nameHindi: "Blush Pink Velvet Lilies with Cash / Love Note Scroll Cylinders",
     slug: "blush-pink-velvet-lilies-cash-love-note-scroll-cylinders",
     category: "customized-bouquets",
     categoryName: "Customized & Secret Scroll Bouquets",
@@ -1522,7 +1522,7 @@ export const INITIAL_PRODUCTS = [
     image: "/images/velvet_pink_tubes.jpg",
     images: [
       "/images/velvet_pink_tubes.jpg",
-      "https://images.unsplash.com/photo-1592417817098-8f3d6910985b?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1592417817098-8f3d6910985b?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
       { name: "Blush Pink Velvet with Scroll Tubes", hex: "#F48FB1", image: "/images/velvet_pink_tubes.jpg" }
@@ -1543,7 +1543,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "custom-initial-letter-floral-box",
     name: "Bespoke Floral Initial Monogram Box",
-    nameHindi: "कस्टम इनिशियल लेटर फ्लोरल बॉक्स",
+    nameHindi: "Bespoke Floral Initial Monogram Box",
     slug: "custom-initial-letter-floral-box",
     category: "customized-bouquets",
     categoryName: "Customized & Secret Scroll Bouquets",
@@ -1555,14 +1555,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "under-2499",
     occasions: ["anniversary", "surprise"],
-    image: "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Red Roses with White Initial", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=800&q=80" },
-      { name: "Pink Roses with White Initial", hex: "#F48FB1", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" }
+      { name: "Red Roses with White Initial", hex: "#B71C1C", image: "https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Pink Roses with White Initial", hex: "#F48FB1", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Single Initial Monogram (A-Z)", stems: 24, priceOffset: 0 }
@@ -1584,7 +1584,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "surprise-flying-butterfly-box",
     name: "Enchanted Bloom & Flutter Surprise Box",
-    nameHindi: "फ्लाईंग बटरफ्लाई सरप्राइज बॉक्स",
+    nameHindi: "Enchanted Bloom & Flutter Surprise Box",
     slug: "surprise-flying-butterfly-box",
     category: "surprise-gift-boxes",
     categoryName: "Surprise Gift Boxes",
@@ -1596,14 +1596,14 @@ export const INITIAL_PRODUCTS = [
     isTrending: true,
     budgetBracket: "under-2499",
     occasions: ["romance", "surprise"],
-    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1513201099705-a9742e15a5b8?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1513201099705-a9742e15a5b8?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Blush Dream & Butterflies", hex: "#F8BBD0", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80" },
-      { name: "Crimson Romance", hex: "#880E4F", image: "https://images.unsplash.com/photo-1513201099705-a9742e15a5b8?auto=format&fit=crop&w=800&q=80" }
+      { name: "Blush Dream & Butterflies", hex: "#F8BBD0", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Crimson Romance", hex: "#880E4F", image: "https://images.unsplash.com/photo-1513201099705-a9742e15a5b8?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "Surprise Box with 4 Flying Butterflies", stems: 12, priceOffset: 0 }
@@ -1625,7 +1625,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: "combo-giant-bear-100-roses",
     name: "Royale 3ft Bear & 50 Roses Grand Combo",
-    nameHindi: "रॉयल 3-फीट टेडी व 50 गुलाब कॉम्बो",
+    nameHindi: "Royale 3ft Bear & 50 Roses Grand Combo",
     slug: "combo-giant-bear-100-roses",
     category: "flower-teddy-combos",
     categoryName: "Flower & Teddy Combos",
@@ -1637,14 +1637,14 @@ export const INITIAL_PRODUCTS = [
     isPremium: true,
     budgetBracket: "luxury-2499",
     occasions: ["romance", "anniversary"],
-    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=95",
     images: [
-      "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=95",
+      "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1600&q=95"
     ],
     colorOptions: [
-      { name: "Cream Plush Bear & Crimson Roses", hex: "#FFF9C4", image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" },
-      { name: "Mocha Teddy & Pastel Roses", hex: "#795548", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80" }
+      { name: "Cream Plush Bear & Crimson Roses", hex: "#FFF9C4", image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1600&q=95" },
+      { name: "Mocha Teddy & Pastel Roses", hex: "#795548", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1600&q=95" }
     ],
     sizeOptions: [
       { name: "3-Foot Giant Plush Bear + 50 Roses", stems: 50, priceOffset: 0 }
@@ -1662,61 +1662,61 @@ export const INITIAL_PRODUCTS = [
 ];
 
 export const OCCASIONS = [
-  { id: "all", name: "All Blooms", nameHindi: "सभी फूल" },
-  { id: "birthday", name: "Birthday", nameHindi: "जन्मदिन", icon: "Cake" },
-  { id: "anniversary", name: "Anniversary", nameHindi: "सालगिरह", icon: "Heart" },
-  { id: "romance", name: "Love & Romance", nameHindi: "प्यार व रोमांस", icon: "Flame" },
-  { id: "wedding", name: "Wedding & Vows", nameHindi: "शादी व सगाई", icon: "Crown" },
-  { id: "congratulations", name: "Congratulations", nameHindi: "बधाई", icon: "Sparkles" },
-  { id: "gratitude", name: "Thank You & Gratitude", nameHindi: "धन्यवाद", icon: "Smile" },
-  { id: "surprise", name: "Surprise Gift", nameHindi: "सरप्राइज गिफ्ट", icon: "Gift" },
-  { id: "housewarming", name: "Housewarming & Puja", nameHindi: "गृह प्रवेश व पूजा", icon: "Home" }
+  { id: "all", name: "All Blooms", nameHindi: "All Blooms" },
+  { id: "birthday", name: "Birthday", nameHindi: "Birthday", icon: "Cake" },
+  { id: "anniversary", name: "Anniversary", nameHindi: "Anniversary", icon: "Heart" },
+  { id: "romance", name: "Love & Romance", nameHindi: "Love & Romance", icon: "Flame" },
+  { id: "wedding", name: "Wedding & Vows", nameHindi: "Wedding & Vows", icon: "Crown" },
+  { id: "congratulations", name: "Congratulations", nameHindi: "Congratulations", icon: "Sparkles" },
+  { id: "gratitude", name: "Thank You & Gratitude", nameHindi: "Thank You & Gratitude", icon: "Smile" },
+  { id: "surprise", name: "Surprise Gift", nameHindi: "Surprise Gift", icon: "Gift" },
+  { id: "housewarming", name: "Housewarming & Puja", nameHindi: "Housewarming & Puja", icon: "Home" }
 ];
 
 export const BUDGET_BRACKETS = [
-  { id: "all", label: "All Prices", labelHindi: "सभी मूल्य", min: 0, max: 99999 },
-  { id: "under-499", label: "Under ₹499", labelHindi: "₹499 से कम", min: 0, max: 499 },
-  { id: "under-999", label: "₹500 - ₹999", labelHindi: "₹500 से ₹999", min: 500, max: 999 },
-  { id: "under-1499", label: "₹1,000 - ₹1,499", labelHindi: "₹1,000 से ₹1,499", min: 1000, max: 1499 },
-  { id: "under-2499", label: "₹1,500 - ₹2,499", labelHindi: "₹1,500 से ₹2,499", min: 1500, max: 2499 },
-  { id: "luxury-2499", label: "Luxury (₹2,500+)", labelHindi: "लक्ज़री (₹2,500+)", min: 2500, max: 99999 }
+  { id: "all", label: "All Prices", labelHindi: "All Prices", min: 0, max: 99999 },
+  { id: "under-499", label: "Under ₹499", labelHindi: "Under ₹499", min: 0, max: 499 },
+  { id: "under-999", label: "₹500 - ₹999", labelHindi: "₹500 - ₹999", min: 500, max: 999 },
+  { id: "under-1499", label: "₹1,000 - ₹1,499", labelHindi: "₹1,000 - ₹1,499", min: 1000, max: 1499 },
+  { id: "under-2499", label: "₹1,500 - ₹2,499", labelHindi: "₹1,500 - ₹2,499", min: 1500, max: 2499 },
+  { id: "luxury-2499", label: "Luxury (₹2,500+)", labelHindi: "Luxury (₹2,500+)", min: 2500, max: 99999 }
 ];
 
 export const LUXURY_ADDONS = [
   {
     id: "addon-choc-truffles",
     name: "Artisan Belgian Truffles (8 Pcs)",
-    nameHindi: "बेल्जियन चॉकलेट ट्रफल्स",
+    nameHindi: "Artisan Belgian Truffles (8 Pcs)",
     price: 399,
-    image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=300&q=80"
+    image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=1600&q=95"
   },
   {
     id: "addon-plush-teddy-mini",
     name: "Honey Plush Cuddle Bear (6\")",
-    nameHindi: "हनी प्लश टेडी बियर",
+    nameHindi: "Honey Plush Cuddle Bear (6\")",
     price: 349,
-    image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=300&q=80"
+    image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=1600&q=95"
   },
   {
     id: "addon-scented-candle",
     name: "Rose & Oud Soy Scented Candle",
-    nameHindi: "रोज़ व ऊद सुगंधित मोमबत्ती",
+    nameHindi: "Rose & Oud Soy Scented Candle",
     price: 499,
-    image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=300&q=80"
+    image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1600&q=95"
   },
   {
     id: "addon-fairy-led-lights",
     name: "Warm Fairy Micro-LED Lights Strand",
-    nameHindi: "वॉर्म माइक्रो-एलईडी लाइट्स",
+    nameHindi: "Warm Fairy Micro-LED Lights Strand",
     price: 199,
-    image: "https://images.unsplash.com/photo-1576014131341-fe148657b5e4?auto=format&fit=crop&w=300&q=80"
+    image: "https://images.unsplash.com/photo-1576014131341-fe148657b5e4?auto=format&fit=crop&w=1600&q=95"
   },
   {
     id: "addon-wax-sealed-card",
     name: "Wax-Sealed Gold Foil Card",
-    nameHindi: "वैक्स-सील्ड गोल्ड फॉयल कार्ड",
+    nameHindi: "Wax-Sealed Gold Foil Card",
     price: 149,
-    image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=300&q=80"
+    image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=1600&q=95"
   }
 ];
 
@@ -1727,7 +1727,19 @@ export function getInitialProducts() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.map((p) => {
+            const initP = INITIAL_PRODUCTS.find((ip) => ip.id === p.id);
+            if (initP && !p.isCustomAddedByOwner) {
+              return { 
+                ...initP, 
+                ...p, 
+                image: (p.image && !p.image.includes('1578632767115') && !p.image.includes('1518895949257')) ? p.image : initP.image,
+                images: initP.images, 
+                colorOptions: initP.colorOptions 
+              };
+            }
+            return p;
+          });
         }
       }
     } catch (e) {

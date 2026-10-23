@@ -1,127 +1,139 @@
 import React, { useState } from 'react';
 import { useShop } from '../../context/ShopContext';
-import { Lock, Eye, EyeOff, ShieldCheck, X, Sparkles } from 'lucide-react';
+import { Lock, Eye, EyeOff, X, Sparkles, ShieldCheck, AlertCircle, ArrowRight, KeyRound } from 'lucide-react';
 
 export default function OwnerLoginModal() {
-  const { isOwnerLoginModalOpen, closeOwnerLogin, loginAsOwner, ownerPin } = useShop();
+  const { isOwnerLoginModalOpen, closeOwnerLogin, loginAsOwner } = useShop();
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState('');
+  const [isShaking, setIsShaking] = useState(false);
 
   if (!isOwnerLoginModalOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!pin.trim()) {
-      setError('कृपया ओनर पिन दर्ज करें (Please enter PIN)');
+      setError('Please enter Security PIN');
+      triggerShake();
       return;
     }
     const res = loginAsOwner(pin);
     if (!res.success) {
-      setError(res.error || 'गलत पिन (Incorrect PIN)');
+      setError(res.error || 'Incorrect Security PIN');
+      triggerShake();
     } else {
       setPin('');
       setError('');
     }
   };
 
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 500);
+  };
+
   const handleQuickFill = () => {
-    setPin(ownerPin || 'risika2026');
+    setPin('risika2026');
     setError('');
   };
 
   return (
-    <div className="drawer-backdrop open owner-modal-backdrop" onClick={closeOwnerLogin}>
+    <div className="drawer-backdrop open owner-native-backdrop" onClick={closeOwnerLogin}>
       <div 
-        className="glass-panel owner-login-card animate-fade-in"
+        className={`owner-native-card ${isShaking ? 'shake-animation' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="drawer-close-btn owner-modal-close" onClick={closeOwnerLogin} aria-label="Close">
-          <X size={20} />
+        {/* Mobile Sheet Handle */}
+        <div className="owner-native-sheet-handle" />
+
+        {/* Close Button */}
+        <button 
+          type="button" 
+          className="owner-native-close-btn" 
+          onClick={closeOwnerLogin} 
+          aria-label="Close"
+        >
+          <X size={18} />
         </button>
 
-        <div className="owner-login-header">
-          <div className="owner-crown-icon">
-            <Lock size={26} />
+        {/* Header with Security Crest */}
+        <div className="owner-native-header">
+          <div className="owner-native-crest">
+            <div className="owner-native-crest-inner">
+              <KeyRound size={26} color="#D4AF37" />
+            </div>
+            <div className="owner-native-crest-glow" />
           </div>
-          <span className="gold-badge" style={{ marginBottom: '0.4rem' }}>
-            <Sparkles size={11} /> Authorized Owner Access Only
-          </span>
-          <h2 className="font-serif-editorial" style={{ fontSize: '1.75rem', marginBottom: '0.3rem' }}>
-            ROSHIKA BLOOMS Owner Portal
+
+          <div className="owner-native-badge">
+            <Sparkles size={11} color="#D4AF37" />
+            <span>RISHIKA BLOOMS • OWNER STUDIO</span>
+          </div>
+
+          <h2 className="owner-native-title">
+            Store Owner Studio
           </h2>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-            केवल ओनर ही बुके की नई तस्वीरें और कीमतें (Prices) जोड़ या बदल सकते हैं।
+          <p className="owner-native-subtitle">
+            This administrative portal is exclusively for the store administrator. Enter your security PIN to manage bouquets, catalog headings, and store configurations.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="owner-login-form">
-          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
-              Owner Security PIN / पासवर्ड
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="owner-native-form">
+          <div className="owner-native-input-group">
+            <label className="owner-native-input-label">
+              <span>Security Passcode</span>
+              <button 
+                type="button" 
+                className="owner-native-hint-btn" 
+                onClick={handleQuickFill}
+                title="Auto-fill default PIN"
+              >
+                (Auto-Fill: risika2026)
+              </button>
             </label>
-            <div style={{ position: 'relative' }}>
+
+            <div className="owner-native-input-wrapper">
               <input
                 type={showPin ? 'text' : 'password'}
                 value={pin}
                 onChange={(e) => { setPin(e.target.value); setError(''); }}
                 placeholder="Enter PIN (e.g. risika2026)"
                 autoFocus
-                className="owner-input-field"
+                inputMode="text"
+                autoComplete="current-password"
+                className="owner-native-input"
               />
               <button
                 type="button"
-                className="owner-pin-toggle"
+                className="owner-native-toggle-btn"
                 onClick={() => setShowPin(!showPin)}
-                title={showPin ? "Hide PIN" : "Show PIN"}
+                title={showPin ? "Hide Passcode" : "Show Passcode"}
+                aria-label="Toggle password visibility"
               >
-                {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPin ? <EyeOff size={19} /> : <Eye size={19} />}
               </button>
             </div>
+
             {error && (
-              <p style={{ color: '#E53E3E', fontSize: '0.8rem', marginTop: '0.4rem', fontWeight: 500 }}>
-                {error}
-              </p>
+              <div className="owner-native-error">
+                <AlertCircle size={14} />
+                <span>{error}</span>
+              </div>
             )}
           </div>
 
-          <div className="owner-pin-hint-box">
-            <ShieldCheck size={16} color="var(--text-gold)" style={{ flexShrink: 0 }} />
-            <div>
-              {ownerPin === 'risika2026' ? (
-                <>
-                  <span>Default Owner PIN: <strong>risika2026</strong></span>
-                  <button 
-                    type="button" 
-                    onClick={handleQuickFill}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--text-gold)',
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                      fontSize: '0.78rem',
-                      marginLeft: '0.5rem',
-                      fontWeight: 600
-                    }}
-                  >
-                    (Auto-Fill)
-                  </button>
-                </>
-              ) : (
-                <span>
-                  🔒 <strong>Custom Owner PIN is active</strong> (Use your private password)
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-            <button type="button" className="btn btn-outline btn-md" style={{ flex: 1 }} onClick={closeOwnerLogin}>
-              Cancel
+          {/* Action Buttons: Full-width Phone First Stack */}
+          <div className="owner-native-actions">
+            <button type="submit" className="owner-native-submit-btn">
+              <ShieldCheck size={18} />
+              <span>Verify & Unlock Studio</span>
+              <ArrowRight size={17} />
             </button>
-            <button type="submit" className="btn btn-gold btn-md" style={{ flex: 2 }}>
-              <Lock size={15} /> Verify & Access
+
+            <button type="button" className="owner-native-cancel-btn" onClick={closeOwnerLogin}>
+              Cancel & Return to Store
             </button>
           </div>
         </form>

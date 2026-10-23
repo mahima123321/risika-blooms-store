@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useShop } from '../../context/ShopContext';
 import { CATEGORIES } from '../../data/categories';
-import { BRAND_CONFIG } from '../../config/brand';
+import BrandLogo from './BrandLogo';
 import { 
   Search, Heart, ShoppingBag, Moon, Sun, Globe, Menu, X, 
-  Sparkles, ChevronDown, Clock, ShieldCheck, PhoneCall, Shield,
-  MessageCircle, Star, ArrowRight 
+  Sparkles, ChevronDown, Clock, Shield,
+  MessageCircle, Star, ArrowRight, Maximize, Minimize, MapPin,
+  Smartphone, Monitor, QrCode, Truck 
 } from 'lucide-react';
 
 export default function Header() {
@@ -16,12 +17,75 @@ export default function Header() {
     cartCount, wishlist, 
     setIsCartOpen, setIsWishlistOpen,
     searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen,
-    isOwnerAuthenticated, openOwnerLogin, openAddProductModal,
-    openOwnerSettingsModal, brandConfig, products
+    isOwnerAuthenticated,
+    openOwnerLogin,
+    openOwnerSettingsModal, brandConfig, products, categories,
+    openAddProductModal, logoutOwner,
+    isMobileFrame, toggleMobileFrame,
+    openQrModal
   } = useShop();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState('');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Mobile Menu Drawer Class Management
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('drawer-open');
+    } else {
+      document.body.classList.remove('drawer-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.classList.remove('drawer-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  // Monitor fullscreen state
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    document.addEventListener('webkitfullscreenchange', handleFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      document.removeEventListener('webkitfullscreenchange', handleFsChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    try {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const el = document.documentElement;
+        if (el.requestFullscreen) {
+          el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    } catch (err) {
+      console.warn('Fullscreen request failed:', err);
+    }
+  };
 
   // Countdown timer to 7:00 PM same day delivery cutoff
   useEffect(() => {
@@ -67,11 +131,11 @@ export default function Header() {
 
   return (
     <>
-      {/* 1. Announcement Bar */}
-      <div className="announcement-bar">
+      {/* 1. Announcement Bar (Desktop Only - Mobile starts cleanly with Logo Header) */}
+      <div className="announcement-bar desktop-only">
         <div className="container announcement-content">
           <span>{t('announcement')}</span>
-          <span className="announcement-timer">
+          <span className="announcement-timer desktop-only">
             <Clock size={13} style={{ display: 'inline', marginRight: '4px' }} />
             Same-Day Dispatch Cutoff: {timeLeft}
           </span>
@@ -91,42 +155,13 @@ export default function Header() {
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          {/* Brand Logo & Crest */}
-          <a 
-            href="#" 
+          {/* Brand Logo & Royal Crest */}
+          <BrandLogo 
+            variant="header" 
+            size="md" 
             onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} 
-            className="brand-logo-link"
-          >
-            <svg className="brand-logo-crest" viewBox="0 0 100 100">
-              <defs>
-                <linearGradient id="crestGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#F9D423" />
-                  <stop offset="50%" stopColor="#D4AF37" />
-                  <stop offset="100%" stopColor="#AA771C" />
-                </linearGradient>
-                <linearGradient id="crestRose" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FF9A9E" />
-                  <stop offset="50%" stopColor="#E892A2" />
-                  <stop offset="100%" stopColor="#8B263E" />
-                </linearGradient>
-              </defs>
-              <circle cx="50" cy="50" r="46" fill="#1A0A10" stroke="url(#crestGold)" strokeWidth="2.5" />
-              <path d="M50 20 C58 35 62 42 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.9" />
-              <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.75" transform="rotate(60 50 50)" />
-              <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.75" transform="rotate(120 50 50)" />
-              <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.75" transform="rotate(180 50 50)" />
-              <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.75" transform="rotate(240 50 50)" />
-              <path d="M50 20 C65 28 72 38 50 60 C38 42 42 35 50 20 Z" fill="url(#crestRose)" opacity="0.75" transform="rotate(300 50 50)" />
-              <circle cx="50" cy="50" r="14" fill="#1A0A10" stroke="url(#crestGold)" strokeWidth="1.5" />
-              <text x="50" y="55" fontFamily="'Cinzel', serif" fontSize="13" fontWeight="bold" fill="url(#crestGold)" textAnchor="middle" letterSpacing="1">RB</text>
-            </svg>
-            <div className="brand-logo-text">
-              <span className="brand-name">{brandConfig?.name || BRAND_CONFIG.name}</span>
-              <span className="brand-tagline">
-                {language === 'hi' ? (brandConfig?.taglineHindi || BRAND_CONFIG.taglineHindi) : (brandConfig?.tagline || BRAND_CONFIG.tagline)}
-              </span>
-            </div>
-          </a>
+          />
+
 
           {/* Desktop Navigation */}
           <nav className="nav-menu">
@@ -154,7 +189,7 @@ export default function Header() {
                 {t('allCategories')} <ChevronDown size={14} />
               </span>
               <div className="mega-menu-dropdown">
-                {CATEGORIES.map((cat) => (
+                {(categories || CATEGORIES).map((cat) => (
                   <div 
                     key={cat.id} 
                     className="mega-menu-item"
@@ -162,7 +197,7 @@ export default function Header() {
                   >
                     <img src={cat.image} alt={cat.name} className="mega-menu-thumb" />
                     <div className="mega-menu-info">
-                      <h4>{language === 'hi' ? cat.nameHindi : cat.name}</h4>
+                      <h4>{cat.name}</h4>
                       <span>{cat.itemCount}</span>
                     </div>
                   </div>
@@ -208,7 +243,7 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* Header Action Buttons */}
+          {/* Header Action Buttons (Ultra-Clean on Mobile: only Search & Cart) */}
           <div className="header-actions">
             {/* Search Trigger */}
             <button 
@@ -220,24 +255,71 @@ export default function Header() {
               <Search size={18} />
             </button>
 
-            {/* Language Switcher */}
+            {/* Fullscreen Mobile App Mode Trigger - Desktop Only */}
             <button 
-              className="lang-theme-pill"
-              onClick={toggleLanguage}
-              title="Change Language"
+              className="action-icon-btn fullscreen-toggle-btn desktop-only" 
+              onClick={toggleFullscreen}
+              aria-label="Toggle Fullscreen App View"
+              title={isFullscreen ? 'Exit Fullscreen' : 'Full Screen App Mode'}
             >
-              <Globe size={14} />
-              <span>{language === 'en' ? 'हिन्दी' : 'ENG'}</span>
+              {isFullscreen ? <Minimize size={17} /> : <Maximize size={17} />}
             </button>
 
-            {/* Theme Switcher */}
+            {/* Mobile App Phone Frame Width Switcher - Desktop Only */}
             <button 
-              className="action-icon-btn"
+              className="action-icon-btn mobile-frame-toggle-btn desktop-only" 
+              onClick={toggleMobileFrame}
+              aria-label="Toggle Mobile Frame View"
+              title={isMobileFrame ? 'Expand to Full Desktop' : 'Switch to Mobile App View'}
+              style={{ position: 'relative' }}
+            >
+              {isMobileFrame ? (
+                <Smartphone size={17} style={{ color: 'var(--color-gold)' }} />
+              ) : (
+                <Monitor size={17} />
+              )}
+            </button>
+
+            {/* QR Code & Scanner Hub Trigger */}
+            <button 
+              className="action-icon-btn qr-header-btn"
+              onClick={() => openQrModal()}
+              title="QR Code & Scanner Hub (Store Link & UPI Pay)"
+              aria-label="QR Code & Scanner"
+            >
+              <QrCode size={18} />
+            </button>
+
+            {/* Language Switcher */}
+            <button 
+              className="action-icon-btn language-toggle-btn"
+              onClick={toggleLanguage}
+              title={`Language: ${language === 'hi' ? 'हिंदी' : 'English'}. Click to switch.`}
+              aria-label="Toggle Language"
+              style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', fontWeight: 700, padding: '0 6px' }}
+            >
+              <Globe size={16} />
+              <span>{language === 'hi' ? 'हिन्दी' : 'EN'}</span>
+            </button>
+
+            {/* Theme Switcher - Desktop Only */}
+            <button 
+              className="action-icon-btn desktop-only"
               onClick={toggleTheme}
               title="Toggle Theme"
               aria-label="Toggle Theme"
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+
+            {/* Track Orders Trigger */}
+            <button 
+              className="action-icon-btn desktop-only"
+              onClick={() => handleNavClick('my-orders')}
+              title="My Orders & Tracking"
+              aria-label="Track My Orders"
+            >
+              <Truck size={18} />
             </button>
 
             {/* Wishlist Trigger */}
@@ -253,23 +335,26 @@ export default function Header() {
               )}
             </button>
 
-            {/* Cart Trigger */}
+            {/* Shopping Cart Trigger */}
             <button 
-              className="action-icon-btn"
-              onClick={() => setIsCartOpen(true)}
+              className="action-icon-btn cart-header-btn"
+              onClick={() => handleNavClick('cart')}
               title="Shopping Bag"
-              aria-label="Cart"
+              aria-label="Shopping Bag"
+              style={{ position: 'relative' }}
             >
               <ShoppingBag size={18} />
               {cartCount > 0 && (
-                <span className="action-badge">{cartCount}</span>
+                <span className="action-badge" style={{ backgroundColor: 'var(--color-rose-crimson, #E11D48)', color: '#FFFFFF' }}>
+                  {cartCount}
+                </span>
               )}
             </button>
 
-            {/* Store Owner Quick Portal Trigger */}
-            {isOwnerAuthenticated ? (
+            {/* Store Owner Quick Portal Trigger - Mobile & Desktop */}
+            {isOwnerAuthenticated && (
               <button 
-                type="button"
+                type="button" 
                 id="owner-active-btn"
                 className="action-icon-btn owner-crown-btn"
                 onClick={() => openOwnerSettingsModal('numbers')}
@@ -279,20 +364,42 @@ export default function Header() {
                 <Shield size={18} color="#D4AF37" />
                 <span className="owner-crown-pulse-dot" />
               </button>
-            ) : (
-              <button 
-                type="button"
-                id="owner-login-btn"
-                className="action-icon-btn discreet-owner-login-btn"
-                onClick={openOwnerLogin}
-                title="Store Owner Login (केवल ओनर के लिए)"
-                aria-label="Owner Login"
-              >
-                <Shield size={17} style={{ opacity: 0.6 }} />
-              </button>
             )}
           </div>
         </div>
+
+        {/* Meesho / Flipkart Signature Mobile Search & Location Strip (Hidden on product detail page for maximum visible screen) */}
+        {currentView.page !== 'product' && (
+          <>
+            <div className="mobile-app-search-row mobile-only">
+              <div 
+                className="mobile-search-pill" 
+                onClick={() => setIsSearchOpen(true)}
+                role="button"
+                tabIndex={0}
+              >
+                <Search size={15} className="search-pill-icon" />
+                <span className="search-pill-text">
+                  Search for 'Velvet bouquets, roses, gifts'...
+                </span>
+                <div className="search-pill-sparkle">
+                  <Sparkles size={13} color="var(--color-gold)" />
+                </div>
+              </div>
+            </div>
+
+            {/* Flipkart / Meesho Express Delivery Location Bar */}
+            <div className="mobile-delivery-address-strip mobile-only" onClick={() => navigateTo('delivery-info')}>
+              <div className="delivery-strip-left">
+                <MapPin size={13} className="delivery-pin-icon" />
+                <span className="delivery-strip-text">
+                  Deliver to <strong>Delhi NCR 110070</strong>
+                </span>
+              </div>
+              <span className="delivery-strip-badge">⚡ 2hr Express</span>
+            </div>
+          </>
+        )}
       </header>
 
       {/* 3. Search Modal */}
@@ -301,18 +408,10 @@ export default function Header() {
           <div 
             className="search-modal-box glass-panel" 
             onClick={(e) => e.stopPropagation()}
-            style={{
-              maxWidth: '650px',
-              width: '90%',
-              margin: '100px auto 0 auto',
-              padding: '2rem',
-              borderRadius: 'var(--radius-xl)',
-              background: 'var(--bg-surface)'
-            }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
               <h3 className="font-serif-editorial" style={{ fontSize: '1.4rem' }}>
-                Search ROSHIKA BLOOMS
+                Search {brandConfig?.name || 'RISHIKA BLOOMS'}
               </h3>
               <button 
                 className="drawer-close-btn" 
@@ -401,7 +500,7 @@ export default function Header() {
                               {item.categoryName}
                             </span>
                             <h4 style={{ fontSize: '0.92rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {language === 'hi' ? (item.nameHindi || item.name) : item.name}
+                              {item.name}
                             </h4>
                           </div>
                           <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -457,13 +556,26 @@ export default function Header() {
 
       {/* 4. Mobile Slide-Out Navigation Drawer */}
       {isMobileMenuOpen && (
-        <div className="drawer-backdrop open mobile-drawer-backdrop" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="mobile-nav-drawer glass-panel" onClick={(e) => e.stopPropagation()}>
+        <div 
+          className="drawer-backdrop open mobile-drawer-backdrop" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          onTouchMove={(e) => {
+            if (e.target === e.currentTarget) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <div 
+            className="mobile-nav-drawer glass-panel" 
+            onClick={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
             <div className="mobile-drawer-header">
-              <div className="brand-logo-text">
-                <span className="brand-name">{brandConfig?.name || BRAND_CONFIG.name}</span>
-                <span className="brand-tagline">Floral Atelier & Studio</span>
-              </div>
+              <BrandLogo 
+                variant="drawer" 
+                size="sm" 
+                onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} 
+              />
               <button 
                 type="button" 
                 className="drawer-close-btn" 
@@ -482,43 +594,45 @@ export default function Header() {
                   className={`mobile-drawer-link ${currentView.page === 'home' ? 'active' : ''}`} 
                   onClick={() => handleNavClick('home')}
                 >
-                  🌸 Home (होम)
+                  🌸 Home
                 </button>
                 <button 
                   type="button" 
                   className={`mobile-drawer-link ${currentView.page === 'shop' ? 'active' : ''}`} 
                   onClick={() => handleNavClick('shop')}
                 >
-                  💐 All Bouquets & Gifts (सभी बुके)
+                  💐 All Bouquets & Gifts
                 </button>
                 <button 
                   type="button" 
                   className={`mobile-drawer-link mobile-drawer-link-highlight ${currentView.page === 'build-bouquet' ? 'active' : ''}`} 
                   onClick={() => handleNavClick('build-bouquet')}
                 >
-                  ✨ Build Your Own Bouquet (कस्टम बुके बनाएं)
+                  ✨ Build Your Own Bouquet
                 </button>
                 <button 
                   type="button" 
                   className={`mobile-drawer-link ${currentView.page === 'gift-combos' ? 'active' : ''}`} 
                   onClick={() => handleNavClick('gift-combos')}
                 >
-                  🎁 Luxury Gift Combos (टेडी व गिफ्ट कॉम्बो)
+                  🎁 Luxury Gift Combos
                 </button>
                 <button 
                   type="button" 
                   className={`mobile-drawer-link ${currentView.page === 'surprise-finder' ? 'active' : ''}`} 
                   onClick={() => handleNavClick('surprise-finder')}
                 >
-                  🎯 Surprise Gift Finder (गिफ्ट फाइंडर)
+                  🎯 Surprise Gift Finder
                 </button>
               </div>
 
               {/* Categories Grid */}
               <div className="mobile-nav-categories">
-                <span className="mobile-nav-section-title">Shop by Category / कैटेगरीज</span>
+                <span className="mobile-nav-section-title">
+                  Shop by Category
+                </span>
                 <div className="mobile-category-chips">
-                  {CATEGORIES.map((cat) => (
+                  {(categories || CATEGORIES).map((cat) => (
                     <button 
                       key={cat.id} 
                       type="button"
@@ -526,7 +640,7 @@ export default function Header() {
                       onClick={() => handleNavClick('category', { categorySlug: cat.slug })}
                     >
                       <img src={cat.image} alt={cat.name} className="mobile-cat-chip-img" />
-                      <span>{language === 'hi' ? cat.nameHindi : cat.name}</span>
+                      <span>{cat.name}</span>
                     </button>
                   ))}
                 </div>
@@ -534,7 +648,9 @@ export default function Header() {
 
               {/* Support & Policies */}
               <div className="mobile-nav-group">
-                <span className="mobile-nav-section-title">Help & Delivery</span>
+                <span className="mobile-nav-section-title">
+                  Help & Delivery
+                </span>
                 <button type="button" className="mobile-drawer-link-subtle" onClick={() => handleNavClick('delivery-info')}>
                   🚚 Same-Day & Midnight Delivery Info
                 </button>
@@ -548,20 +664,31 @@ export default function Header() {
 
               {/* WhatsApp Quick Order */}
               <a 
-                href={`https://wa.me/${brandConfig?.whatsappNumber || '919876543210'}?text=${encodeURIComponent('Hello RISIKA BLOOMS! I would like to order a handcrafted luxury bouquet.')}`}
+                href={`https://wa.me/${(brandConfig?.whatsappNumber || '919305371705').replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello RISIKA BLOOMS! I would like to order a handcrafted luxury bouquet.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-whatsapp btn-md mobile-drawer-wa"
               >
-                <MessageCircle size={16} />
-                <span>WhatsApp Concierge ({brandConfig?.whatsappNumber || '+91 98765 43210'})</span>
+                <MessageCircle size={18} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
+                  <span style={{ fontWeight: 600 }}>WhatsApp Concierge</span>
+                  <span style={{ fontSize: '0.75rem', opacity: 0.9, letterSpacing: '0.5px' }}>{brandConfig?.phone || '+91 93053 71705'}</span>
+                </div>
               </a>
 
-              {/* Language & Theme Controls inside Drawer */}
+              {/* Quick Utility Controls inside Drawer */}
               <div className="mobile-drawer-toggles">
-                <button type="button" className="btn btn-outline btn-sm" onClick={toggleLanguage} style={{ flex: 1 }}>
-                  <Globe size={14} />
-                  <span>{language === 'en' ? 'हिन्दी में देखें' : 'English View'}</span>
+                <button 
+                  type="button" 
+                  className="btn btn-outline btn-sm" 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openQrModal();
+                  }} 
+                  style={{ flex: 1 }}
+                >
+                  <QrCode size={14} />
+                  <span>QR Code & Scanner</span>
                 </button>
                 <button type="button" className="btn btn-outline btn-sm" onClick={toggleTheme} style={{ flex: 1 }}>
                   {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
@@ -569,24 +696,86 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* Store Owner Studio Link */}
-              <div className="mobile-drawer-owner">
-                <button 
-                  type="button" 
-                  className="owner-mobile-link"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    if (isOwnerAuthenticated) {
-                      openOwnerSettingsModal('numbers');
-                    } else {
-                      openOwnerLogin();
-                    }
-                  }}
-                >
-                  <Shield size={14} color="#D4AF37" />
-                  <span>{isOwnerAuthenticated ? '👑 Store Owner Studio (ओनर सेटिंग्स)' : 'Store Owner Login (केवल ओनर के लिए)'}</span>
-                </button>
-              </div>
+              {/* Store Owner Studio Panel - When Authenticated on Mobile */}
+              {isOwnerAuthenticated ? (
+                <div style={{
+                  marginTop: '1.25rem',
+                  padding: '1rem',
+                  background: 'rgba(212, 175, 55, 0.08)',
+                  border: '1.5px solid var(--border-gold)',
+                  borderRadius: 'var(--radius-lg)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Shield size={16} color="#D4AF37" />
+                      <strong style={{ fontSize: '0.9rem', color: 'var(--text-gold)' }}>👑 Store Owner Studio</strong>
+                    </div>
+                    <span style={{ fontSize: '0.72rem', color: '#10B981', fontWeight: 700 }}>● Active</span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.45rem' }}>
+                    <button
+                      type="button"
+                      className="btn btn-gold btn-sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        openAddProductModal();
+                      }}
+                      style={{ justifyContent: 'center', fontSize: '0.82rem' }}
+                    >
+                      <span>+ Add New Bouquet</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        openOwnerSettingsModal('categories');
+                      }}
+                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
+                    >
+                      <span>📁 Manage Categories</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        openOwnerSettingsModal('catalog');
+                      }}
+                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
+                    >
+                      <span>💐 Bouquet Catalog ({products?.length || 0})</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        openOwnerSettingsModal('numbers');
+                      }}
+                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
+                    >
+                      <span>⚙️ Boutique & WhatsApp Settings</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        logoutOwner();
+                      }}
+                      style={{ justifyContent: 'center', fontSize: '0.78rem', color: '#EF4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                    >
+                      <span>Exit Owner Mode</span>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
