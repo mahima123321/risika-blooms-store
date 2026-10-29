@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+*.db-shm
+*.db-wal
+server/data/*.db-shm
+server/data/*.db-wal
 
 # Editor directories and files
 .vscode/*
