@@ -804,17 +804,16 @@ body.app-modal-active .combo-mobile-sticky-bar {
 
 .flipkart-main-img {
   width: 100% !important;
-  height: 100% !important;
-  max-height: 360px !important;
+  height: auto !important;
+  max-height: 520px !important;
   object-fit: contain !important;
   display: block !important;
   margin: 0 auto !important;
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .flipkart-slider-viewport:hover .flipkart-main-img:not(.is-hover-zoomed) {
@@ -1446,12 +1445,13 @@ body.app-modal-active .combo-mobile-sticky-bar {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s ease;
 }
 
 .product-card:hover .product-card-image {
@@ -6476,7 +6476,7 @@ body.app-modal-active .combo-mobile-sticky-bar {
   border-radius: var(--radius-md);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   will-change: transform;
@@ -7748,4 +7748,28 @@ a[href*="netlify.com"] {
 .flipkart-slider-viewport:active .flipkart-main-img,
 .hero-main-image-card:hover {
   transform: none !important;
+}
+
+
+/* ==========================================================================
+   HD BOUQUET IMAGE QUALITY ENHANCEMENT
+   Ensures sharp, vibrant, crystal-clear rendering on Retina, AMOLED & Mobile
+   ========================================================================== */
+.product-card-media,
+.category-card-media,
+.flipkart-slider-viewport {
+  background: #ffffff !important;
+  image-rendering: auto !important;
+}
+
+.product-card-image,
+.flipkart-main-img,
+.category-card-img,
+.bouquet-lightbox-img {
+  image-rendering: auto !important;
+  image-rendering: -webkit-optimize-contrast !important;
+  filter: contrast(1.03) saturate(1.05);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
