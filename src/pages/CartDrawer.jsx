@@ -24,7 +24,7 @@ export default function CartDrawer() {
 
   const [inputCoupon, setInputCoupon] = useState('');
   const [showCheckoutForm, setShowCheckoutForm] = useState(true);
-  const [paymentMode, setPaymentMode] = useState('otp'); // 'otp' | 'whatsapp' | 'online'
+  const [paymentMode, setPaymentMode] = useState('otp'); // 'otp' | 'online'
 
   // Recipient & Delivery form state
   const [customerName, setCustomerName] = useState('');
@@ -247,23 +247,7 @@ export default function CartDrawer() {
     openOrderConfirmationModal(newOrder);
     showToast(`🌸 Order #${orderId} confirmed! Handover OTP sent to +91 ${clean10}.`, 'success');
 
-    // If WhatsApp checkout requested, also open concise order message to florist
-    if (actionType === 'whatsapp') {
-      const msg = buildCartWhatsAppMessage({
-        orderId,
-        deliveryOtp,
-        cartItems: cart,
-        total: cartTotal,
-        customerName,
-        recipientName,
-        recipientPhone: clean10,
-        deliveryAddress,
-        pincode,
-        deliverySlot
-      });
-      const url = createWhatsAppUrl(msg, brandConfig?.whatsappNumber);
-      window.open(url, '_blank');
-    }
+    
   };
 
   const freeDeliveryThreshold = BRAND_CONFIG.delivery.freeThreshold;
@@ -691,43 +675,7 @@ export default function CartDrawer() {
                   <ShieldCheck size={18} color="var(--text-gold)" />
                 </div>
 
-                {/* Method 2: WhatsApp Concierge Order */}
-                <div 
-                  onClick={() => setPaymentMode('whatsapp')}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '0.85rem 1rem',
-                    borderRadius: 'var(--radius-md)',
-                    border: paymentMode === 'whatsapp' ? '2px solid #25D366' : '1px solid var(--border-subtle)',
-                    background: paymentMode === 'whatsapp' ? 'rgba(37, 211, 102, 0.08)' : 'var(--bg-surface)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{
-                      width: '18px',
-                      height: '18px',
-                      borderRadius: '50%',
-                      border: paymentMode === 'whatsapp' ? '5px solid #25D366' : '2px solid var(--border-subtle)',
-                      background: 'var(--bg-surface)',
-                      flexShrink: 0
-                    }} />
-                    <div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                        Order via WhatsApp Concierge
-                      </div>
-                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                        Instant chat order with boutique atelier & get mobile OTP.
-                      </div>
-                    </div>
-                  </div>
-                  <MessageCircle size={18} color="#25D366" />
-                </div>
-
-                {/* Method 3: Online Payment */}
+                {/* Method 2: Online UPI / Card Payment */}
                 <div 
                   onClick={() => setPaymentMode('online')}
                   style={{
@@ -859,12 +807,7 @@ export default function CartDrawer() {
                   borderRadius: 'var(--radius-md)'
                 }}
               >
-                {paymentMode === 'whatsapp' ? (
-                  <>
-                    <MessageCircle size={20} />
-                    <span>Order on WhatsApp Concierge • ₹{cartTotal}</span>
-                  </>
-                ) : paymentMode === 'online' ? (
+                {paymentMode === 'online' ? (
                   <>
                     <Smartphone size={20} />
                     <span>Proceed to Owner UPI Payment • ₹{cartTotal}</span>

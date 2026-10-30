@@ -773,13 +773,23 @@ export default function ProductDetailPage() {
             <div className="product-quick-cta-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem', marginBottom: '1.15rem' }}>
               <button 
                 type="button" 
-                className="btn btn-whatsapp"
-                onClick={handleWhatsAppOrder}
+                className="btn btn-primary"
+                onClick={() => {
+                  addToCart(product, {
+                    quantity,
+                    selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
+                    selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
+                    selectedWrap,
+                    selectedRibbon,
+                    image: activeImage
+                  });
+                  setIsCartOpen(true);
+                }}
                 style={{ padding: '0.75rem 0.5rem', fontSize: '0.88rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', borderRadius: 'var(--radius-md)' }}
-                title="Instant WhatsApp Order"
+                title="Instant Buy Now"
               >
-                <MessageCircle size={18} />
-                <span>WhatsApp</span>
+                <Zap size={18} />
+                <span>Buy Now</span>
               </button>
               <button 
                 type="button" 
@@ -807,7 +817,7 @@ export default function ProductDetailPage() {
                 <span>Available Offers & Coupons (4 Offers)</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', color: 'var(--text-secondary)', fontSize: '0.76rem', lineHeight: 1.4 }}>
-                <div>• <strong style={{ color: 'var(--text-primary)' }}>Bank Offer:</strong> 5% Instant Cashback on WhatsApp UPI & Google Pay</div>
+                <div>• <strong style={{ color: 'var(--text-primary)' }}>Bank Offer:</strong> 5% Instant Cashback on UPI & Cards</div>
                 <div>• <strong style={{ color: 'var(--text-primary)' }}>Special Coupon:</strong> Flat ₹150 OFF on first order with code <span style={{ background: '#FEF3C7', color: '#92400E', padding: '1px 5px', borderRadius: '3px', fontWeight: 800, border: '1px solid rgba(217, 119, 6, 0.3)' }}>BLOOM150</span></div>
                 <div>• <strong style={{ color: 'var(--text-primary)' }}>Complimentary Gift:</strong> Luxury Gold-Foil Printed Card & Chrysal Flower Food Sachet included free</div>
                 <div>• <strong style={{ color: 'var(--text-primary)' }}>Freshness Guarantee:</strong> 100% Morning Harvest or Instant Replacement</div>

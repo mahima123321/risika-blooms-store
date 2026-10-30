@@ -662,19 +662,7 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* WhatsApp Quick Order */}
-              <a 
-                href={`https://wa.me/${(brandConfig?.whatsappNumber || '919305371705').replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello RISIKA BLOOMS! I would like to order a handcrafted luxury bouquet.')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-whatsapp btn-md mobile-drawer-wa"
-              >
-                <MessageCircle size={18} />
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
-                  <span style={{ fontWeight: 600 }}>WhatsApp Concierge</span>
-                  <span style={{ fontSize: '0.75rem', opacity: 0.9, letterSpacing: '0.5px' }}>{brandConfig?.phone || '+91 93053 71705'}</span>
-                </div>
-              </a>
+              
 
               {/* Quick Utility Controls inside Drawer */}
               <div className="mobile-drawer-toggles">
