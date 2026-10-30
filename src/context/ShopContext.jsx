@@ -47,30 +47,18 @@ export function ShopProvider({ children }) {
       const saved = localStorage.getItem('rb_custom_categories');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Auto-heal parsed categories with full details from INITIAL_CATEGORIES
-          const healed = parsed.map((pCat) => {
-            const defaultMatch = INITIAL_CATEGORIES.find((c) => c.id === pCat.id || c.slug === pCat.slug || c.name === pCat.name);
-            return {
-              ...(defaultMatch || {}),
-              ...pCat,
-              name: pCat.name || defaultMatch?.name || 'Luxury Floral Collection',
-              nameHindi: pCat.nameHindi || defaultMatch?.nameHindi || '',
-              slug: pCat.slug || defaultMatch?.slug || pCat.id || 'floral-collection',
-              id: pCat.id || defaultMatch?.id || pCat.slug || 'floral-collection',
-              image: pCat.image || defaultMatch?.image || '/images/red_roses_luxury_bouquet.jpg',
-              bannerImage: pCat.bannerImage || defaultMatch?.bannerImage || pCat.image || '/images/red_roses_luxury_bouquet.jpg',
-              description: pCat.description || defaultMatch?.description || 'Curated luxury collection of handcrafted blooms.'
-            };
-          });
-          const customSlugs = new Set(healed.map((c) => c.slug || c.id));
-          const initialMissing = INITIAL_CATEGORIES.filter((c) => !customSlugs.has(c.slug || c.id));
-          return [...healed, ...initialMissing];
+        // If valid, contains all categories and all have valid names
+        if (Array.isArray(parsed) && parsed.length >= 10 && parsed.every((c) => c && c.name && String(c.name).trim().length > 0)) {
+          return parsed;
         }
       }
     } catch (e) {
       console.warn('Error reading stored categories:', e);
     }
+    // Auto-heal incomplete or corrupted category cache with official 14 collections
+    try {
+      localStorage.setItem('rb_custom_categories', JSON.stringify(INITIAL_CATEGORIES));
+    } catch (e) {}
     return [...INITIAL_CATEGORIES];
   });
 
