@@ -768,6 +768,36 @@ export default function CartDrawer() {
               </div>
             )}
 
+            {/* FLIPKART / MEESHO MASTER PROCEED BUTTON */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsCartOpen(false);
+                navigateTo('checkout');
+              }}
+              style={{
+                width: '100%',
+                padding: '0.9rem 1rem',
+                background: '#FB641B',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.96rem',
+                borderRadius: 'var(--radius-md)',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(251, 100, 27, 0.4)',
+                marginBottom: '0.75rem',
+                textTransform: 'uppercase'
+              }}
+            >
+              <span>PROCEED TO CHECKOUT • ₹{cartTotal}</span>
+              <ArrowRight size={18} />
+            </button>
+
             {/* STEP 4: SINGLE MASTER ACTION BUTTON */}
             <div>
               <button 
