@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { BRAND_CONFIG } from '../config/brand';
@@ -948,9 +949,7 @@ export default function CartDrawer() {
               marginBottom: '1rem'
             }}>
               <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(
-                  `upi://pay?pa=${brandConfig?.upiId || 'roshikablooms@upi'}&pn=Rishika%20Blooms&am=${cartTotal}&cu=INR`
-                )}`}
+                src={brandConfig?.upiQrImage || `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(`upi://pay?pa=${brandConfig?.upiId || "9305371705@paytm"}&pn=Rishika%20Blooms&am=${cartTotal}&cu=INR`)}`}
                 alt="UPI QR Code"
                 style={{ width: '180px', height: '180px', display: 'block' }}
               />

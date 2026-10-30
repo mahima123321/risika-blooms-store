@@ -962,9 +962,9 @@ export default function CheckoutPage() {
                           <div style={{ background: '#FFFFFF', padding: '1rem', borderRadius: '6px', border: '1px solid #D0D0D0', maxWidth: '360px', textAlign: 'center' }}>
                             <div style={{ display: 'inline-block', padding: '8px', background: '#FFF', borderRadius: '8px', border: '1px solid #E0E0E0', marginBottom: '8px' }}>
                               <img 
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`upi://pay?pa=${brandConfig?.upiId || 'roshikablooms@upi'}&pn=RisikaBlooms&am=${cartTotal}&cu=INR`)}`} 
-                                alt="UPI QR" 
-                                style={{ width: '130px', height: '130px', display: 'block' }}
+                                src={brandConfig?.upiQrImage || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`upi://pay?pa=${brandConfig?.upiId || '9305371705@paytm'}&pn=RisikaBlooms&am=${cartTotal}&cu=INR`)}`} 
+                                alt="UPI Payment Scanner" 
+                                style={{ width: '150px', height: '150px', objectFit: 'contain', display: 'block', margin: '0 auto', borderRadius: '6px' }}
                               />
                             </div>
                             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#212121' }}>

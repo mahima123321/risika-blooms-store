@@ -30,7 +30,7 @@ export default function QrScannerModal() {
 
   // QR Code Image URLs via public high-res QR API
   const storeQrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=12&data=${encodeURIComponent(currentUrl)}`;
-  const upiQrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=12&data=${encodeURIComponent(upiLink)}`;
+  const upiQrImgUrl = brandConfig?.upiQrImage || `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=12&data=${encodeURIComponent(upiLink)}`;
 
   // Handle ESC key and body scroll lock
   useEffect(() => {

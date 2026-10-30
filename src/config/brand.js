@@ -1,6 +1,9 @@
 // Brand Configuration for RISHIKA BLOOMS
 export const BRAND_CONFIG = {
   name: "RISHIKA BLOOMS",
+  ownerName: "Rishika / Mahima",
+  upiId: "9305371705@paytm",
+  upiQrImage: "",
   tagline: "Every Bloom Tells a Story.",
   taglineHindi: "Every Bloom Tells a Story.",
   established: "2024",
