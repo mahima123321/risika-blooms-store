@@ -267,9 +267,23 @@ export default function AdminDashboardPage() {
         });
       }
       setOtpVerifyInput('');
-      showToast(`✓ OTP Verified! Order #${order.orderId} marked Delivered!`, 'success');
+      showToast(`🎉 Doorstep OTP Verified! Order #${order.orderId} marked Delivered!`, 'success');
+      
+      try {
+        confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+      } catch (e) {}
+
+      // Automatically trigger Congratulations & Celebration wishes to customer
+      const customerPhone = order.customerPhone || order.recipientPhone || order.phone;
+      if (customerPhone) {
+        const confirmMsg = buildDeliveryConfirmationWhatsAppMessage({ order });
+        const cleanPhone = String(customerPhone).replace(/\D/g, '');
+        const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+        const waUrl = createWhatsAppUrl(confirmMsg, finalPhone);
+        window.open(waUrl, '_blank');
+      }
     } else {
-      showToast('❌ Incorrect Delivery OTP entered. Please check with customer.', 'error');
+      showToast('❌ Incorrect Delivery OTP entered. Please check code with customer.', 'error');
     }
   };
 

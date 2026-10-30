@@ -140,6 +140,22 @@ export function buildCustomerDeliveryOtpWhatsAppMessage({ order }) {
  * Builds short post-handover celebration message.
  */
 export function buildDeliveryConfirmationWhatsAppMessage({ order }) {
-  const id = order.orderId || order.id;
-  return `🎉 *Order #${id} Delivered!*\nYour bouquet has been handed over successfully. Thank you for choosing Rishika Blooms! 🌸✨`;
+  const id = order.orderId || order.id || 'ORDER';
+  const name = order.recipientName || order.customerName || 'Valued Customer';
+  const bouquet = Array.isArray(order.items) && order.items.length > 0
+    ? order.items.map(i => `${i.name} (x${i.quantity || 1})`).join(', ')
+    : (order.bouquetName || 'Luxury Handcrafted Floral Bouquet');
+
+  let msg = `🌸 *RISHIKA BLOOMS — DELIVERY COMPLETED* 🌸\n\n`;
+  msg += `🎉 *CONGRATULATIONS ${name.toUpperCase()}!* 🎉\n\n`;
+  msg += `✨ Your luxury bouquet (*${bouquet}*) under Order #${id} has been *successfully hand-delivered*! 💐\n\n`;
+  msg += `💖 *Congratulations & Warmest Wishes from Rishika Blooms!* We hope these fresh blossoms fill your celebration with pure elegance, beauty, and unforgettable moments.\n\n`;
+  msg += `🌿 *Quick Floral Care Tip:*\n`;
+  msg += `• Keep flowers away from direct afternoon sun.\n`;
+  msg += `• Add fresh cold water to the vase / stems daily.\n\n`;
+  msg += `⭐ *Love your flowers?*\n`;
+  msg += `Share your review & photo with us: https://rishikablooms.vercel.app\n\n`;
+  msg += `_Thank you for choosing Rishika Blooms Atelier!_ 🌸✨`;
+
+  return msg;
 }

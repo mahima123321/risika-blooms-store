@@ -124,7 +124,7 @@ export default function DeliveryOrdersModal() {
     }
   };
 
-  const handleVerifyOtp = (orderId, overrideEntered) => {
+  const handleVerifyOtp = async (orderId, overrideEntered) => {
     const entered = overrideEntered || otpInputs[orderId] || '';
     if (!entered || entered.length < 4) {
       setErrorMessages(prev => ({ ...prev, [orderId]: 'Please enter the complete 4-digit OTP provided by customer.' }));
@@ -132,29 +132,42 @@ export default function DeliveryOrdersModal() {
     }
 
     setVerifyingOrderId(orderId);
-    const result = verifyDeliveryOtp(orderId, entered);
+    try {
+      const result = await verifyDeliveryOtp(orderId, entered);
 
-    if (result.success) {
-      // 🔔 Play celebratory delivery sound, vibration & voice announcement on owner device
-      playDeliverySuccessChime('Congratulations! Bouquet successfully received. Thank you for choosing Rishika Blooms!');
+      if (result && result.success) {
+        // 🔔 Celebratory audio alert & voice announcement on owner device
+        try {
+          playDeliverySuccessChime('Congratulations! Bouquet successfully received. Thank you for choosing Rishika Blooms!');
+        } catch (e) {}
 
-      showToast(`🎉 Order #${orderId} verified and marked as Delivered! (Voice: Bouquet successfully received)`, 'success');
-      try {
-        confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
-      } catch {}
+        showToast(`🎉 Order #${orderId} verified and marked as Delivered!`, 'success');
+        try {
+          confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
+        } catch (e) {}
 
-      // Automatically offer WhatsApp celebration wish trigger
-      const confirmMsg = buildDeliveryConfirmationWhatsAppMessage({ order: result.order });
-      const customerPhone = result.order.recipientPhone || result.order.customerPhone;
-      if (customerPhone) {
-        const waUrl = createWhatsAppUrl(confirmMsg, customerPhone);
-        window.open(waUrl, '_blank');
+        // Automatically dispatch WhatsApp celebration & congratulation wishes to customer
+        const targetOrder = result.order || orders.find(o => String(o.orderId || o.order_id) === String(orderId));
+        if (targetOrder) {
+          const confirmMsg = buildDeliveryConfirmationWhatsAppMessage({ order: targetOrder });
+          const customerPhone = targetOrder.recipientPhone || targetOrder.customerPhone || targetOrder.phone;
+          if (customerPhone) {
+            const cleanPhone = String(customerPhone).replace(/\D/g, '');
+            const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+            const waUrl = createWhatsAppUrl(confirmMsg, finalPhone);
+            window.open(waUrl, '_blank');
+          }
+        }
+      } else {
+        setErrorMessages(prev => ({ ...prev, [orderId]: result?.message || 'Incorrect OTP code.' }));
+        showToast('❌ OTP Verification Failed. Please re-check code with customer.', 'error');
       }
-    } else {
-      setErrorMessages(prev => ({ ...prev, [orderId]: result.message || 'Incorrect OTP code.' }));
-      showToast('❌ OTP Verification Failed. Please re-check code.', 'error');
+    } catch (err) {
+      console.error('OTP verification error:', err);
+      showToast('❌ Error verifying OTP.', 'error');
+    } finally {
+      setVerifyingOrderId(null);
     }
-    setVerifyingOrderId(null);
   };
 
   const handleSendWhatsAppWishes = (order) => {
