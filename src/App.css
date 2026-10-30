@@ -7773,3 +7773,112 @@ a[href*="netlify.com"] {
   backface-visibility: hidden;
   transform: translateZ(0);
 }
+
+
+/* ==========================================================================
+   ENHANCED OWNER STUDIO & MOBILE LUXURY CARD STYLES
+   ========================================================================== */
+.owner-category-item-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.85rem !important;
+  padding: 1.15rem 1.25rem !important;
+  border-radius: var(--radius-lg, 18px) !important;
+  background: var(--bg-surface, #ffffff) !important;
+  border: 1.5px solid var(--border-subtle, rgba(212, 175, 55, 0.25)) !important;
+  transition: all 0.25s ease !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+}
+
+.owner-category-item-card:hover {
+  border-color: var(--border-gold, #D4AF37) !important;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.16) !important;
+  transform: translateY(-2px);
+}
+
+.owner-category-top-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+.owner-category-thumb {
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 14px !important;
+  object-fit: cover !important;
+  border: 1.5px solid var(--border-gold, #D4AF37) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  flex-shrink: 0 !important;
+  background: #f8f5f0 !important;
+}
+
+.owner-category-details {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.owner-category-title {
+  font-family: var(--font-serif-editorial, "Playfair Display", serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1A1A1A) !important;
+  margin: 0.2rem 0 !important;
+  line-height: 1.3 !important;
+  word-break: break-word !important;
+}
+
+.owner-category-subtitle {
+  font-size: 0.82rem !important;
+  color: var(--text-gold, #B88E22) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.owner-category-desc {
+  font-size: 0.78rem !important;
+  color: var(--text-muted, #71717A) !important;
+  margin: 0.2rem 0 0 0 !important;
+  line-height: 1.45 !important;
+}
+
+.owner-category-bottom-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  width: 100% !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px dashed var(--border-subtle, rgba(0, 0, 0, 0.1)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile Responsiveness for Owner Studio & Modals */
+@media (max-width: 768px) {
+  .owner-product-modal-card {
+    padding: 1.25rem 1rem !important;
+    width: 96% !important;
+    max-height: 94dvh !important;
+    border-radius: var(--radius-lg, 18px) !important;
+  }
+  .owner-form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+  .owner-category-item-card {
+    padding: 0.95rem 1rem !important;
+  }
+  .owner-category-thumb {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 10px !important;
+  }
+  .owner-category-title {
+    font-size: 1rem !important;
+  }
+  .owner-input-field {
+    font-size: 16px !important; /* Prevents auto-zoom on mobile Safari */
+  }
+}

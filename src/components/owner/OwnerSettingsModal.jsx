@@ -61,6 +61,7 @@ export default function OwnerSettingsModal() {
     categories,
     saveOwnerCategory,
     deleteOwnerCategory,
+    resetCategoriesToDefault,
     openAddProductModal,
     openEditProductModal,
     deleteOwnerProduct,
@@ -960,14 +961,29 @@ export default function OwnerSettingsModal() {
               </div>
 
               {!isCategoryFormOpen ? (
-                <button
-                  type="button"
-                  className="btn btn-gold btn-sm"
-                  onClick={handleOpenNewCategory}
-                >
-                  <Plus size={14} />
-                  <span>Create Collection</span>
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-sm"
+                    onClick={() => {
+                      if (window.confirm('Restore all 14 official store collections (Birthday, Wedding, Velvet, etc.)?')) {
+                        resetCategoriesToDefault();
+                      }
+                    }}
+                    title="Restore all 14 official collections"
+                  >
+                    <RotateCcw size={13} />
+                    <span>Reset 14 Collections</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-gold btn-sm"
+                    onClick={handleOpenNewCategory}
+                  >
+                    <Plus size={14} />
+                    <span>Create Collection</span>
+                  </button>
+                </div>
               ) : (
                 <button
                   type="button"
@@ -1189,8 +1205,21 @@ export default function OwnerSettingsModal() {
                 </div>
               ) : (
                 filteredCategories.map((cat, idx) => {
-                  const bouquetCount = products.filter((p) => p.category === cat.slug || p.category === cat.id).length;
-                  const cleanEn = (cat.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                  const bouquetCount = products.filter((p) => {
+                    if (!p) return false;
+                    const pCat = String(p.category || '').toLowerCase().trim();
+                    const cSlug = String(cat.slug || '').toLowerCase().trim();
+                    const cId = String(cat.id || '').toLowerCase().trim();
+                    const cName = String(cat.name || '').toLowerCase().trim();
+                    return (
+                      (cSlug && (pCat === cSlug || pCat.includes(cSlug) || cSlug.includes(pCat))) ||
+                      (cId && (pCat === cId || pCat.includes(cId) || cId.includes(pCat))) ||
+                      (cName && (pCat === cName || pCat.includes(cName) || cName.includes(pCat)))
+                    );
+                  }).length;
+
+                  const displayName = cat.name || cat.title || cat.heading || cat.categoryName || 'Exclusive Floral Collection';
+                  const cleanEn = displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
                   const cleanHi = (cat.nameHindi || '').toLowerCase().replace(/[^a-z0-9]/g, '');
                   const isDuplicateSubtitle = !cat.nameHindi || (cleanHi && cleanEn && cleanHi === cleanEn);
 
@@ -1199,13 +1228,13 @@ export default function OwnerSettingsModal() {
                       <div className="owner-category-top-row">
                         <img 
                           src={cat.image || cat.bannerImage || '/images/red_roses_luxury_bouquet.jpg'} 
-                          alt={cat.name} 
+                          alt={displayName} 
                           className="owner-category-thumb"
                           onError={(e) => { e.target.src = '/images/red_roses_luxury_bouquet.jpg'; }}
                         />
 
                         <div className="owner-category-details">
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
                             <span className="owner-live-count-badge">
                               🌸 {bouquetCount} {bouquetCount === 1 ? 'Bouquet' : 'Bouquets'} Live
                             </span>
@@ -1215,7 +1244,7 @@ export default function OwnerSettingsModal() {
                           </div>
 
                           <h4 className="owner-category-title">
-                            {cat.name}
+                            {displayName}
                           </h4>
 
                           {!isDuplicateSubtitle && cat.nameHindi && (
@@ -1240,7 +1269,7 @@ export default function OwnerSettingsModal() {
                             closeOwnerSettingsModal();
                             openAddProductModal(cat.slug || cat.id);
                           }}
-                          title={`Add new bouquet under ${cat.name}`}
+                          title={`Add new bouquet under ${displayName}`}
                         >
                           <Plus size={13} />
                           <span>Add Bouquet</span>
@@ -1260,7 +1289,7 @@ export default function OwnerSettingsModal() {
                           type="button"
                           className="btn btn-outline btn-sm owner-delete-btn"
                           onClick={() => {
-                            if (window.confirm(`Are you sure you want to delete the "${cat.name}" category collection?`)) {
+                            if (window.confirm(`Are you sure you want to delete the "${displayName}" category collection?`)) {
                               deleteOwnerCategory(cat.id || cat.slug);
                             }
                           }}

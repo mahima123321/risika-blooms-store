@@ -48,9 +48,24 @@ export function ShopProvider({ children }) {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const customSlugs = new Set(parsed.map((c) => c.slug || c.id));
+          // Auto-heal parsed categories with full details from INITIAL_CATEGORIES
+          const healed = parsed.map((pCat) => {
+            const defaultMatch = INITIAL_CATEGORIES.find((c) => c.id === pCat.id || c.slug === pCat.slug || c.name === pCat.name);
+            return {
+              ...(defaultMatch || {}),
+              ...pCat,
+              name: pCat.name || defaultMatch?.name || 'Luxury Floral Collection',
+              nameHindi: pCat.nameHindi || defaultMatch?.nameHindi || '',
+              slug: pCat.slug || defaultMatch?.slug || pCat.id || 'floral-collection',
+              id: pCat.id || defaultMatch?.id || pCat.slug || 'floral-collection',
+              image: pCat.image || defaultMatch?.image || '/images/red_roses_luxury_bouquet.jpg',
+              bannerImage: pCat.bannerImage || defaultMatch?.bannerImage || pCat.image || '/images/red_roses_luxury_bouquet.jpg',
+              description: pCat.description || defaultMatch?.description || 'Curated luxury collection of handcrafted blooms.'
+            };
+          });
+          const customSlugs = new Set(healed.map((c) => c.slug || c.id));
           const initialMissing = INITIAL_CATEGORIES.filter((c) => !customSlugs.has(c.slug || c.id));
-          return [...parsed, ...initialMissing];
+          return [...healed, ...initialMissing];
         }
       }
     } catch (e) {
@@ -1357,6 +1372,17 @@ export function ShopProvider({ children }) {
     }
   };
 
+    const resetCategoriesToDefault = () => {
+    setCategories([...INITIAL_CATEGORIES]);
+    try {
+      localStorage.removeItem('rb_custom_categories');
+      localStorage.setItem('rb_custom_categories', JSON.stringify(INITIAL_CATEGORIES));
+    } catch (e) {
+      console.warn('Error resetting categories:', e);
+    }
+    showToast('✨ Restored all 14 official category collections!');
+  };
+
   const deleteOwnerCategory = (categoryId) => {
     if (!isOwnerAuthenticated) {
       showToast('❌ Unauthorized: Only the verified store owner can delete categories.', 'error');
@@ -1448,6 +1474,7 @@ export function ShopProvider({ children }) {
         categories,
         saveOwnerCategory,
         deleteOwnerCategory,
+        resetCategoriesToDefault,
         // Brand & Store Configurations (WhatsApp Number, Phone, Address, Announcements)
         brandConfig,
         updateBrandConfig,

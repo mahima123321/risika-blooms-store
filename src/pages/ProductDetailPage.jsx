@@ -418,6 +418,18 @@ export default function ProductDetailPage() {
   const finalUnitPrice = baseUnitPrice;
   const grandTotalPrice = (finalUnitPrice * quantity) + addonsTotal;
 
+  const handleAddToCart = () => {
+    addToCart(product, {
+      quantity,
+      selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
+      selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
+      selectedWrap,
+      selectedRibbon,
+      image: activeImage
+    });
+    setIsCartOpen(true);
+  };
+
   const handlePincodeCheck = (e) => {
     e.preventDefault();
     const res = checkDeliveryPincode(pincodeInput);

@@ -8,20 +8,20 @@ export default function WhatsAppButton() {
   const [hasAutoOpened, setHasAutoOpened] = useState(false);
 
   useEffect(() => {
-    // Check if user has already auto-opened or dismissed the channel prompt
-    const alreadyOpened = localStorage.getItem('rb_wa_channel_auto_opened');
-    const alreadyDismissed = sessionStorage.getItem('rb_wa_channel_dismissed');
+    // Check if user has already auto-opened or dismissed the channel prompt in this session
+    const alreadyOpenedInSession = sessionStorage.getItem('rb_wa_channel_session_opened');
 
-    if (!alreadyOpened && !alreadyDismissed) {
-      // 1. Show the prominent floating invite banner after a brief 1-second delay
+    if (!alreadyOpenedInSession) {
+      // 1. Show the prominent floating invite banner after a brief 1.2-second delay
       const bannerTimer = setTimeout(() => {
         setShowBanner(true);
       }, 1200);
 
-      // 2. Automatically open WhatsApp Channel on the first user click/touch anywhere
+      // 2. Automatically open WhatsApp Channel on the first user click/touch anywhere on the website
       const triggerAutoOpenOnFirstInteraction = (e) => {
-        if (!localStorage.getItem('rb_wa_channel_auto_opened')) {
-          localStorage.setItem('rb_wa_channel_auto_opened', 'true');
+        // Only trigger once per session so browsing remains smooth
+        if (!sessionStorage.getItem('rb_wa_channel_session_opened')) {
+          sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
           setHasAutoOpened(true);
           try {
             window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
@@ -37,20 +37,20 @@ export default function WhatsAppButton() {
       window.addEventListener('click', triggerAutoOpenOnFirstInteraction, { once: true });
       window.addEventListener('touchend', triggerAutoOpenOnFirstInteraction, { once: true });
 
-      // 3. Also try a direct timed attempt (some mobile browsers allow it if trusted)
+      // 3. Timed attempt on page load (allowed on modern Android/Chrome if trusted)
       const autoTimer = setTimeout(() => {
-        if (!localStorage.getItem('rb_wa_channel_auto_opened')) {
+        if (!sessionStorage.getItem('rb_wa_channel_session_opened')) {
           try {
             const win = window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
             if (win) {
-              localStorage.setItem('rb_wa_channel_auto_opened', 'true');
+              sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
               setHasAutoOpened(true);
             }
           } catch (e) {
-            // Popup blocker may intercept until user taps
+            // Browser popup blocker intercepts; first tap will handle it
           }
         }
-      }, 2500);
+      }, 2000);
 
       return () => {
         clearTimeout(bannerTimer);
@@ -63,14 +63,14 @@ export default function WhatsAppButton() {
 
   const handleJoinClick = (e) => {
     e.stopPropagation();
-    localStorage.setItem('rb_wa_channel_auto_opened', 'true');
+    sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
     setShowBanner(false);
     window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
   };
 
   const handleDismiss = (e) => {
     e.stopPropagation();
-    sessionStorage.setItem('rb_wa_channel_dismissed', 'true');
+    sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
     setShowBanner(false);
   };
 
@@ -80,19 +80,20 @@ export default function WhatsAppButton() {
       {showBanner && (
         <div style={{
           position: 'fixed',
-          bottom: '80px',
+          bottom: '82px',
           left: '50%',
           transform: 'translateX(-50%)',
           width: '92%',
-          maxWidth: '440px',
+          maxWidth: '420px',
           background: 'linear-gradient(135deg, #075E54 0%, #128C7E 100%)',
           color: '#ffffff',
-          borderRadius: '14px',
-          padding: '1rem 1.1rem',
-          boxShadow: '0 12px 35px rgba(18, 140, 126, 0.45), 0 4px 12px rgba(0,0,0,0.2)',
+          borderRadius: '16px',
+          padding: '1.1rem 1.15rem',
+          boxShadow: '0 16px 40px rgba(7, 94, 84, 0.55), 0 4px 14px rgba(0,0,0,0.25)',
           zIndex: 9999,
           animation: 'slideUpWaBanner 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-          border: '1.5px solid rgba(255, 255, 255, 0.25)'
+          border: '2px solid rgba(255, 255, 255, 0.35)',
+          boxSizing: 'border-box'
         }}>
           {/* Close button */}
           <button
@@ -100,13 +101,13 @@ export default function WhatsAppButton() {
             onClick={handleDismiss}
             style={{
               position: 'absolute',
-              top: '8px',
-              right: '8px',
-              background: 'rgba(0,0,0,0.2)',
+              top: '10px',
+              right: '10px',
+              background: 'rgba(0,0,0,0.25)',
               border: 'none',
               color: '#ffffff',
-              width: '24px',
-              height: '24px',
+              width: '26px',
+              height: '26px',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
@@ -115,73 +116,74 @@ export default function WhatsAppButton() {
             }}
             title="Dismiss"
           >
-            <X size={14} />
+            <X size={15} />
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', marginBottom: '0.85rem' }}>
             <div style={{
-              width: '42px',
-              height: '42px',
+              width: '46px',
+              height: '46px',
               borderRadius: '50%',
               background: '#25D366',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 3px 10px rgba(37, 211, 102, 0.4)'
+              boxShadow: '0 4px 12px rgba(37, 211, 102, 0.5)'
             }}>
-              <MessageCircle size={24} color="#ffffff" />
+              <MessageCircle size={26} color="#ffffff" />
             </div>
 
-            <div style={{ flex: 1, paddingRight: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-                <span style={{ fontWeight: 800, fontSize: '0.98rem', letterSpacing: '-0.2px' }}>
+            <div style={{ flex: 1, paddingRight: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }}>
+                <span style={{ fontWeight: 800, fontSize: '1.02rem', letterSpacing: '-0.2px' }}>
                   Join WhatsApp Channel
                 </span>
-                <span style={{ background: '#25D366', color: '#ffffff', fontSize: '0.62rem', fontWeight: 900, padding: '1px 5px', borderRadius: '4px' }}>
-                  OFFICIAL
+                <span style={{ background: '#25D366', color: '#ffffff', fontSize: '0.62rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                  VERIFIED
                 </span>
               </div>
-              <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.92)', lineHeight: '1.3' }}>
-                Join for daily flower discounts, fresh bouquet drops & real-time delivery updates!
+              <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.95)', lineHeight: '1.35' }}>
+                हमारे ऑफिशियल व्हाट्सएप चैनल से जुड़ें और पाएं <strong>20% की छूट</strong> व नए बुके का डेली अपडेट!
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.6rem' }}>
             <button
               type="button"
               onClick={handleJoinClick}
               style={{
-                flex: 1,
+                flex: 1.5,
                 background: '#25D366',
                 color: '#ffffff',
                 border: 'none',
-                padding: '0.65rem 1rem',
-                borderRadius: '8px',
+                padding: '0.75rem 1rem',
+                borderRadius: '10px',
                 fontWeight: 800,
-                fontSize: '0.88rem',
+                fontSize: '0.92rem',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
-                boxShadow: '0 3px 10px rgba(0,0,0,0.2)'
+                boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
               }}
             >
-              <span>Join Channel Now</span>
-              <ExternalLink size={15} />
+              <span>चैनल से जुड़ें (Join Now)</span>
+              <ExternalLink size={16} />
             </button>
 
             <button
               type="button"
               onClick={handleDismiss}
               style={{
+                flex: 0.6,
                 background: 'rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                padding: '0.65rem 0.85rem',
-                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                padding: '0.75rem 0.5rem',
+                borderRadius: '10px',
                 fontWeight: 600,
                 fontSize: '0.82rem',
                 cursor: 'pointer'
@@ -200,12 +202,12 @@ export default function WhatsAppButton() {
         rel="noopener noreferrer"
         style={{
           position: 'fixed',
-          bottom: '24px',
-          right: '24px',
+          bottom: '22px',
+          right: '18px',
           background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
           color: '#ffffff',
           borderRadius: '50px',
-          padding: '0.65rem 1rem 0.65rem 0.85rem',
+          padding: '0.65rem 1.1rem 0.65rem 0.95rem',
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
@@ -213,8 +215,8 @@ export default function WhatsAppButton() {
           zIndex: 900,
           textDecoration: 'none',
           fontWeight: 700,
-          fontSize: '0.84rem',
-          border: '2px solid rgba(255, 255, 255, 0.4)',
+          fontSize: '0.85rem',
+          border: '2px solid rgba(255, 255, 255, 0.45)',
           transition: 'transform 0.2s ease, box-shadow 0.2s ease'
         }}
         title="Join our official WhatsApp Channel"
@@ -232,7 +234,7 @@ export default function WhatsAppButton() {
             boxShadow: '0 0 0 2px #128C7E'
           }} />
         </div>
-        <span className="hide-on-very-small-screens">Join WhatsApp Channel</span>
+        <span>Join Channel</span>
       </a>
 
       {/* Keyframe animation styling */}
@@ -245,11 +247,6 @@ export default function WhatsAppButton() {
           to {
             opacity: 1;
             transform: translate(-50%, 0);
-          }
-        }
-        @media (max-width: 480px) {
-          .hide-on-very-small-screens {
-            display: none;
           }
         }
       `}</style>
