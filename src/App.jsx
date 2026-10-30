@@ -83,6 +83,9 @@ function MainAppContent() {
       case 'faqs':
         return <FaqPage />;
       case 'delivery-info':
+      case 'delivery':
+      case 'delivery-portal':
+      case 'delivery-hub':
         return <DeliveryInfoPage />;
       case 'privacy':
       case 'privacy-policy':
