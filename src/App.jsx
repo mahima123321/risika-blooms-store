@@ -10,6 +10,7 @@ import OwnerProductModal from './components/owner/OwnerProductModal';
 import OwnerSettingsModal from './components/owner/OwnerSettingsModal';
 import QrScannerModal from './components/common/QrScannerModal';
 import IncomingSmsBanner from './components/common/IncomingSmsBanner';
+import WhatsAppButton from './components/common/WhatsAppButton';
 
 import HomePage from './pages/HomePage';
 import ShopPage from './pages/ShopPage';
@@ -142,6 +143,7 @@ function MainAppContent() {
       <QrScannerModal />
       <IncomingSmsBanner />
       <MobileBottomNav />
+      <WhatsAppButton />
       <Toast />
     </div>
   );
