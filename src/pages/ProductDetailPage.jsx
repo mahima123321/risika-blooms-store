@@ -477,28 +477,19 @@ export default function ProductDetailPage() {
               title="Click to view full screen HD zoom"
             >
               {/* Main Image Viewport with Desktop Hover Magnifier */}
-              <div 
-                className="flipkart-slider-viewport"
-                onMouseMove={handleMainImgMouseMove}
-                onMouseLeave={handleMainImgMouseLeave}
-              >
-                <img 
-                  src={currentDisplayImage} 
-                  alt={product.name} 
+              {/* Main Image Viewport (Stable Image - Zoom on click/tap only) */}
+              <div className="flipkart-slider-viewport">
+                <img
+                  src={currentDisplayImage}
+                  alt={product.name}
                   decoding="async"
-                  className={`flipkart-main-img ${isDesktopHoverZoom ? 'is-hover-zoomed' : ''}`}
-                  style={isDesktopHoverZoom ? {
-                    transformOrigin: `${hoverZoomCoords.x}% ${hoverZoomCoords.y}%`,
-                    transform: 'scale(2.2)',
-                  } : undefined}
+                  className="flipkart-main-img"
+                  style={{ transform: "none" }}
                 />
-
-                {isDesktopHoverZoom && (
-                  <div className="flipkart-hover-zoom-hint animate-fade-in">
-                    <ZoomIn size={13} />
-                    <span>Click for Fullscreen Zoom Studio</span>
-                  </div>
-                )}
+                <div className="flipkart-hover-zoom-hint" style={{ opacity: 0.9 }}>
+                  <ZoomIn size={13} />
+                  <span>Tap to Zoom</span>
+                </div>
               </div>
 
               {/* Flipkart Top Floating Badges & Icons */}

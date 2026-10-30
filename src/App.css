@@ -818,7 +818,7 @@ body.app-modal-active .combo-mobile-sticky-bar {
 }
 
 .flipkart-slider-viewport:hover .flipkart-main-img:not(.is-hover-zoomed) {
-  transform: scale(1.04);
+  transform: none !important;
 }
 
 .flipkart-main-img.is-hover-zoomed {
@@ -1377,7 +1377,7 @@ body.app-modal-active .combo-mobile-sticky-bar {
 }
 
 .category-card:hover .category-card-img {
-  transform: scale(1.08);
+  transform: none !important;
 }
 
 .category-card-overlay {
@@ -1455,7 +1455,7 @@ body.app-modal-active .combo-mobile-sticky-bar {
 }
 
 .product-card:hover .product-card-image {
-  transform: scale(1.06) translateZ(0);
+  transform: none !important;
 }
 
 .product-badge-tag {
@@ -4980,7 +4980,7 @@ body.app-modal-active .combo-mobile-sticky-bar {
 }
 
 .product-detail-img-card:hover .product-detail-main-img {
-  transform: scale(1.03);
+  transform: none !important;
 }
 
 .product-fullscreen-pill {
@@ -7725,3 +7725,27 @@ a[href*="netlify.com"] {
   }
 }
 
+
+
+/* ==========================================================================
+   GLOBAL FIX: Disable automatic unwanted zoom on touch / hover
+   Zoom occurs ONLY when user explicitly clicks/taps or opens zoom studio
+   ========================================================================== */
+.product-card-image,
+.category-card-img,
+.flipkart-main-img,
+.product-detail-main-img,
+.product-card-media img,
+.hero-main-image-card img {
+  transform: none !important;
+}
+
+.product-card:hover .product-card-image,
+.product-card:active .product-card-image,
+.category-card:hover .category-card-img,
+.category-card:active .category-card-img,
+.flipkart-slider-viewport:hover .flipkart-main-img,
+.flipkart-slider-viewport:active .flipkart-main-img,
+.hero-main-image-card:hover {
+  transform: none !important;
+}
