@@ -1,7 +1,10 @@
 import React from 'react';
-import { Star, Quote, CheckCircle2 } from 'lucide-react';
+import { useShop } from '../../context/ShopContext';
+import { Star, Quote, CheckCircle2, Camera } from 'lucide-react';
 
 export default function TestimonialsSection() {
+  const { openWriteReviewModal } = useShop();
+
   const testimonials = [
     {
       name: "Radhika Mehra",
@@ -41,7 +44,7 @@ export default function TestimonialsSection() {
             <span className="floral-divider-line"></span>
           </div>
           <p className="section-subtitle">
-            Curated client experiences & feedback. (Customer demo reviews — live photo reviews appear on product details).
+            Curated client experiences & verified feedback. Share your bouquet photos with our floral masters.
           </p>
         </div>
 
@@ -93,6 +96,31 @@ export default function TestimonialsSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Direct Feedback with Camera CTA Button */}
+        <div style={{ textAlign: 'center', marginTop: '2.75rem' }}>
+          <button
+            type="button"
+            className="btn btn-gold btn-md"
+            onClick={() => openWriteReviewModal()}
+            style={{
+              padding: '0.75rem 1.75rem',
+              fontSize: '0.92rem',
+              fontWeight: 800,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              borderRadius: '50px',
+              boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)'
+            }}
+          >
+            <Camera size={18} />
+            <span>✍️ Write Feedback & Share Bouquet Photos</span>
+          </button>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            Open camera to snap live blooms or upload from gallery
+          </div>
         </div>
       </div>
     </section>

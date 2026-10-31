@@ -740,7 +740,7 @@ export default function ProductDetailPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsWriteReviewModalOpen(true)}
+                onClick={() => openWriteReviewModal(product)}
                 style={{
                   background: 'rgba(212, 175, 55, 0.12)',
                   border: '1px solid rgba(212, 175, 55, 0.4)',

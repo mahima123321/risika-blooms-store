@@ -467,3 +467,4 @@ fs.writeFileSync(cssPath, cssContent, 'utf8');
 console.log('✓ App.css updated with Flipkart / Meesho / Myntra profile styles!');
 
 console.log('=== ALL FLIPKART & MEESHO PRODUCT PROFILE FIXES APPLIED SUCCESSFULLY ===');
+

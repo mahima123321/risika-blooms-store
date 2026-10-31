@@ -187,6 +187,19 @@ export function ShopProvider({ children }) {
   });
 
   // Customer photo reviews state persisted in localStorage
+  const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
+  const [writeReviewTargetProduct, setWriteReviewTargetProduct] = useState(null);
+
+  const openWriteReviewModal = (targetProduct = null) => {
+    const prod = targetProduct || (products && products[0]) || null;
+    setWriteReviewTargetProduct(prod);
+    setIsWriteReviewModalOpen(true);
+  };
+
+  const closeWriteReviewModal = () => {
+    setIsWriteReviewModalOpen(false);
+  };
+
   const [productReviews, setProductReviews] = useState(() => {
     try {
       const saved = localStorage.getItem('rb_product_reviews');

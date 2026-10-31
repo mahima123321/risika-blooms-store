@@ -22,7 +22,8 @@ export default function Header() {
     openOwnerSettingsModal, brandConfig, products, categories,
     openAddProductModal, logoutOwner,
     isMobileFrame, toggleMobileFrame,
-    openQrModal
+    openQrModal,
+    openWriteReviewModal
   } = useShop();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -669,6 +670,9 @@ export default function Header() {
                 </button>
                 <button type="button" className="mobile-drawer-link-subtle" onClick={() => handleNavClick('contact')}>
                   📞 Contact Customer Concierge
+                </button>
+                <button type="button" className="mobile-drawer-link-subtle" onClick={() => { setIsMobileMenuOpen(false); openWriteReviewModal(); }} style={{ color: "#D4AF37", fontWeight: 700 }}>
+                  📸 Write Feedback & Photo Review (Camera)
                 </button>
               </div>
 

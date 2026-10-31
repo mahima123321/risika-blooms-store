@@ -1465,6 +1465,30 @@ export default function MyOrdersPage() {
                       >
                         Contact Concierge
                       </button>
+
+                      <button 
+                        type="button" 
+                        className="btn btn-gold btn-sm"
+                        onClick={() => {
+                          const item = activeCustomerOrder.items?.[0];
+                          const prod = (products || []).find(p => p.id === (item?.productId || item?.id)) || (products || [])[0];
+                          openWriteReviewModal(prod);
+                        }}
+                        style={{
+                          background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                          border: 'none',
+                          color: '#FFFFFF',
+                          fontWeight: 700,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
+                        }}
+                      >
+                        <Camera size={14} />
+                        <span>⭐ Rate & Review with Photos</span>
+                      </button>
+
                     </div>
                   </div>
                 )}

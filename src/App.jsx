@@ -12,6 +12,7 @@ import DeliveryOrdersModal from './components/owner/DeliveryOrdersModal';
 import QrScannerModal from './components/common/QrScannerModal';
 import IncomingSmsBanner from './components/common/IncomingSmsBanner';
 import WhatsAppButton from './components/common/WhatsAppButton';
+import WriteReviewModal from './components/reviews/WriteReviewModal';
 
 import HomePage from './pages/HomePage';
 import ShopPage from './pages/ShopPage';
@@ -41,7 +42,7 @@ import {
 import './App.css';
 
 function MainAppContent() {
-  const { currentView, isMobileFrame } = useShop();
+  const { currentView, isMobileFrame, isWriteReviewModalOpen, closeWriteReviewModal, writeReviewTargetProduct } = useShop();
 
   const renderActivePage = () => {
     switch (currentView.page) {
@@ -147,6 +148,11 @@ function MainAppContent() {
       <IncomingSmsBanner />
       <MobileBottomNav />
       <WhatsAppButton />
+      <WriteReviewModal 
+        isOpen={isWriteReviewModalOpen} 
+        onClose={closeWriteReviewModal} 
+        product={writeReviewTargetProduct} 
+      />
       <Toast />
     </div>
   );
