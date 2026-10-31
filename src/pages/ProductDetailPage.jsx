@@ -430,6 +430,18 @@ export default function ProductDetailPage() {
     setIsCartOpen(true);
   };
 
+  const handleBuyNow = () => {
+    addToCart(product, {
+      quantity,
+      selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
+      selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
+      selectedWrap,
+      selectedRibbon,
+      image: activeImage
+    });
+    navigateTo('checkout');
+  };
+
   const handlePincodeCheck = (e) => {
     e.preventDefault();
     const res = checkDeliveryPincode(pincodeInput);
@@ -786,17 +798,7 @@ export default function ProductDetailPage() {
               <button 
                 type="button" 
                 className="btn btn-primary"
-                onClick={() => {
-                  addToCart(product, {
-                    quantity,
-                    selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
-                    selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
-                    selectedWrap,
-                    selectedRibbon,
-                    image: activeImage
-                  });
-                  setIsCartOpen(true);
-                }}
+                onClick={handleBuyNow}
                 style={{ padding: '0.75rem 0.5rem', fontSize: '0.88rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', borderRadius: 'var(--radius-md)' }}
                 title="Instant Buy Now"
               >
@@ -1042,17 +1044,7 @@ export default function ProductDetailPage() {
                 <button 
                   type="button" 
                   className="btn btn-primary btn-lg"
-                  onClick={() => {
-                    addToCart(product, {
-                      quantity,
-                      selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
-                      selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
-                      selectedWrap,
-                      selectedRibbon,
-                      image: activeImage
-                    });
-                    navigateTo('checkout');
-                  }}
+                  onClick={handleBuyNow}
                   style={{ justifyContent: 'center', fontWeight: 700, gap: '8px' }}
                 >
                   <Zap size={18} />
@@ -1506,17 +1498,7 @@ export default function ProductDetailPage() {
           <button 
             type="button" 
             className="btn btn-primary btn-sm sticky-btn-buy"
-            onClick={() => {
-              addToCart(product, {
-                quantity,
-                selectedColor: product.colorOptions?.[selectedColorIdx]?.name,
-                selectedSize: product.sizeOptions?.[selectedSizeIdx]?.name,
-                selectedWrap,
-                selectedRibbon,
-                image: activeImage
-              });
-              navigateTo('checkout');
-            }}
+            onClick={handleBuyNow}
           >
             <Zap size={15} />
             <span>Buy Now</span>

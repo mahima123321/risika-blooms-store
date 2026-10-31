@@ -1,18 +1,18 @@
 import React, { useState, useMemo } from 'react';
 import { useShop } from '../../context/ShopContext';
-import { 
-  Star, ThumbsUp, CheckCircle2, Camera, Sparkles, 
-  Trash2, X, ChevronRight, ChevronLeft, Image as ImageIcon, 
-  Filter, Plus 
+import {
+  Star, ThumbsUp, CheckCircle2, Camera, Sparkles,
+  Trash2, X, ChevronRight, ChevronLeft, Image as ImageIcon,
+  Filter, Plus
 } from 'lucide-react';
 import WriteReviewModal from './WriteReviewModal';
 
 export default function ProductReviewsSection({ product }) {
-  const { 
-    getProductReviews, 
-    voteReviewHelpful, 
-    deleteProductReview, 
-    isOwnerAuthenticated 
+  const {
+    getProductReviews,
+    voteReviewHelpful,
+    deleteProductReview,
+    isOwnerAuthenticated
   } = useShop();
 
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
@@ -110,12 +110,12 @@ export default function ProductReviewsSection({ product }) {
                   {star} <Star size={11} fill="#F59E0B" color="#F59E0B" />
                 </span>
                 <div className="rating-bar-track">
-                  <div 
-                    className="rating-bar-fill" 
-                    style={{ 
+                  <div
+                    className="rating-bar-fill"
+                    style={{
                       width: `${percent}%`,
-                      backgroundColor: star >= 4 ? '#10B981' : star === 3 ? '#F59E0B' : '#EF4444' 
-                    }} 
+                      backgroundColor: star >= 4 ? '#10B981' : star === 3 ? '#F59E0B' : '#EF4444'
+                    }}
                   />
                 </div>
                 <span className="rating-bar-count">{count}</span>
@@ -126,8 +126,8 @@ export default function ProductReviewsSection({ product }) {
 
         {/* Right: CTA to Rate & Review with photo */}
         <div className="reviews-summary-right">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn btn-gold btn-md write-review-cta-btn"
             onClick={() => setIsWriteModalOpen(true)}
           >
@@ -156,8 +156,8 @@ export default function ProductReviewsSection({ product }) {
 
           <div className="customer-photos-scroll-row">
             {allCustomerPhotos.map((item, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="customer-photo-card"
                 onClick={() => setLightboxImage(item)}
                 title={`Click to view photo by ${item.review.author}`}
@@ -208,7 +208,7 @@ export default function ProductReviewsSection({ product }) {
           className={`review-filter-pill ${selectedFilter === '4star' ? 'active' : ''}`}
           onClick={() => setSelectedFilter('4star')}
         >
-          4 ★ & above ({ (starCounts[5] || 0) + (starCounts[4] || 0) })
+          4 ★ & above ({(starCounts[5] || 0) + (starCounts[4] || 0)})
         </button>
       </div>
 
@@ -252,8 +252,8 @@ export default function ProductReviewsSection({ product }) {
               {Array.isArray(rev.images) && rev.images.length > 0 && (
                 <div className="review-attached-photos-grid">
                   {rev.images.map((imgUrl, i) => (
-                    <div 
-                      key={i} 
+                    <div
+                      key={i}
                       className="review-attached-photo-wrapper"
                       onClick={() => setLightboxImage({ url: imgUrl, review: rev })}
                       title="Click to zoom customer photo"
@@ -318,9 +318,9 @@ export default function ProductReviewsSection({ product }) {
       {lightboxImage && (
         <div className="drawer-backdrop open lightbox-backdrop" onClick={() => setLightboxImage(null)} style={{ zIndex: 100030 }}>
           <div className="lightbox-content-card glass-panel" onClick={(e) => e.stopPropagation()}>
-            <button 
-              type="button" 
-              className="lightbox-close-btn" 
+            <button
+              type="button"
+              className="lightbox-close-btn"
               onClick={() => setLightboxImage(null)}
               aria-label="Close"
             >

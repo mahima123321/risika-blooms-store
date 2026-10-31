@@ -365,3 +365,4 @@ if (!appCssContent.includes('ENHANCED OWNER STUDIO & MOBILE LUXURY CARD STYLES')
 }
 
 console.log('🎉 All fixes applied successfully!');
+

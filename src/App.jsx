@@ -8,6 +8,7 @@ import OwnerTopBar from './components/owner/OwnerTopBar';
 import OwnerLoginModal from './components/owner/OwnerLoginModal';
 import OwnerProductModal from './components/owner/OwnerProductModal';
 import OwnerSettingsModal from './components/owner/OwnerSettingsModal';
+import DeliveryOrdersModal from './components/owner/DeliveryOrdersModal';
 import QrScannerModal from './components/common/QrScannerModal';
 import IncomingSmsBanner from './components/common/IncomingSmsBanner';
 import WhatsAppButton from './components/common/WhatsAppButton';
@@ -141,6 +142,7 @@ function MainAppContent() {
       <OwnerLoginModal />
       <OwnerProductModal />
       <OwnerSettingsModal />
+      <DeliveryOrdersModal />
       <QrScannerModal />
       <IncomingSmsBanner />
       <MobileBottomNav />

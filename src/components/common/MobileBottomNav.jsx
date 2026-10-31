@@ -6,10 +6,13 @@ export default function MobileBottomNav() {
   const { 
     currentView, 
     navigateTo, 
-    cartCount 
+    cartCount,
+    isOwnerAuthenticated,
+    orders
   } = useShop();
 
   const activePage = currentView?.page || 'home';
+  const activeOrdersCount = (orders || []).filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled').length;
 
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
@@ -63,12 +66,19 @@ export default function MobileBottomNav() {
       <button 
         type="button"
         className={`mobile-nav-btn ${activePage === 'my-orders' || activePage === 'order-tracking' ? 'active' : ''}`}
-        onClick={() => navigateTo('my-orders')}
+        onClick={() => navigateTo('my-orders', isOwnerAuthenticated ? { mode: 'owner' } : {})}
       >
         <div className="mobile-nav-icon-wrapper">
-          <Truck size={20} />
+          <Truck size={20} color={isOwnerAuthenticated ? '#D4AF37' : 'currentColor'} />
+          {isOwnerAuthenticated && activeOrdersCount > 0 && (
+            <span className="mobile-nav-badge" style={{ backgroundColor: '#D4AF37', color: '#000000', fontSize: '0.62rem', fontWeight: 900 }}>
+              {activeOrdersCount}
+            </span>
+          )}
         </div>
-        <span>Orders</span>
+        <span style={{ color: isOwnerAuthenticated ? '#D4AF37' : 'inherit', fontWeight: isOwnerAuthenticated ? 700 : 500 }}>
+          {isOwnerAuthenticated ? 'Dispatch' : 'Orders'}
+        </span>
       </button>
     </nav>
   );

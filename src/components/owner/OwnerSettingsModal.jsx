@@ -73,7 +73,9 @@ export default function OwnerSettingsModal() {
     reconnectCloud,
     cloudBulkUploadCatalog,
     getFirebaseConfig,
-    saveFirebaseConfig
+    saveFirebaseConfig,
+    navigateTo,
+    orders
   } = useShop();
 
   const [activeTab, setActiveTab] = useState(ownerSettingsActiveTab || 'numbers');
@@ -489,6 +491,18 @@ export default function OwnerSettingsModal() {
 
         {/* Navigation Tabs */}
         <div className="owner-settings-tabs">
+          <button
+            type="button"
+            className="owner-settings-tab"
+            onClick={() => {
+              closeOwnerSettingsModal();
+              if (navigateTo) navigateTo('my-orders', { mode: 'owner' });
+            }}
+            style={{ background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(184, 134, 11, 0.22) 100%)', border: '1.5px solid #D4AF37' }}
+          >
+            <Truck size={15} color="#D4AF37" />
+            <span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>🚚 Delivery Schedule & Orders ({(orders || []).length})</span>
+          </button>
           <button
             type="button"
             className={`owner-settings-tab ${activeTab === 'numbers' ? 'active' : ''}`}
