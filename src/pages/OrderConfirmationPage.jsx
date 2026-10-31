@@ -1,13 +1,12 @@
 import React from 'react';
-import { buildCustomerDeliveryOtpWhatsAppMessage, createWhatsAppUrl } from '../config/whatsapp';
 import { useShop } from '../context/ShopContext';
 import { 
   CheckCircle2, Printer, ArrowRight, ShieldCheck, 
-  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles, MessageSquare, Send 
+  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles 
 } from 'lucide-react';
 
 export default function OrderConfirmationPage() {
-  const { currentView, orders, navigateTo, triggerIncomingSmsNotification, showToast } = useShop();
+  const { currentView, orders, navigateTo, showToast } = useShop();
 
   const targetOrderId = currentView?.params?.orderId;
   const order = (orders || []).find((o) => o.orderId === targetOrderId) || orders?.[0];
@@ -113,29 +112,14 @@ export default function OrderConfirmationPage() {
               <button
                 type="button"
                 onClick={() => {
-                  if (triggerIncomingSmsNotification) {
-                    triggerIncomingSmsNotification({
-                      orderId: order.orderId,
-                      deliveryOtp: order.deliveryOtp,
-                      phone: order.customerPhone || order.recipientPhone,
-                      customerName: order.customerName,
-                      autoLaunchNative: false
-                    });
-                  }
-                  const otpMsg = buildCustomerDeliveryOtpWhatsAppMessage({ order });
-                  const targetPhone = order.customerPhone || order.recipientPhone;
-                  const clean = String(targetPhone || '').replace(/\D/g, '');
-                  const finalPh = clean.length === 10 ? `91${clean}` : clean;
-                  if (finalPh) {
-                    window.open(createWhatsAppUrl(otpMsg, finalPh), '_blank');
-                  }
-                  if (showToast) showToast('📲 Handover OTP sent to your phone & WhatsApp!', 'success');
+                  navigator.clipboard.writeText(order.deliveryOtp || '4892');
+                  if (showToast) showToast('📋 Delivery Handover OTP copied to clipboard!', 'success');
                 }}
                 className="btn btn-sm"
                 style={{
-                  background: '#10B981',
-                  color: '#FFFFFF',
-                  border: 'none',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: '#059669',
+                  border: '1px solid #10B981',
                   fontSize: '0.74rem',
                   fontWeight: 800,
                   padding: '5px 12px',
@@ -146,8 +130,7 @@ export default function OrderConfirmationPage() {
                   cursor: 'pointer'
                 }}
               >
-                <MessageSquare size={13} />
-                <span>Receive OTP on WhatsApp</span>
+                <span>📋 Copy Handover OTP</span>
               </button>
             </div>
           </div>
@@ -254,76 +237,107 @@ export default function OrderConfirmationPage() {
             </div>
 
             <div>
-              <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '3px' }}>Ship & Deliver To:</strong>
-              <div>Recipient: {order.recipientName || order.customerName}</div>
+              <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '3px' }}>Deliver To / Recipient:</strong>
+              <div>{order.recipientName || order.customerName}</div>
+              <div>Phone: +91 {order.recipientPhone || order.customerPhone}</div>
               <div>{order.deliveryAddress}</div>
             </div>
 
             <div>
-              <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '3px' }}>Delivery Schedule:</strong>
-              <div>Date: {order.deliveryDate}</div>
-              <div>Slot: {order.deliverySlot}</div>
+              <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '3px' }}>Fulfillment Slot:</strong>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Calendar size={14} color="var(--text-gold)" />
+                <span>{order.deliveryDate}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                <Clock size={14} color="var(--text-gold)" />
+                <span>{order.deliverySlot}</span>
+              </div>
             </div>
           </div>
 
+          {/* Gift Message Card Note */}
           {order.giftMessage && (
-            <div style={{ background: 'var(--bg-accent-soft)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-gold)', marginBottom: '1.5rem', fontSize: '0.84rem' }}>
-              <strong style={{ color: 'var(--text-gold)', display: 'block', marginBottom: '2px' }}>Personalized Card Inscription:</strong>
-              <div style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>"{order.giftMessage}"</div>
+            <div style={{ 
+              background: 'rgba(212, 175, 55, 0.08)', 
+              border: '1px dashed var(--border-gold)', 
+              borderRadius: 'var(--radius-sm)', 
+              padding: '1rem',
+              marginBottom: '1.5rem',
+              fontStyle: 'italic'
+            }}>
+              <span style={{ fontWeight: 700, fontStyle: 'normal', color: 'var(--text-gold)', display: 'block', marginBottom: '4px' }}>
+                💌 Hand-Penned Keepsake Gift Note:
+              </span>
+              "{order.giftMessage}"
             </div>
           )}
 
-          {/* Itemized Table */}
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
-            <thead>
-              <tr style={{ background: 'var(--bg-alt)', borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
-                <th style={{ padding: '8px 12px' }}>Item Description</th>
-                <th style={{ padding: '8px 12px', textAlign: 'center' }}>Qty</th>
-                <th style={{ padding: '8px 12px', textAlign: 'right' }}>Unit Price</th>
-                <th style={{ padding: '8px 12px', textAlign: 'right' }}>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(order.items || []).map((item, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <td style={{ padding: '10px 12px' }}>
-                    <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      {item.selectedColor ? `Color: ${item.selectedColor}` : ''} {item.selectedSize ? `• Size: ${item.selectedSize}` : ''}
-                    </div>
-                  </td>
-                  <td style={{ padding: '10px 12px', textAlign: 'center' }}>{item.quantity}</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right' }}>₹{item.price}</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 600 }}>₹{item.price * item.quantity}</td>
+          {/* Items Summary Table */}
+          <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+              <thead>
+                <tr style={{ borderBottom: '1.5px solid var(--border-subtle)', textAlign: 'left', color: 'var(--text-muted)' }}>
+                  <th style={{ padding: '0.5rem 0' }}>Bouquet / Item</th>
+                  <th style={{ padding: '0.5rem', textAlign: 'center' }}>Qty</th>
+                  <th style={{ padding: '0.5rem', textAlign: 'right' }}>Unit Price</th>
+                  <th style={{ padding: '0.5rem 0', textAlign: 'right' }}>Total</th>
                 </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colSpan={3} style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600 }}>Subtotal:</td>
-                <td style={{ padding: '8px 12px', textAlign: 'right' }}>₹{order.subtotal || order.total}</td>
-              </tr>
-              {order.discountAmount > 0 && (
-                <tr style={{ color: '#16A34A' }}>
-                  <td colSpan={3} style={{ padding: '4px 12px', textAlign: 'right' }}>Discount ({order.couponCode || 'Promo'}):</td>
-                  <td style={{ padding: '4px 12px', textAlign: 'right' }}>-₹{order.discountAmount}</td>
-                </tr>
-              )}
-              <tr>
-                <td colSpan={3} style={{ padding: '4px 12px', textAlign: 'right' }}>Express Delivery:</td>
-                <td style={{ padding: '4px 12px', textAlign: 'right' }}>
-                  {order.deliveryFee === 0 ? 'FREE' : `₹${order.deliveryFee || 0}`}
-                </td>
-              </tr>
-              <tr style={{ borderTop: '2px solid var(--border-subtle)', fontSize: '1.05rem', fontWeight: 800 }}>
-                <td colSpan={3} style={{ padding: '10px 12px', textAlign: 'right' }}>Total Paid / Payable:</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text-accent)' }}>₹{order.total}</td>
-              </tr>
-            </tfoot>
-          </table>
+              </thead>
+              <tbody>
+                {(order.items || []).map((item, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                    <td style={{ padding: '0.75rem 0', fontWeight: 600, color: 'var(--text-primary)' }}>
+                      {item.name}
+                      {item.selectedColor && (
+                        <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 400 }}>
+                          Color: {item.selectedColor}
+                        </div>
+                      )}
+                    </td>
+                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>{item.quantity}</td>
+                    <td style={{ padding: '0.75rem', textAlign: 'right' }}>₹{item.price}</td>
+                    <td style={{ padding: '0.75rem 0', textAlign: 'right', fontWeight: 700 }}>
+                      ₹{item.price * item.quantity}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <div style={{ textAlign: 'center', fontSize: '0.76rem', color: 'var(--text-muted)', borderTop: '1px dashed var(--border-subtle)', paddingTop: '1rem' }}>
-            This is a computer-generated tax invoice for customer reference. Thank you for choosing Risika Blooms!
+          {/* Pricing Summary */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ minWidth: '240px', fontSize: '0.88rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                <span>Subtotal:</span>
+                <span>₹{order.subtotal || order.total}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                <span>Express Dedicated Dispatch:</span>
+                <span style={{ color: '#16A34A', fontWeight: 600 }}>
+                  {order.deliveryFee > 0 ? `₹${order.deliveryFee}` : 'FREE'}
+                </span>
+              </div>
+              {order.discountAmount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', color: '#16A34A' }}>
+                  <span>Discount Savings:</span>
+                  <span>-₹{order.discountAmount}</span>
+                </div>
+              )}
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                borderTop: '1.5px solid var(--border-gold)', 
+                paddingTop: '0.6rem',
+                fontSize: '1.15rem',
+                fontWeight: 800,
+                color: 'var(--text-accent)'
+              }}>
+                <span>Total Amount:</span>
+                <span>₹{order.total}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

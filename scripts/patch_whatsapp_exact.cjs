@@ -102,3 +102,4 @@ if (content.includes(targetStr)) {
     console.error('Failed to match target');
   }
 }
+

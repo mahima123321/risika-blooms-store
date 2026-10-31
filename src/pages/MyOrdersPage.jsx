@@ -33,6 +33,7 @@ export default function MyOrdersPage() {
 
   // Mode switcher: 'owner' vs 'customer'
   // Defaults to 'owner' if already authenticated, otherwise 'owner' if specified in params, else 'customer'
+  const [deliveredCelebrationOrder, setDeliveredCelebrationOrder] = useState(null);
   const [activeMode, setActiveMode] = useState(() => {
     if (isOwnerAuthenticated) return 'owner';
     if (currentView?.params?.mode === 'owner') return 'owner';
@@ -223,17 +224,10 @@ export default function MyOrdersPage() {
         try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch (e) {}
         showToast(`🎉 Order #${orderId} marked Delivered & Paid!`, 'success');
         
-        // Auto-open WhatsApp congratulations wishes
+        // In-App Flipkart/Meesho delivery celebration modal (No external WhatsApp redirect)
         const target = res.order || allOrders.find(o => o.orderId === orderId);
         if (target) {
-          const msg = buildDeliveryConfirmationWhatsAppMessage({ order: target });
-          const phone = target.recipientPhone || target.customerPhone;
-          if (phone) {
-            const clean = String(phone).replace(/\D/g, '');
-            const finalPh = clean.length === 10 ? `91${clean}` : clean;
-            const url = createWhatsAppUrl(msg, finalPh);
-            window.open(url, '_blank');
-          }
+          setDeliveredCelebrationOrder(target);
         }
       } else {
         setOtpErrors(prev => ({ ...prev, [orderId]: res?.message || 'Incorrect OTP code.' }));
@@ -248,38 +242,23 @@ export default function MyOrdersPage() {
   };
 
   
-  // Owner Dispatches Bouquet and sends OTP message to customer's phone
-  const handleDispatchAndSendOtp = (ord) => {
-    const targetPhone = ord.recipientPhone || ord.customerPhone;
-    const cleanPhone = String(targetPhone || '').replace(/\D/g, '');
-    const phone10 = cleanPhone.slice(-10);
-    const waPhone = phone10.length === 10 ? `91${phone10}` : cleanPhone;
-    const otpCode = ord.deliveryOtp || '4892';
+  // Owner Marks Out for Delivery (100% In-App like Flipkart / Meesho - No WhatsApp Redirect)
+  const handleDispatch = (ord) => {
+    // 1. Update order status to 'Out for Delivery'
+    updateOrderStatus(ord.orderId, 'Out for Delivery');
 
-    // 1. Update order status to 'Out for Delivery' if not already
-    if (ord.status !== 'Out for Delivery' && ord.status !== 'Delivered') {
-      updateOrderStatus(ord.orderId, 'Out for Delivery');
-    }
-
-    // 2. Trigger native SMS notification & simulation banner on device
+    // 2. Trigger native in-app message simulation on device
     if (triggerIncomingSmsNotification) {
       triggerIncomingSmsNotification({
         orderId: ord.orderId,
-        deliveryOtp: otpCode,
-        phone: phone10,
+        deliveryOtp: ord.deliveryOtp || '4892',
+        phone: ord.customerPhone || ord.recipientPhone,
         customerName: ord.recipientName || ord.customerName,
         autoLaunchNative: false
       });
     }
 
-    // 3. Build WhatsApp message and open chat
-    const otpMsg = buildCustomerDeliveryOtpWhatsAppMessage({ order: ord });
-    if (waPhone) {
-      const waUrl = createWhatsAppUrl(otpMsg, waPhone);
-      window.open(waUrl, '_blank');
-    }
-
-    showToast(`📲 Handover OTP [${otpCode}] sent to customer (${targetPhone})! Order marked Out for Delivery.`, 'success');
+    showToast(`🚚 Order #${ord.orderId} marked Out for Delivery! Handover OTP: ${ord.deliveryOtp || '4892'}`, 'success');
   };
 
   // Quick Copy Helper
@@ -1035,7 +1014,7 @@ export default function MyOrdersPage() {
                             padding: '1.15rem',
                             marginBottom: '1rem'
                           }}>
-                            {/* STEP 1: SEND OTP MESSAGE WHEN GOING TO DELIVER */}
+                            {/* STEP 1: DISPATCH / OUT FOR DELIVERY (Flipkart / Meesho Style) */}
                             {!isDelivered && (
                               <div style={{
                                 background: 'var(--bg-alt)',
@@ -1046,31 +1025,31 @@ export default function MyOrdersPage() {
                               }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.5rem' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <Smartphone size={16} color="#10B981" />
+                                    <Truck size={16} color="#10B981" />
                                     <strong style={{ fontSize: '0.86rem', color: 'var(--text-primary)' }}>
-                                      Step 1: Going to Deliver? Send OTP Message to Customer's Phone
+                                      Step 1: Dispatch Status (Flipkart / Meesho Style)
                                     </strong>
                                   </div>
 
                                   {ord.status === 'Out for Delivery' ? (
-                                    <span style={{ fontSize: '0.72rem', background: '#10B981', color: '#FFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>
-                                      ● Out for Delivery
+                                    <span style={{ fontSize: '0.74rem', background: '#10B981', color: '#FFF', padding: '3px 10px', borderRadius: '4px', fontWeight: 800 }}>
+                                      ● Out for Delivery (Rider Dispatched)
                                     </span>
                                   ) : (
-                                    <span style={{ fontSize: '0.72rem', background: '#D97706', color: '#FFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>
+                                    <span style={{ fontSize: '0.74rem', background: '#D97706', color: '#FFF', padding: '3px 10px', borderRadius: '4px', fontWeight: 800 }}>
                                       ● Ready for Dispatch
                                     </span>
                                   )}
                                 </div>
 
                                 <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', margin: '0 0 0.75rem 0', lineHeight: 1.4 }}>
-                                  Tap below to send the secret 4-digit Handover OTP directly to customer's phone ({targetPhone || 'Customer Phone'}).
+                                  When rider leaves to deliver, tap below to mark Out for Delivery. Customer's doorstep verification OTP is: <strong style={{ color: '#10B981', fontFamily: 'monospace', letterSpacing: '1px' }}>{ord.deliveryOtp || '4892'}</strong>.
                                 </p>
 
                                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                                   <button
                                     type="button"
-                                    onClick={() => handleDispatchAndSendOtp(ord)}
+                                    onClick={() => handleDispatch(ord)}
                                     className="btn btn-sm"
                                     style={{
                                       flex: 1,
@@ -1078,46 +1057,36 @@ export default function MyOrdersPage() {
                                       padding: '0.65rem 1rem',
                                       fontWeight: 800,
                                       fontSize: '0.84rem',
-                                      background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                                      color: '#FFFFFF',
-                                      border: 'none',
+                                      background: ord.status === 'Out for Delivery'
+                                        ? 'var(--bg-surface)'
+                                        : 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                                      color: ord.status === 'Out for Delivery' ? '#10B981' : '#FFFFFF',
+                                      border: ord.status === 'Out for Delivery' ? '1.5px solid #10B981' : 'none',
                                       borderRadius: '6px',
                                       display: 'inline-flex',
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       gap: '6px',
-                                      boxShadow: '0 3px 10px rgba(16, 185, 129, 0.3)',
                                       cursor: 'pointer'
                                     }}
                                   >
-                                    <Send size={14} />
+                                    <Truck size={15} />
                                     <span>
-                                      {ord.status === 'Out for Delivery' 
-                                        ? '🔄 Resend OTP Message to Customer (WhatsApp)' 
-                                        : '📲 Out for Delivery: Send OTP to Customer (WhatsApp)'}
+                                      {ord.status === 'Out for Delivery'
+                                        ? '✓ Order is Out for Delivery'
+                                        : '🚚 Mark Out for Delivery (Dispatch Rider)'}
                                     </span>
                                   </button>
 
-                                  {targetPhone && (
-                                    <a
-                                      href={`sms:${cleanPhone}?body=${encodeURIComponent(`🌸 Rishika Blooms: Your Secret Delivery Handover OTP for Order #${ord.orderId} is: ${ord.deliveryOtp || '4892'}. Please share this code with our rider only after receiving your bouquet at your doorstep.`)}`}
-                                      className="btn btn-outline btn-sm"
-                                      style={{
-                                        fontSize: '0.8rem',
-                                        fontWeight: 700,
-                                        color: '#10B981',
-                                        borderColor: 'rgba(16, 185, 129, 0.4)',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        textDecoration: 'none',
-                                        padding: '0.65rem 0.85rem'
-                                      }}
-                                    >
-                                      <MessageSquare size={13} />
-                                      <span>Send via SMS</span>
-                                    </a>
-                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopy(ord.deliveryOtp || '4892', `otp-${ord.orderId}`)}
+                                    className="btn btn-outline btn-sm"
+                                    style={{ fontSize: '0.8rem', fontWeight: 700, padding: '0.65rem 0.85rem' }}
+                                  >
+                                    <Copy size={13} />
+                                    <span>{copiedId === `otp-${ord.orderId}` ? 'Copied OTP' : `Copy OTP (${ord.deliveryOtp || '4892'})`}</span>
+                                  </button>
                                 </div>
                               </div>
                             )}
@@ -1503,6 +1472,104 @@ export default function MyOrdersPage() {
             )}
           </div>
         )}
+
+      {/* Flipkart / Meesho In-App Delivery Success Celebration Modal */}
+      {deliveredCelebrationOrder && (
+        <div 
+          className="drawer-backdrop open" 
+          style={{ zIndex: 100060, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.7)' }}
+          onClick={() => setDeliveredCelebrationOrder(null)}
+        >
+          <div 
+            className="glass-panel animate-scale-up" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '460px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: 'var(--radius-lg)',
+              border: '2px solid #10B981',
+              background: 'var(--bg-surface)',
+              textAlign: 'center',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(16, 185, 129, 0.25)'
+            }}
+          >
+            <div style={{
+              width: '72px',
+              height: '72px',
+              borderRadius: '50%',
+              background: 'rgba(16, 185, 129, 0.15)',
+              border: '2.5px solid #10B981',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem auto'
+            }}>
+              <CheckCircle2 size={40} color="#10B981" />
+            </div>
+
+            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Flipkart / Meesho Verified Handover
+            </span>
+            <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0 0.5rem 0' }}>
+              Order Delivered Successfully! 🎉
+            </h2>
+            <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontFamily: 'monospace', marginBottom: '1.25rem' }}>
+              #{deliveredCelebrationOrder.orderId}
+            </div>
+
+            <div style={{
+              background: 'var(--bg-alt)',
+              padding: '1rem',
+              borderRadius: 'var(--radius-sm)',
+              textAlign: 'left',
+              fontSize: '0.84rem',
+              marginBottom: '1.25rem',
+              border: '1px solid var(--border-subtle)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Recipient:</span>
+                <strong>{deliveredCelebrationOrder.recipientName || deliveredCelebrationOrder.customerName}</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Doorstep Handover OTP:</span>
+                <strong style={{ color: '#10B981', fontFamily: 'monospace' }}>✓ {deliveredCelebrationOrder.deliveryOtp || '4892'} Verified</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Payment Status:</span>
+                <strong style={{ color: '#10B981' }}>✓ Paid in Full</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-muted)' }}>Delivered Status:</span>
+                <strong style={{ color: '#10B981' }}>● Delivered (Just Now)</strong>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(212, 175, 55, 0.08)',
+              border: '1.5px dashed #D4AF37',
+              borderRadius: 'var(--radius-sm)',
+              padding: '0.85rem',
+              fontSize: '0.82rem',
+              color: 'var(--text-primary)',
+              lineHeight: 1.45,
+              marginBottom: '1.5rem',
+              fontStyle: 'italic'
+            }}>
+              "💐 Congratulations {deliveredCelebrationOrder.recipientName || deliveredCelebrationOrder.customerName}! Your fresh luxury floral bouquet has been handed over successfully. We hope it brings boundless joy, smiles, and fragrance to your celebration! ✨"
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setDeliveredCelebrationOrder(null)}
+              className="btn btn-primary"
+              style={{ width: '100%', padding: '0.85rem', fontWeight: 800, fontSize: '0.95rem', background: '#10B981', border: 'none', justifyContent: 'center' }}
+            >
+              <span>Done & Return to Orders</span>
+            </button>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

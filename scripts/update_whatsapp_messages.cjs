@@ -66,3 +66,4 @@ if (targetRegex.test(content)) {
   fs.writeFileSync(filePath, content, 'utf8');
   console.log('Fallback updated whatsapp.js successfully!');
 }
+
