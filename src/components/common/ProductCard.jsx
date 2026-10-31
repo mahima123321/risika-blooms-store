@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useShop } from '../../context/ShopContext';
-import { Heart, Star, Sparkles, Eye, Edit3, Trash2, ArrowRight, ShoppingBag } from 'lucide-react';
+import { Heart, Star, Sparkles, Edit3, Trash2, ShoppingBag } from 'lucide-react';
 
 export default function ProductCard({ product }) {
   const { 
@@ -26,7 +26,7 @@ export default function ProductCard({ product }) {
     : 0;
 
   return (
-    <div className="product-card" onClick={handleCardClick}>
+    <div className="product-card" onClick={handleCardClick} role="button" tabIndex={0}>
       {/* Product Image & Floating Controls */}
       <div className="product-card-media">
         <img 
@@ -37,16 +37,16 @@ export default function ProductCard({ product }) {
           decoding="async"
         />
 
-        {/* Badge Tag */}
+        {/* Badge Tag (Flipkart / Myntra bottom-left position: never collides with owner edit controls) */}
         {product.badge && (
           <div className="product-badge-tag">
             <span className={product.isPremium ? 'gold-badge' : 'rose-badge'}>
-              <Sparkles size={11} /> {product.badge}
+              <Sparkles size={10} /> {product.badge}
             </span>
           </div>
         )}
 
-        {/* Wishlist Heart */}
+        {/* Wishlist Heart (Top-Right) */}
         <button 
           className={`product-wishlist-btn ${isInWishlist(product.id) ? 'active' : ''}`}
           onClick={(e) => {
@@ -59,7 +59,7 @@ export default function ProductCard({ product }) {
           <Heart size={16} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
         </button>
 
-        {/* Owner-Only Quick Actions (Only visible to verified store owner) */}
+        {/* Owner-Only Quick Actions (Top-Left, separated from badge) */}
         {isOwnerAuthenticated && (
           <div className="owner-card-actions-wrapper" onClick={(e) => e.stopPropagation()}>
             <button
@@ -94,18 +94,18 @@ export default function ProductCard({ product }) {
       {/* Content */}
       <div className="product-card-content">
         <span className="product-card-category">
-          {product.categoryName}
+          {product.categoryName || 'Luxury Bouquet'}
         </span>
         
-        <h3 className="product-card-title">
+        <h3 className="product-card-title" title={product.name}>
           {product.name}
         </h3>
 
-        {/* Rating Row */}
+        {/* Rating Row (Flipkart / Meesho Style) */}
         <div className="product-card-rating-row">
           <div className="meesho-rating-pill">
-            <span>{product.rating}</span>
-            <Star size={10} fill="#FFFFFF" color="#FFFFFF" />
+            <span>{product.rating || '4.9'}</span>
+            <Star size={9} fill="#FFFFFF" color="#FFFFFF" />
           </div>
           <span className="meesho-review-count">({product.reviewCount || 120})</span>
           <span className="meesho-assured-badge">⚡ Handcrafted</span>
@@ -123,7 +123,7 @@ export default function ProductCard({ product }) {
                 onClick={() => setSelectedColorIndex(idx)}
               />
             ))}
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: '4px' }}>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginLeft: '4px' }}>
               {activeColor?.name}
             </span>
           </div>
@@ -142,28 +142,18 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Details & Quick Add Action Buttons */}
-        <div className="product-card-actions" style={{ marginTop: '0.65rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+        {/* Flipkart / Meesho / Myntra Full-Width Action Button (Never Truncates!) */}
+        <div className="product-card-actions" onClick={(e) => e.stopPropagation()}>
           <button 
             type="button"
-            className="btn btn-outline btn-sm"
-            onClick={handleCardClick}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.78rem', padding: '0.45rem 0.5rem' }}
-          >
-            <Eye size={13} />
-            <span>Details</span>
-          </button>
-          <button 
-            type="button"
-            className="btn btn-gold btn-sm"
+            className="btn btn-gold btn-sm product-card-btn-full"
             onClick={(e) => {
               e.stopPropagation();
               addToCart(product, { selectedColor: activeColor?.name });
             }}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.78rem', padding: '0.45rem 0.5rem' }}
           >
-            <ShoppingBag size={13} />
-            <span>Add to Bag</span>
+            <ShoppingBag size={14} />
+            <span>Add to Cart</span>
           </button>
         </div>
       </div>

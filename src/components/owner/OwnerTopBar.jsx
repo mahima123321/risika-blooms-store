@@ -97,7 +97,7 @@ export default function OwnerTopBar() {
             onClick={() => openAddProductModal()}
             title="Add a new bouquet"
           >
-            <Plus size={16} />
+            <Plus size={14} />
             <span>Add Bouquet</span>
           </button>
 
