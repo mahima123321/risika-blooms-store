@@ -196,3 +196,4 @@ if (drawerOwnerRegex.test(content)) {
 
 fs.writeFileSync(headerPath, content, 'utf8');
 console.log('Header.jsx updated successfully!');
+

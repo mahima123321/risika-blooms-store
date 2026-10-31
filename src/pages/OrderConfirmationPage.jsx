@@ -1,12 +1,13 @@
 import React from 'react';
+import { buildCustomerDeliveryOtpWhatsAppMessage, createWhatsAppUrl } from '../config/whatsapp';
 import { useShop } from '../context/ShopContext';
 import { 
   CheckCircle2, Printer, ArrowRight, ShieldCheck, 
-  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles 
+  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles, MessageSquare, Send 
 } from 'lucide-react';
 
 export default function OrderConfirmationPage() {
-  const { currentView, orders, navigateTo } = useShop();
+  const { currentView, orders, navigateTo, triggerIncomingSmsNotification, showToast } = useShop();
 
   const targetOrderId = currentView?.params?.orderId;
   const order = (orders || []).find((o) => o.orderId === targetOrderId) || orders?.[0];
@@ -106,9 +107,48 @@ export default function OrderConfirmationPage() {
               <div style={{ fontSize: '1.7rem', fontWeight: 900, color: '#059669', fontFamily: 'monospace', letterSpacing: '3px', marginTop: '2px' }}>
                 {order.deliveryOtp || '4892'}
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
                 Share with rider at doorstep only after inspecting blooms
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (triggerIncomingSmsNotification) {
+                    triggerIncomingSmsNotification({
+                      orderId: order.orderId,
+                      deliveryOtp: order.deliveryOtp,
+                      phone: order.customerPhone || order.recipientPhone,
+                      customerName: order.customerName,
+                      autoLaunchNative: false
+                    });
+                  }
+                  const otpMsg = buildCustomerDeliveryOtpWhatsAppMessage({ order });
+                  const targetPhone = order.customerPhone || order.recipientPhone;
+                  const clean = String(targetPhone || '').replace(/\D/g, '');
+                  const finalPh = clean.length === 10 ? `91${clean}` : clean;
+                  if (finalPh) {
+                    window.open(createWhatsAppUrl(otpMsg, finalPh), '_blank');
+                  }
+                  if (showToast) showToast('📲 Handover OTP sent to your phone & WhatsApp!', 'success');
+                }}
+                className="btn btn-sm"
+                style={{
+                  background: '#10B981',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  padding: '5px 12px',
+                  borderRadius: '6px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                <MessageSquare size={13} />
+                <span>Receive OTP on WhatsApp</span>
+              </button>
             </div>
           </div>
 

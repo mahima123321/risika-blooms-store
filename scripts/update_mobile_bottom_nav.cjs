@@ -92,3 +92,4 @@ export default function MobileBottomNav() {
 
 fs.writeFileSync(navPath, newContent, 'utf8');
 console.log('MobileBottomNav.jsx updated successfully!');
+
