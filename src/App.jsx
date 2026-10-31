@@ -23,6 +23,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import WishlistPage from './pages/WishlistPage';
 import DeliveryInfoPage from './pages/DeliveryInfoPage';
+import CartDrawer from './pages/CartDrawer';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';

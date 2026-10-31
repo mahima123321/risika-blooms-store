@@ -144,7 +144,7 @@ export default function WhatsAppButton() {
                 </span>
               </div>
               <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.95)', lineHeight: '1.35' }}>
-                हमारे ऑफिशियल व्हाट्सएप चैनल से जुड़ें और पाएं <strong>20% की छूट</strong> व नए बुके का डेली अपडेट!
+                Join our Official WhatsApp Channel to get <strong>20% OFF</strong> and daily new luxury bouquet updates!
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@ export default function WhatsAppButton() {
                 boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
               }}
             >
-              <span>चैनल से जुड़ें (Join Now)</span>
+              <span>Join Channel Now</span>
               <ExternalLink size={16} />
             </button>
 

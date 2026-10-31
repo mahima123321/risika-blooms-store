@@ -1266,9 +1266,9 @@ export function ShopProvider({ children }) {
     if (isFirebaseLive()) {
       cloudSaveProduct(savedItem).then((ok) => {
         if (ok) {
-          showToast('☁️ Live Cloud Synced! Sabhi phones par live update ho gaya.', 'success');
+          showToast('☁️ Live Cloud Synced! Real-time catalog updated across all devices.', 'success');
         } else {
-          showToast('⚠️ Cloud note: Changes phone me save hain, cloud retry ho raha hai.', 'warning');
+          showToast('⚠️ Cloud note: Saved locally, retrying cloud sync in background.', 'warning');
         }
       });
     }
@@ -1296,7 +1296,7 @@ export function ShopProvider({ children }) {
     if (isFirebaseLive()) {
       cloudDeleteProduct(productId).then((ok) => {
         if (ok) {
-          showToast('☁️ Cloud Synced! Doosre sabhi phones se bhi delete ho gaya.', 'info');
+          showToast('☁️ Cloud Synced! Removed across all customer devices.', 'info');
         }
       });
     }

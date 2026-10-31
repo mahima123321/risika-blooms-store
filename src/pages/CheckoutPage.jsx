@@ -1097,7 +1097,7 @@ export default function CheckoutPage() {
                 color: '#878787',
                 textTransform: 'uppercase'
               }}>
-                PRICE DETAILS (मूल्य विवरण)
+                PRICE DETAILS
               </div>
 
               <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.9rem' }}>
