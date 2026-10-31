@@ -12,3 +12,4 @@ modalContent = modalContent.replace(
 
 fs.writeFileSync(modalPath, modalContent, 'utf8');
 console.log('Fixed DeliveryOrdersModal.jsx syntax error!');
+

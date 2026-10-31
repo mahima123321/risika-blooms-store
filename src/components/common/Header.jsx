@@ -247,7 +247,7 @@ export default function Header() {
           <div className="header-actions">
             {/* Search Trigger */}
             <button 
-              className="action-icon-btn" 
+              className="action-icon-btn desktop-only" 
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
               title="Search flowers & gifts"
@@ -282,7 +282,7 @@ export default function Header() {
 
             {/* QR Code & Scanner Hub Trigger */}
             <button 
-              className="action-icon-btn qr-header-btn"
+              className="action-icon-btn qr-header-btn desktop-only"
               onClick={() => openQrModal()}
               title="QR Code & Scanner Hub (Store Link & UPI Pay)"
               aria-label="QR Code & Scanner"
@@ -292,7 +292,7 @@ export default function Header() {
 
             {/* Language Switcher */}
             <button 
-              className="action-icon-btn language-toggle-btn"
+              className="action-icon-btn language-toggle-btn desktop-only"
               onClick={toggleLanguage}
               title={`Language: ${language === 'hi' ? 'हिंदी' : 'English'}. Click to switch.`}
               aria-label="Toggle Language"

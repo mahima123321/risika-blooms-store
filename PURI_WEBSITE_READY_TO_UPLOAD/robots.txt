@@ -1,5 +1,9 @@
+# Block all search engines from indexing this site until final launch
 User-agent: *
-Allow: /
+Disallow: /
 
-Sitemap: https://rishikabloom.vercel.app/sitemap.xml
+User-agent: Googlebot
+Disallow: /
 
+User-agent: Bingbot
+Disallow: /

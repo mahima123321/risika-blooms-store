@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useShop } from '../context/ShopContext';
 import { 
   CheckCircle2, Printer, ArrowRight, ShieldCheck, 
-  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles 
+  MapPin, Clock, Calendar, Gift, Phone, Package, Truck, Sparkles, Copy, Check 
 } from 'lucide-react';
 
 export default function OrderConfirmationPage() {
-  const { currentView, orders, navigateTo, showToast } = useShop();
+  const { currentView, orders, navigateTo, showToast, triggerIncomingSmsNotification } = useShop();
 
   const targetOrderId = currentView?.params?.orderId;
   const order = (orders || []).find((o) => o.orderId === targetOrderId) || orders?.[0];
+
+  // Realistic professional carrier SMS notification on device load
+  useEffect(() => {
+    if (order && triggerIncomingSmsNotification) {
+      const timer = setTimeout(() => {
+        triggerIncomingSmsNotification({
+          orderId: order.orderId,
+          deliveryOtp: order.deliveryOtp || '4892',
+          phone: order.customerPhone || order.recipientPhone,
+          customerName: order.recipientName || order.customerName,
+          autoLaunchNative: false
+        });
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [order?.orderId]);
 
   if (!order) {
     return (
@@ -37,24 +53,30 @@ export default function OrderConfirmationPage() {
     window.print();
   };
 
+  const handleCopyOtp = () => {
+    navigator.clipboard.writeText(order.deliveryOtp || '4892');
+    showToast(`📋 Delivery Handover OTP ${order.deliveryOtp || '4892'} copied!`, 'success');
+  };
+
   return (
-    <div className="order-confirmation-page animate-fade-in" style={{ padding: '2.5rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
+    <div className="order-confirmation-page animate-fade-in" style={{ padding: '2rem 0 6rem 0', backgroundColor: 'var(--bg-primary)' }}>
       <div className="container" style={{ maxWidth: '850px' }}>
         
         {/* Success Card */}
         <div className="glass-panel" style={{ 
-          padding: '2.5rem', 
+          padding: '2.25rem 1.75rem', 
           borderRadius: 'var(--radius-lg)', 
           textAlign: 'center',
           border: '2px solid var(--border-gold)',
-          marginBottom: '2rem'
+          marginBottom: '2rem',
+          boxShadow: '0 12px 36px rgba(0,0,0,0.06)'
         }}>
           <div style={{
             width: '74px',
             height: '74px',
             borderRadius: '50%',
             background: 'rgba(22, 163, 74, 0.12)',
-            border: '2px solid #16A34A',
+            border: '2.5px solid #16A34A',
             color: '#16A34A',
             display: 'flex',
             alignItems: 'center',
@@ -64,18 +86,93 @@ export default function OrderConfirmationPage() {
             <CheckCircle2 size={42} />
           </div>
 
-          <span className="rose-badge" style={{ marginBottom: '0.6rem' }}>
-            ✓ Order Successfully Logged & Verified
+          <span className="rose-badge" style={{ marginBottom: '0.6rem', fontSize: '0.75rem', padding: '4px 12px' }}>
+            ✓ Order Confirmed & Scheduled for Delivery
           </span>
 
-          <h1 className="font-serif-editorial" style={{ fontSize: '2.4rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
+          <h1 className="font-serif-editorial" style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
             Thank You for Your Order!
           </h1>
-          <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', maxWidth: '520px', margin: '0 auto 1.5rem auto', lineHeight: 1.6 }}>
-            Our master florists have received your bouquet request. Flowers will be freshly cut, hand-arranged with cold-chain packs, and dispatched for your scheduled slot.
+          <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', maxWidth: '520px', margin: '0 auto 1.5rem auto', lineHeight: 1.55 }}>
+            Our master florists have received your bespoke bouquet request. Fresh blooms will be cut, hand-arranged with cold-chain packs, and dispatched for your selected delivery slot.
           </p>
 
-          {/* Reference & OTP Highlight Box */}
+          {/* 📦 HIGH-PRIORITY FLIPKART/MEESHO STYLE DELIVERY HANDOVER PASS & OTP */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.09) 0%, rgba(5, 150, 105, 0.04) 100%)',
+            border: '2px solid #10B981',
+            borderRadius: '16px',
+            padding: '1.4rem',
+            marginBottom: '1.75rem',
+            boxShadow: '0 8px 24px rgba(16, 185, 129, 0.12)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: '#10B981',
+              color: '#FFFFFF',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              padding: '4px 12px',
+              borderRadius: '12px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.8px',
+              marginBottom: '0.75rem'
+            }}>
+              <span>📦 DOORSTEP DELIVERY PASS & HANDOVER OTP</span>
+            </div>
+
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>
+              Your Secret 4-Digit Doorstep Verification OTP:
+            </div>
+
+            <div style={{
+              display: 'inline-block',
+              background: 'var(--bg-surface)',
+              border: '2px dashed #10B981',
+              borderRadius: '12px',
+              padding: '0.65rem 2rem',
+              marginBottom: '0.75rem',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
+            }}>
+              <span style={{ fontSize: '2.5rem', fontWeight: 900, color: '#047857', fontFamily: 'monospace', letterSpacing: '6px' }}>
+                {order.deliveryOtp || '4892'}
+              </span>
+            </div>
+
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-primary)', maxWidth: '440px', margin: '0 auto 0.85rem auto', lineHeight: 1.45 }}>
+              ℹ️ <strong>Doorstep Verification Instructions:</strong> Share this 4-digit code with the delivery partner at your door only after inspecting and receiving your fresh bouquet.
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={handleCopyOtp}
+                className="btn btn-sm"
+                style={{
+                  background: '#10B981',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.82rem',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '6px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
+                }}
+              >
+                <Copy size={14} />
+                <span>Copy Delivery OTP</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Reference Meta Box */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -83,16 +180,16 @@ export default function OrderConfirmationPage() {
             background: 'var(--bg-accent-soft)',
             padding: '1.25rem',
             borderRadius: 'var(--radius-md)',
-            border: '1.5px dashed var(--border-gold)',
-            marginBottom: '1.5rem',
+            border: '1.5px solid var(--border-gold)',
+            marginBottom: '1.75rem',
             textAlign: 'left'
           }}>
             <div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-gold)', fontWeight: 700 }}>
+              <div style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-gold)', fontWeight: 700 }}>
                 Unique Order Reference ID
               </div>
               <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'monospace', marginTop: '2px' }}>
-                {order.orderId}
+                #{order.orderId}
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Placed: {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -100,38 +197,15 @@ export default function OrderConfirmationPage() {
             </div>
 
             <div style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1rem' }}>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#10B981', fontWeight: 700 }}>
-                Secret Delivery Handover OTP
+              <div style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-gold)', fontWeight: 700 }}>
+                Fulfillment Slot
               </div>
-              <div style={{ fontSize: '1.7rem', fontWeight: 900, color: '#059669', fontFamily: 'monospace', letterSpacing: '3px', marginTop: '2px' }}>
-                {order.deliveryOtp || '4892'}
+              <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '2px' }}>
+                {order.deliverySlot}
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                Share with rider at doorstep only after inspecting blooms
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Delivery Date: {order.deliveryDate || 'Scheduled for Today'}
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(order.deliveryOtp || '4892');
-                  if (showToast) showToast('📋 Delivery Handover OTP copied to clipboard!', 'success');
-                }}
-                className="btn btn-sm"
-                style={{
-                  background: 'rgba(16, 185, 129, 0.15)',
-                  color: '#059669',
-                  border: '1px solid #10B981',
-                  fontSize: '0.74rem',
-                  fontWeight: 800,
-                  padding: '5px 12px',
-                  borderRadius: '6px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  cursor: 'pointer'
-                }}
-              >
-                <span>📋 Copy Handover OTP</span>
-              </button>
             </div>
           </div>
 

@@ -1,252 +1,211 @@
-import React, { useState, useEffect } from 'react';
-import { MessageCircle, X, ExternalLink, Sparkles, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { MessageCircle, X, ExternalLink, Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 const WA_CHANNEL_URL = 'https://whatsapp.com/channel/0029VbE37yqDTkJzYHDgZV1h';
 
 export default function WhatsAppButton() {
-  const [showBanner, setShowBanner] = useState(false);
-  const [hasAutoOpened, setHasAutoOpened] = useState(false);
-
-  useEffect(() => {
-    // Check if user has already auto-opened or dismissed the channel prompt in this session
-    const alreadyOpenedInSession = sessionStorage.getItem('rb_wa_channel_session_opened');
-
-    if (!alreadyOpenedInSession) {
-      // 1. Show the prominent floating invite banner after a brief 1.2-second delay
-      const bannerTimer = setTimeout(() => {
-        setShowBanner(true);
-      }, 1200);
-
-      // 2. Automatically open WhatsApp Channel on the first user click/touch anywhere on the website
-      const triggerAutoOpenOnFirstInteraction = (e) => {
-        // Only trigger once per session so browsing remains smooth
-        if (!sessionStorage.getItem('rb_wa_channel_session_opened')) {
-          sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
-          setHasAutoOpened(true);
-          try {
-            window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
-          } catch (err) {
-            console.warn('Auto open blocked by browser popup protection:', err);
-          }
-        }
-        window.removeEventListener('click', triggerAutoOpenOnFirstInteraction);
-        window.removeEventListener('touchend', triggerAutoOpenOnFirstInteraction);
-      };
-
-      // Listen for the very first interaction (click or tap)
-      window.addEventListener('click', triggerAutoOpenOnFirstInteraction, { once: true });
-      window.addEventListener('touchend', triggerAutoOpenOnFirstInteraction, { once: true });
-
-      // 3. Timed attempt on page load (allowed on modern Android/Chrome if trusted)
-      const autoTimer = setTimeout(() => {
-        if (!sessionStorage.getItem('rb_wa_channel_session_opened')) {
-          try {
-            const win = window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
-            if (win) {
-              sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
-              setHasAutoOpened(true);
-            }
-          } catch (e) {
-            // Browser popup blocker intercepts; first tap will handle it
-          }
-        }
-      }, 2000);
-
-      return () => {
-        clearTimeout(bannerTimer);
-        clearTimeout(autoTimer);
-        window.removeEventListener('click', triggerAutoOpenOnFirstInteraction);
-        window.removeEventListener('touchend', triggerAutoOpenOnFirstInteraction);
-      };
-    }
-  }, []);
-
-  const handleJoinClick = (e) => {
-    e.stopPropagation();
-    sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
-    setShowBanner(false);
-    window.open(WA_CHANNEL_URL, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleDismiss = (e) => {
-    e.stopPropagation();
-    sessionStorage.setItem('rb_wa_channel_session_opened', 'true');
-    setShowBanner(false);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
-      {/* 1. AUTO PROMPT / JOIN BANNER (Appears on First Visit) */}
-      {showBanner && (
-        <div style={{
+      {/* Sleek, Luxury Floating VIP Atelier Button (Positioned above mobile bottom bar) */}
+      <div 
+        className="luxury-vip-float-wrapper"
+        style={{
           position: 'fixed',
-          bottom: '82px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '92%',
-          maxWidth: '420px',
-          background: 'linear-gradient(135deg, #075E54 0%, #128C7E 100%)',
-          color: '#ffffff',
-          borderRadius: '16px',
-          padding: '1.1rem 1.15rem',
-          boxShadow: '0 16px 40px rgba(7, 94, 84, 0.55), 0 4px 14px rgba(0,0,0,0.25)',
-          zIndex: 9999,
-          animation: 'slideUpWaBanner 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-          border: '2px solid rgba(255, 255, 255, 0.35)',
-          boxSizing: 'border-box'
-        }}>
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={handleDismiss}
-            style={{
+          zIndex: 900,
+          pointerEvents: 'auto'
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          style={{
+            background: 'linear-gradient(135deg, #064E3B 0%, #047857 100%)',
+            border: '1.5px solid #D4AF37',
+            borderRadius: '50px',
+            padding: '0.55rem 1rem 0.55rem 0.85rem',
+            color: '#FFFFFF',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '7px',
+            boxShadow: '0 8px 24px rgba(6, 78, 59, 0.4), 0 0 12px rgba(212, 175, 55, 0.25)',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          title="Join Rishika Blooms Official VIP Channel"
+        >
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <MessageCircle size={18} color="#34D399" />
+            <span style={{
               position: 'absolute',
-              top: '10px',
-              right: '10px',
-              background: 'rgba(0,0,0,0.25)',
-              border: 'none',
-              color: '#ffffff',
-              width: '26px',
-              height: '26px',
+              top: '-3px',
+              right: '-3px',
+              width: '7px',
+              height: '7px',
               borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
-            title="Dismiss"
-          >
-            <X size={15} />
-          </button>
-
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', marginBottom: '0.85rem' }}>
-            <div style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '50%',
-              background: '#25D366',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              boxShadow: '0 4px 12px rgba(37, 211, 102, 0.5)'
-            }}>
-              <MessageCircle size={26} color="#ffffff" />
-            </div>
-
-            <div style={{ flex: 1, paddingRight: '1.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }}>
-                <span style={{ fontWeight: 800, fontSize: '1.02rem', letterSpacing: '-0.2px' }}>
-                  Join WhatsApp Channel
-                </span>
-                <span style={{ background: '#25D366', color: '#ffffff', fontSize: '0.62rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
-                  VERIFIED
-                </span>
-              </div>
-              <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.95)', lineHeight: '1.35' }}>
-                Join our Official WhatsApp Channel to get <strong>20% OFF</strong> and daily new luxury bouquet updates!
-              </div>
-            </div>
+              background: '#D4AF37',
+              boxShadow: '0 0 6px #D4AF37'
+            }} />
           </div>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.3px' }}>
+            VIP Channel • 20% OFF
+          </span>
+        </button>
+      </div>
 
-          <div style={{ display: 'flex', gap: '0.6rem' }}>
+      {/* Professional Haute Atelier VIP Modal (Only opens when user clicks!) */}
+      {isModalOpen && (
+        <div 
+          className="drawer-backdrop open" 
+          style={{ zIndex: 100080, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.75)' }}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="glass-panel animate-scale-up" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '420px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: '20px',
+              border: '2px solid var(--border-gold)',
+              background: 'var(--bg-surface)',
+              textAlign: 'center',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212, 175, 55, 0.25)',
+              position: 'relative'
+            }}
+          >
+            {/* Close Button */}
             <button
               type="button"
-              onClick={handleJoinClick}
+              onClick={() => setIsModalOpen(false)}
               style={{
-                flex: 1.5,
-                background: '#25D366',
-                color: '#ffffff',
-                border: 'none',
-                padding: '0.75rem 1rem',
-                borderRadius: '10px',
-                fontWeight: 800,
-                fontSize: '0.92rem',
-                cursor: 'pointer',
+                position: 'absolute',
+                top: '14px',
+                right: '14px',
+                background: 'var(--bg-alt)',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-muted)',
+                width: '30px',
+                height: '30px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '6px',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
-              }}
-            >
-              <span>Join Channel Now</span>
-              <ExternalLink size={16} />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleDismiss}
-              style={{
-                flex: 0.6,
-                background: 'rgba(255, 255, 255, 0.15)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                padding: '0.75rem 0.5rem',
-                borderRadius: '10px',
-                fontWeight: 600,
-                fontSize: '0.82rem',
                 cursor: 'pointer'
               }}
+              title="Close"
             >
-              Later
+              <X size={16} />
             </button>
+
+            {/* Emblem Crest */}
+            <div style={{
+              width: '58px',
+              height: '58px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(184, 134, 11, 0.1) 100%)',
+              border: '2px solid #D4AF37',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem auto'
+            }}>
+              <Sparkles size={26} color="#D4AF37" />
+            </div>
+
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(212, 175, 55, 0.12)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '3px 10px', borderRadius: '12px', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '0.5rem' }}>
+              <ShieldCheck size={13} />
+              <span>OFFICIAL VIP CLUB</span>
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.35rem 0' }}>
+              Rishika Blooms VIP Channel
+            </h3>
+            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', margin: '0 0 1.25rem 0', lineHeight: 1.45 }}>
+              Join our verified WhatsApp channel for royal atelier privileges, exclusive coupon codes & live fresh bloom updates.
+            </p>
+
+            {/* Benefits List */}
+            <div style={{
+              background: 'var(--bg-alt)',
+              padding: '1rem',
+              borderRadius: '12px',
+              textAlign: 'left',
+              fontSize: '0.82rem',
+              color: 'var(--text-primary)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.65rem',
+              marginBottom: '1.5rem',
+              border: '1px solid var(--border-subtle)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1rem' }}>💎</span>
+                <span><strong>Instant 20% OFF</strong> code on your luxury bouquet orders</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1rem' }}>💐</span>
+                <span><strong>Daily Fresh Drops</strong> — First preview of new Dutch roses & velvet wraps</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1rem' }}>🌙</span>
+                <span><strong>Midnight Priority</strong> — Dedicated slots for surprise midnight deliveries</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              <a
+                href={WA_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsModalOpen(false)}
+                className="btn btn-primary"
+                style={{
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  padding: '0.85rem',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '7px',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
+                }}
+              >
+                <span>Join Official Channel</span>
+                <ExternalLink size={15} />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="btn btn-outline"
+                style={{ padding: '0.65rem', fontSize: '0.84rem', borderRadius: '10px' }}
+              >
+                Maybe Later
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* 2. FLOATING WHATSAPP CHANNEL CORNER PILL (Always accessible) */}
-      <a
-        href={WA_CHANNEL_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: 'fixed',
-          bottom: '22px',
-          right: '18px',
-          background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
-          color: '#ffffff',
-          borderRadius: '50px',
-          padding: '0.65rem 1.1rem 0.65rem 0.95rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          boxShadow: '0 6px 24px rgba(37, 211, 102, 0.45)',
-          zIndex: 900,
-          textDecoration: 'none',
-          fontWeight: 700,
-          fontSize: '0.85rem',
-          border: '2px solid rgba(255, 255, 255, 0.45)',
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-        }}
-        title="Join our official WhatsApp Channel"
-      >
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <MessageCircle size={22} color="#ffffff" />
-          <span style={{
-            position: 'absolute',
-            top: '-4px',
-            right: '-4px',
-            width: '9px',
-            height: '9px',
-            background: '#ffeb3b',
-            borderRadius: '50%',
-            boxShadow: '0 0 0 2px #128C7E'
-          }} />
-        </div>
-        <span>Join Channel</span>
-      </a>
-
-      {/* Keyframe animation styling */}
+      {/* Responsive floating styles */}
       <style>{`
-        @keyframes slideUpWaBanner {
-          from {
-            opacity: 0;
-            transform: translate(-50%, 25px);
-          }
-          to {
-            opacity: 1;
-            transform: translate(-50%, 0);
+        .luxury-vip-float-wrapper {
+          bottom: 24px;
+          right: 24px;
+        }
+        @media (max-width: 768px) {
+          .luxury-vip-float-wrapper {
+            bottom: 74px !important;
+            right: 14px !important;
           }
         }
       `}</style>

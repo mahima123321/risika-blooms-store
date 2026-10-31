@@ -86,22 +86,32 @@ RISHIKA BLOOMS — FINAL WEBSITE READY TO UPLOAD
 }
 
 for (const loc of targetLocations) {
-  console.log(`Copying files to: ${loc}...`);
+  console.log(`Copying fresh dist files to: ${loc}...`);
   copyDirRecursive(srcDist, loc);
   ensureSpecialFiles(loc);
 
   const existingZip = path.join(loc, 'UPLOAD_THIS_ZIP_FILE.zip');
   if (fs.existsSync(existingZip)) fs.unlinkSync(existingZip);
 
-  // Copy master zip from parent dir or create it
-  const masterZip = 'C:\\Users\\hp\\OneDrive\\attachment2\\WEBSITE_READY_TO_UPLOAD_ANYWHERE.zip';
-  if (fs.existsSync(masterZip)) {
-    fs.copyFileSync(masterZip, existingZip);
-    console.log(`✓ Copied master zip to ${existingZip}`);
-  } else {
+  try {
+    console.log(`Generating fresh zip for: ${existingZip}...`);
     execSync(`powershell -Command "Compress-Archive -Path '${loc}\\*' -DestinationPath '${existingZip}' -Force"`, { stdio: 'inherit' });
-    console.log(`✓ Generated zip in ${loc}`);
+    console.log(`✓ Fresh zip created at ${existingZip}`);
+  } catch (err) {
+    console.warn(`Zip creation warning for ${existingZip}:`, err.message);
   }
+}
+
+// Also place fresh zip directly on Desktop
+const desktopDirectZip = 'C:\\Users\\hp\\Desktop\\UPLOAD_THIS_ZIP_FILE.zip';
+try {
+  const desktopFolderZip = 'C:\\Users\\hp\\Desktop\\RISHIKA_BLOOMS_FINAL_WEBSITE_UPLOAD_FOLDER\\UPLOAD_THIS_ZIP_FILE.zip';
+  if (fs.existsSync(desktopFolderZip)) {
+    fs.copyFileSync(desktopFolderZip, desktopDirectZip);
+    console.log(`✓ Copied directly to Desktop: ${desktopDirectZip}`);
+  }
+} catch (e) {
+  console.warn(e.message);
 }
 
 console.log('--- ALL FINAL UPLOAD FOLDERS AND ZIPS READY ON DESKTOP & ATTACHMENT2 ---');

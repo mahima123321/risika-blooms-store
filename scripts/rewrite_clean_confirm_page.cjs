@@ -353,3 +353,4 @@ export default function OrderConfirmationPage() {
 
 fs.writeFileSync(pagePath, content, 'utf8');
 console.log('OrderConfirmationPage.jsx rewritten cleanly with no errors!');
+
