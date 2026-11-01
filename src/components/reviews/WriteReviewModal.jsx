@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import { useShop } from '../../context/ShopContext';
 import { 
@@ -249,8 +250,8 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
 
   const activeRatingInfo = RATING_LABELS[hoverRating || rating] || RATING_LABELS[5];
 
-  return (
-    <div className="drawer-backdrop open owner-modal-backdrop" onClick={handleClose} style={{ zIndex: 100030 }}>
+  return typeof document !== 'undefined' ? createPortal(
+    <div className="bouquet-lightbox-overlay animate-fade-in" onClick={handleClose} role="dialog" aria-modal="true" style={{ zIndex: 999999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(8px)', position: 'fixed', inset: 0, overflowY: 'auto' }}>
       <div 
         className="glass-panel write-review-modal-card animate-fade-in"
         onClick={(e) => e.stopPropagation()}
@@ -650,6 +651,7 @@ export default function WriteReviewModal({ isOpen, onClose, product }) {
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>,
+    document.body
+  ) : null;
 }

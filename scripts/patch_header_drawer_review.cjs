@@ -20,3 +20,4 @@ if (c.includes(targetStr)) {
 
 fs.writeFileSync(p, c, 'utf8');
 console.log('Header drawer updated successfully! Present:', c.includes('Write Feedback & Photo Review'));
+

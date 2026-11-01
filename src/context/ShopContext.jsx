@@ -1484,6 +1484,10 @@ export function ShopProvider({ children }) {
         changeOwnerPin,
         resetOwnerPinToDefault,
         // Customer Photo Reviews & Feedback (Flipkart/Meesho style)
+        isWriteReviewModalOpen,
+        writeReviewTargetProduct,
+        openWriteReviewModal,
+        closeWriteReviewModal,
         productReviews,
         getProductReviews,
         addProductReview,
