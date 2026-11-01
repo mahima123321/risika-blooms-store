@@ -9,7 +9,7 @@ import {
   Heart, Star, Sparkles, 
   Truck, Clock, ShieldCheck, CheckCircle2, ChevronRight, ChevronLeft,
   ArrowLeft, Plus, Minus, Send, Share2, Edit3, Trash2,
-  Maximize2, X, ZoomIn, ZoomOut, RotateCcw, Camera, QrCode, ShoppingBag, Zap 
+  Maximize2, X, ZoomIn, ZoomOut, RotateCcw, Camera, QrCode, ShoppingCart, ShoppingBag, Zap 
 } from 'lucide-react';
 
 export default function ProductDetailPage() {
@@ -810,10 +810,10 @@ export default function ProductDetailPage() {
                 className="btn btn-gold"
                 onClick={handleAddToCart}
                 style={{ padding: '0.75rem 0.5rem', fontSize: '0.88rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', borderRadius: 'var(--radius-md)' }}
-                title="Add to Shopping Bag"
+                title="Add to Shopping Cart"
               >
-                <ShoppingBag size={18} />
-                <span>Add to Bag</span>
+                <ShoppingCart size={18} />
+                <span>Add to Cart</span>
               </button>
             </div>
 
@@ -1037,8 +1037,8 @@ export default function ProductDetailPage() {
                   }}
                   style={{ justifyContent: 'center', fontWeight: 700, gap: '8px', borderColor: 'var(--border-gold)' }}
                 >
-                  <ShoppingBag size={18} />
-                  <span>Add to Bag</span>
+                  <ShoppingCart size={18} />
+                  <span>Add to Cart</span>
                 </button>
 
                 <button 
@@ -1492,8 +1492,8 @@ export default function ProductDetailPage() {
               setIsCartOpen(true);
             }}
           >
-            <ShoppingBag size={15} />
-            <span>Add to Bag</span>
+            <ShoppingCart size={15} />
+            <span>Add to Cart</span>
           </button>
           <button 
             type="button" 

@@ -76,7 +76,7 @@ const EN_TRANSLATIONS = {
   recipientPhone: "Recipient's Phone",
   deliveryDate: "Select Delivery Date",
   deliverySlot: "Delivery Time Slot",
-  cartTitle: "Your Shopping Bag",
+  cartTitle: "Your Shopping Cart",
   emptyCart: "Your shopping bag is currently empty.",
   subtotal: "Subtotal",
   deliveryFee: "Delivery Fee",

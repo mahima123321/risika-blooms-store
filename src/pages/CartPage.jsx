@@ -49,7 +49,7 @@ export default function CartPage() {
             <ShoppingBag size={40} />
           </div>
           <h2 className="font-serif-editorial" style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.6rem', color: 'var(--text-primary)' }}>
-            Your Shopping Bag is Empty
+            Your Shopping Cart is Empty
           </h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.95rem', lineHeight: 1.6 }}>
             Discover our handcrafted fresh flower arrangements, velvet roses, and celebration gifts to begin your order.
@@ -99,7 +99,7 @@ export default function CartPage() {
         </div>
 
         <h1 className="font-serif-editorial" style={{ fontSize: '2.2rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
-          Shopping Bag & Order Summary
+          Shopping Cart & Order Summary
         </h1>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', alignItems: 'start' }}>

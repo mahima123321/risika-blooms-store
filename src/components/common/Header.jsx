@@ -3,7 +3,7 @@ import { useShop } from '../../context/ShopContext';
 import { CATEGORIES } from '../../data/categories';
 import BrandLogo from './BrandLogo';
 import { 
-  Search, Heart, ShoppingBag, Moon, Sun, Globe, Menu, X, 
+  Search, Heart, ShoppingCart, ShoppingBag, Moon, Sun, Globe, Menu, X, 
   Sparkles, ChevronDown, Clock, Shield,
   MessageCircle, Star, ArrowRight, Maximize, Minimize, MapPin,
   Smartphone, Monitor, QrCode, Truck, Crown 
@@ -340,11 +340,11 @@ export default function Header() {
             <button 
               className="action-icon-btn cart-header-btn"
               onClick={() => handleNavClick('cart')}
-              title="Shopping Bag"
-              aria-label="Shopping Bag"
+              title="Shopping Cart"
+              aria-label="Shopping Cart"
               style={{ position: 'relative' }}
             >
-              <ShoppingBag size={18} />
+              <ShoppingCart size={18} />
               {cartCount > 0 && (
                 <span className="action-badge" style={{ backgroundColor: 'var(--color-rose-crimson, #E11D48)', color: '#FFFFFF' }}>
                   {cartCount}

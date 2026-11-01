@@ -1,6 +1,6 @@
 import React from 'react';
 import { useShop } from '../../context/ShopContext';
-import { Home, Sparkles, ShoppingBag, Layers, Truck } from 'lucide-react';
+import { Home, Sparkles, ShoppingCart, Layers, Truck } from 'lucide-react';
 
 export default function MobileBottomNav() {
   const { 
@@ -55,12 +55,12 @@ export default function MobileBottomNav() {
         onClick={() => navigateTo('cart')}
       >
         <div className="mobile-nav-icon-wrapper">
-          <ShoppingBag size={20} />
+          <ShoppingCart size={20} />
           {cartCount > 0 && (
             <span className="mobile-nav-badge">{cartCount}</span>
           )}
         </div>
-        <span>Bag</span>
+        <span>Cart</span>
       </button>
 
       <button 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import ProductCard from '../components/common/ProductCard';
-import { Heart, ShoppingBag, ArrowRight, Trash2, X } from 'lucide-react';
+import { Heart, ShoppingCart, ShoppingBag, ArrowRight, Trash2, X } from 'lucide-react';
 
 export default function WishlistPage() {
   const { 
@@ -75,7 +75,7 @@ export default function WishlistPage() {
                         }}
                       >
                         <ShoppingBag size={12} />
-                        <span>Move to Bag</span>
+                        <span>Move to Cart</span>
                       </button>
                     </div>
 
