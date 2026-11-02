@@ -730,36 +730,191 @@ export default function CheckoutPage() {
                     ))}
                   </div>
 
-                  {/* Scheduled Slot Selection */}
-                  <div style={{ background: '#F9FAFB', padding: '1rem', borderRadius: '6px', border: '1px solid #E5E7EB', marginBottom: '1.25rem' }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#212121', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Clock size={16} color="#2874F0" />
-                      <span>Choose Delivery Date & Time Slot</span>
+                  {/* Executive Delivery Scheduling & Slot Selector */}
+                  <div style={{ background: '#FFFFFF', padding: '1.25rem', borderRadius: '8px', border: '1.5px solid #E5E7EB', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563EB', flexShrink: 0 }}>
+                          <Truck size={17} />
+                        </div>
+                        <div>
+                          <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 800, color: '#111827' }}>
+                            Express Floral Delivery & Time Slot
+                          </h4>
+                          <span style={{ fontSize: '0.74rem', color: '#6B7280' }}>
+                            Chilled climate-controlled transit with hydration bio-gel stems
+                          </span>
+                        </div>
+                      </div>
+
+                      <span style={{ background: '#ECFDF5', color: '#047857', border: '1px solid #A7F3D0', padding: '3px 10px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 800 }}>
+                        ✓ 100% Free Express Delivery
+                      </span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                      <div>
-                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#666', marginBottom: '3px' }}>DELIVERY DATE</label>
-                        <input 
-                          type="date" 
-                          min={todayStr}
-                          value={deliveryDate}
-                          onChange={(e) => setDeliveryDate(e.target.value)}
-                          style={{ width: '100%', padding: '0.55rem', borderRadius: '4px', border: '1px solid #D1D5DB', fontSize: '0.85rem', boxSizing: 'border-box' }}
-                        />
+                    {/* Quick Date Chips */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, color: '#4B5563', textTransform: 'uppercase', marginBottom: '6px' }}>
+                        1. Select Delivery Date:
+                      </label>
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {[
+                          { label: 'Today (Fastest)', date: todayStr, tag: '⚡ Same Day' },
+                          { 
+                            label: 'Tomorrow', 
+                            date: new Date(Date.now() + 86400000).toISOString().split('T')[0], 
+                            tag: 'Fresh Harvest' 
+                          },
+                          { 
+                            label: 'Day After', 
+                            date: new Date(Date.now() + 172800000).toISOString().split('T')[0], 
+                            tag: 'Planned' 
+                          }
+                        ].map((d) => (
+                          <button
+                            key={d.date}
+                            type="button"
+                            onClick={() => setDeliveryDate(d.date)}
+                            style={{
+                              padding: '0.5rem 0.85rem',
+                              borderRadius: '6px',
+                              border: deliveryDate === d.date ? '2px solid #2563EB' : '1px solid #D1D5DB',
+                              background: deliveryDate === d.date ? '#EFF6FF' : '#F9FAFB',
+                              color: deliveryDate === d.date ? '#1E40AF' : '#374151',
+                              fontSize: '0.8rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            <span>{d.label}</span>
+                            <span style={{ fontSize: '0.68rem', padding: '1px 5px', borderRadius: '4px', background: deliveryDate === d.date ? '#DBEAFE' : '#E5E7EB', color: deliveryDate === d.date ? '#1E40AF' : '#6B7280' }}>
+                              {d.tag}
+                            </span>
+                          </button>
+                        ))}
+
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <input 
+                            type="date" 
+                            min={todayStr}
+                            value={deliveryDate}
+                            onChange={(e) => setDeliveryDate(e.target.value)}
+                            style={{
+                              padding: '0.45rem 0.65rem',
+                              borderRadius: '6px',
+                              border: '1px solid #D1D5DB',
+                              fontSize: '0.8rem',
+                              background: '#FFF',
+                              color: '#374151',
+                              outline: 'none',
+                              cursor: 'pointer'
+                            }}
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#666', marginBottom: '3px' }}>DELIVERY TIME SLOT</label>
-                        <select
-                          value={deliverySlot}
-                          onChange={(e) => setDeliverySlot(e.target.value)}
-                          style={{ width: '100%', padding: '0.55rem', borderRadius: '4px', border: '1px solid #D1D5DB', fontSize: '0.85rem', boxSizing: 'border-box', background: '#FFF' }}
-                        >
-                          <option value="Morning Dew (8 AM - 11 AM)">🌅 Morning Dew (8:00 AM – 11:00 AM)</option>
-                          <option value="Standard Delivery (1 PM - 5 PM)">☀️ Standard Afternoon (1:00 PM – 5:00 PM)</option>
-                          <option value="Evening Sunset (6 PM - 9 PM)">🌇 Evening Sunset (6:00 PM – 9:00 PM)</option>
-                          <option value="Midnight Surprise (11:15 PM - 12:00 AM)">🌙 Midnight Special (11:15 PM – 12:00 AM)</option>
-                        </select>
+                    </div>
+
+                    {/* 2. Interactive Time Slot Grid Cards */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, color: '#4B5563', textTransform: 'uppercase', marginBottom: '6px' }}>
+                        2. Select Delivery Time Window:
+                      </label>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.65rem' }}>
+                        {[
+                          {
+                            val: 'Morning Dew (8 AM - 11 AM)',
+                            icon: '🌅',
+                            title: 'Morning Slot',
+                            time: '8:00 AM – 11:00 AM',
+                            desc: 'Early bird surprise with fresh morning harvest blooms',
+                            badge: 'FREE'
+                          },
+                          {
+                            val: 'Standard Delivery (1 PM - 5 PM)',
+                            icon: '☀️',
+                            title: 'Standard Afternoon',
+                            time: '1:00 PM – 5:00 PM',
+                            desc: 'Most popular express climate-locked afternoon transit',
+                            badge: 'POPULAR • FREE'
+                          },
+                          {
+                            val: 'Evening Sunset (6 PM - 9 PM)',
+                            icon: '🌇',
+                            title: 'Evening Sunset',
+                            time: '6:00 PM – 9:00 PM',
+                            desc: 'Perfect for romantic dinner celebrations & returns from office',
+                            badge: 'ROMANCE • FREE'
+                          },
+                          {
+                            val: 'Midnight Surprise (11:30 PM - 12:30 AM)',
+                            icon: '🌙',
+                            title: 'Midnight Surprise',
+                            time: '11:30 PM – 12:30 AM',
+                            desc: 'Exact midnight bell ringing for birthdays & anniversaries',
+                            badge: 'MIDNIGHT • FREE'
+                          }
+                        ].map((slot) => {
+                          const isSelected = deliverySlot.includes(slot.title) || deliverySlot === slot.val;
+                          return (
+                            <div
+                              key={slot.val}
+                              onClick={() => setDeliverySlot(slot.val)}
+                              style={{
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: isSelected ? '2px solid #2563EB' : '1px solid #E5E7EB',
+                                background: isSelected ? '#EFF6FF' : '#F9FAFB',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                                position: 'relative'
+                              }}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ fontSize: '1.1rem' }}>{slot.icon}</span>
+                                  <strong style={{ fontSize: '0.85rem', color: isSelected ? '#1E40AF' : '#111827' }}>
+                                    {slot.title}
+                                  </strong>
+                                </div>
+                                <span style={{
+                                  fontSize: '0.66rem',
+                                  fontWeight: 800,
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  background: isSelected ? '#2563EB' : '#E5E7EB',
+                                  color: isSelected ? '#FFFFFF' : '#4B5563'
+                                }}>
+                                  {slot.badge}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: isSelected ? '#2563EB' : '#4B5563', marginBottom: '2px' }}>
+                                ⏰ {slot.time}
+                              </div>
+                              <div style={{ fontSize: '0.72rem', color: '#6B7280', lineHeight: 1.3 }}>
+                                {slot.desc}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Delivery Assurance Badges */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.5rem', marginTop: '0.85rem', paddingTop: '0.85rem', borderTop: '1px solid #F3F4F6' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.74rem', color: '#4B5563' }}>
+                        <ShieldCheck size={14} color="#059669" />
+                        <span><strong>4-Digit Secret OTP:</strong> Doorstep verified</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.74rem', color: '#4B5563' }}>
+                        <Sparkles size={14} color="#2563EB" />
+                        <span><strong>Hydration Pod:</strong> 7-Day bloom life</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.74rem', color: '#4B5563' }}>
+                        <Clock size={14} color="#D97706" />
+                        <span><strong>Live Tracking:</strong> Realtime updates</span>
                       </div>
                     </div>
                   </div>

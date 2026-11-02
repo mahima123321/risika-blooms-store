@@ -1484,65 +1484,105 @@ export default function MyOrdersPage() {
                         </span>
                       </div>
 
-                      {/* 2. Secret Delivery Handover OTP Card */}
+                      {/* 2. Official Doorstep Delivery Handover OTP Protocol */}
                       <div style={{
-                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.05) 100%)',
-                        border: '1.5px dashed #10B981',
-                        borderRadius: 'var(--radius-sm)',
-                        padding: '0.85rem 1rem',
+                        background: 'linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(6, 95, 70, 0.95) 100%)',
+                        border: '1.5px solid rgba(16, 185, 129, 0.6)',
+                        borderRadius: '10px',
+                        padding: '1rem 1.25rem',
                         marginBottom: '1rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         flexWrap: 'wrap',
-                        gap: '0.65rem'
+                        gap: '0.85rem',
+                        boxShadow: '0 4px 18px rgba(6, 78, 59, 0.25)',
+                        color: '#FFFFFF'
                       }}>
                         <div>
-                          <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#047857', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <KeyRound size={13} />
-                            <span>Secret Delivery Handover OTP</span>
+                          <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#A7F3D0', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <ShieldCheck size={14} color="#34D399" />
+                            <span>Official Doorstep Handover Verification Code</span>
                           </div>
-                          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#047857', fontFamily: 'monospace', letterSpacing: '3px', marginTop: '1px' }}>
+                          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#FFFFFF', fontFamily: 'monospace', letterSpacing: '4px', margin: '2px 0 0 0' }}>
                             {ord.deliveryOtp || '4892'}
                           </div>
                         </div>
-                        <div style={{ maxWidth: '240px', fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
-                          Share this 4-digit code with our rider at your doorstep only after receiving your bouquet.
+                        <div style={{ maxWidth: '280px', fontSize: '0.76rem', color: '#D1FAE5', lineHeight: 1.45 }}>
+                          🔒 <strong>Zero-Contact Verification Protocol:</strong> Share this 4-digit code with our delivery partner only after receiving and verifying your bouquet in person.
                         </div>
                       </div>
 
-                      {/* 3. Visual Progress Stepper (Flipkart / Meesho Timeline) */}
-                      <div style={{ marginBottom: '1.25rem', background: 'var(--bg-alt)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.65rem' }}>
-                          Delivery Progress Tracker
+                      {/* 3. Dedicated Cold-Chain Courier Logistics & Transit Card */}
+                      <div style={{
+                        background: 'var(--bg-alt)',
+                        padding: '0.85rem 1rem',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-subtle)',
+                        marginBottom: '1rem'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Truck size={16} color="var(--text-gold)" />
+                            <strong style={{ fontSize: '0.86rem', color: 'var(--text-primary)' }}>
+                              Rishika Blooms Dedicated Express Courier Fleet
+                            </strong>
+                          </div>
+                          <span style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(37, 99, 235, 0.12)', color: '#2563EB', fontWeight: 800 }}>
+                            Air-Conditioned Cold-Chain Transit
+                          </span>
                         </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '0.45rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                          <div>• <strong>Courier Partner:</strong> Express Priority Fleet</div>
+                          <div>• <strong>Hydration Lock:</strong> Pre-hydrated bio-gel stems</div>
+                          <div>• <strong>Tracking Ref:</strong> TRK-{(ord.orderId || '984210').replace(/\D/g, '')}</div>
+                          <div>• <strong>Transit Target:</strong> {slotMeta.label}</div>
+                        </div>
+                      </div>
+
+                      {/* 4. Visual Progress Stepper (BlueDart / Flipkart Logistics Timeline) */}
+                      <div style={{ marginBottom: '1.25rem', background: 'var(--bg-alt)', padding: '0.95rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                          <span style={{ fontSize: '0.74rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            Live Delivery Progress Tracker
+                          </span>
+                          <span style={{ fontSize: '0.72rem', color: '#10B981', fontWeight: 700 }}>
+                            ● Active Milestone Verified
+                          </span>
+                        </div>
+
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.15rem', textAlign: 'center' }}>
                           {[
-                            { title: 'Placed', done: true },
-                            { title: 'Confirmed', done: ord.status !== 'Order Placed' },
-                            { title: 'Packed', done: ['Packed', 'Shipped', 'Out for Delivery', 'Delivered'].includes(ord.status) },
-                            { title: 'Out for Delivery', done: ['Out for Delivery', 'Delivered'].includes(ord.status) },
-                            { title: 'Delivered', done: ord.status === 'Delivered' }
+                            { title: 'Placed', sub: 'Logged', done: true },
+                            { title: 'Confirmed', sub: 'Assigned', done: ord.status !== 'Order Placed' },
+                            { title: 'Packed', sub: 'Inspected', done: ['Packed', 'Shipped', 'Out for Delivery', 'Delivered'].includes(ord.status) },
+                            { title: 'Out for Delivery', sub: 'With Rider', done: ['Out for Delivery', 'Delivered'].includes(ord.status) },
+                            { title: 'Delivered', sub: 'Handed Over', done: ord.status === 'Delivered' }
                           ].map((st, i) => (
                             <div key={st.title} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                               <div style={{
-                                width: '26px',
-                                height: '26px',
+                                width: '28px',
+                                height: '28px',
                                 borderRadius: '50%',
                                 background: st.done ? '#10B981' : 'var(--bg-surface)',
                                 color: st.done ? '#FFF' : 'var(--text-muted)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: '0.72rem',
+                                fontSize: '0.74rem',
                                 fontWeight: 800,
                                 marginBottom: '4px',
-                                border: st.done ? '1.5px solid #10B981' : '1px solid var(--border-subtle)'
+                                border: st.done ? '1.5px solid #10B981' : '1px solid var(--border-subtle)',
+                                boxShadow: st.done ? '0 0 10px rgba(16, 185, 129, 0.35)' : 'none'
                               }}>
                                 {st.done ? '✓' : i + 1}
                               </div>
-                              <span style={{ fontSize: '0.64rem', fontWeight: st.done ? 800 : 500, color: st.done ? 'var(--text-primary)' : 'var(--text-muted)', lineHeight: 1.2 }}>
+                              <span style={{ fontSize: '0.68rem', fontWeight: st.done ? 800 : 500, color: st.done ? 'var(--text-primary)' : 'var(--text-muted)', lineHeight: 1.2 }}>
                                 {st.title}
+                              </span>
+                              <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', marginTop: '1px' }}>
+                                {st.sub}
                               </span>
                             </div>
                           ))}

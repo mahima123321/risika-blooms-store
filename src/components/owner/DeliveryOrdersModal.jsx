@@ -289,7 +289,7 @@ export default function DeliveryOrdersModal() {
               title="Click to test celebratory delivery sound on your phone"
             >
               <Volume2 size={13} />
-              <span>🔊 Test Voice</span>
+              <span>🔊 Delivery Chime Alert</span>
             </button>
 
             <button 
