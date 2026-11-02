@@ -332,10 +332,16 @@ export function ShopProvider({ children }) {
     const unsubOrders = subscribeToCloudOrders(
       (cloudOrders) => {
         if (cloudOrders && cloudOrders.length > 0) {
-          setOrders(cloudOrders);
-          try {
-            localStorage.setItem('rb_orders', JSON.stringify(cloudOrders));
-          } catch (e) {}
+          setOrders((prev) => {
+            const cloudIds = new Set(cloudOrders.map((o) => String(o.orderId || o.order_id)));
+            // Keep any locally created customer orders not in cloud so they are never lost
+            const localOnly = (prev || []).filter((o) => !cloudIds.has(String(o.orderId || o.order_id)));
+            const merged = [...cloudOrders, ...localOnly];
+            try {
+              localStorage.setItem('rb_orders', JSON.stringify(merged));
+            } catch (e) {}
+            return merged;
+          });
         }
       },
       (err) => console.warn('Cloud orders sync note:', err)
@@ -415,6 +421,20 @@ export function ShopProvider({ children }) {
         paymentMethod: 'WhatsApp Instant Checkout'
       }
     ];
+  });
+
+  // Dedicated Customer Personal Orders placed on this device (persisted in rb_customer_orders)
+  const [customerOrders, setCustomerOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('rb_customer_orders');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Error reading stored customer orders:', e);
+    }
+    return [];
   });
 
   // Modal states for Customer Order Receipt & Rider OTP verification
@@ -564,13 +584,23 @@ export function ShopProvider({ children }) {
       console.warn('Backend SQLite order dispatch note:', err.message);
     }
 
-    // 2. Synchronize to local state & cloud fallback
+    // 2. Synchronize to global local state & cloud fallback
     setOrders((prev) => {
-      const updated = [formattedOrder, ...prev];
+      const updated = [formattedOrder, ...prev.filter(o => (o.orderId || o.order_id) !== formattedOrder.orderId)];
       try {
         localStorage.setItem('rb_orders', JSON.stringify(updated));
       } catch (e) {}
       return updated;
+    });
+
+    // 3. Persist to customer personal orders on this device so customer can always track what they ordered
+    setCustomerOrders((prev) => {
+      const updatedCust = [formattedOrder, ...prev.filter(o => (o.orderId || o.order_id) !== formattedOrder.orderId)];
+      try {
+        localStorage.setItem('rb_customer_orders', JSON.stringify(updatedCust));
+        localStorage.setItem('rb_last_order_id', formattedOrder.orderId);
+      } catch (e) {}
+      return updatedCust;
     });
 
     if (isCloudConnected) {
@@ -632,6 +662,14 @@ export function ShopProvider({ children }) {
       return updated;
     });
 
+    setCustomerOrders(prev => {
+      const updated = prev.map(o => String(o.orderId || o.order_id) === String(orderId) ? updatedOrder : o);
+      try {
+        localStorage.setItem('rb_customer_orders', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+
     if (isCloudConnected) {
       cloudUpdateOrderStatus(orderId, { status: 'Delivered', deliveredAt });
     }
@@ -683,6 +721,23 @@ export function ShopProvider({ children }) {
       });
       try {
         localStorage.setItem('rb_orders', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+
+    setCustomerOrders(prev => {
+      const updated = prev.map(o => {
+        if (String(o.orderId || o.order_id) === String(orderId)) {
+          return {
+            ...o,
+            status: targetStatus,
+            ...(courierProvider ? { courier_provider: courierProvider, tracking_number: trackingNumber, tracking_url: trackingUrl } : {})
+          };
+        }
+        return o;
+      });
+      try {
+        localStorage.setItem('rb_customer_orders', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -1529,6 +1584,8 @@ export function ShopProvider({ children }) {
         toggleMobileFrame,
         // Live Orders & OTP Delivery Verification
         orders,
+        customerOrders,
+        setCustomerOrders,
         createOrder,
         verifyDeliveryOtp,
         updateOrderStatus,

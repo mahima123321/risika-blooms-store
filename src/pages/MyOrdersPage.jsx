@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useShop } from '../context/ShopContext';
 import { 
   Package, Search, Clock, CheckCircle2, Truck, Send, Smartphone, MessageSquare,
   MapPin, Printer, ArrowRight, ShieldCheck, AlertCircle, XCircle,
   Phone, MessageCircle, Calendar, Sparkles, Copy, Check, Lock, Unlock,
   KeyRound, Eye, EyeOff, Navigation, Heart, ExternalLink, RefreshCw,
-  Settings, LogOut
+  Settings, LogOut, Camera, Star, ShoppingBag, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { 
   createWhatsAppUrl, 
@@ -18,6 +18,8 @@ import { playDeliverySuccessChime } from '../utils/audioAlerts';
 export default function MyOrdersPage() {
   const { 
     orders, 
+    customerOrders,
+    products,
     currentView, 
     navigateTo, 
     showToast,
@@ -28,17 +30,28 @@ export default function MyOrdersPage() {
     verifyDeliveryOtp,
     updateOrderStatus,
     openOwnerSettingsModal,
-    triggerIncomingSmsNotification
+    triggerIncomingSmsNotification,
+    openWriteReviewModal,
+    brandConfig
   } = useShop();
 
   // Mode switcher: 'owner' vs 'customer'
-  // Defaults to 'owner' if already authenticated, otherwise 'owner' if specified in params, else 'customer'
+  // Defaults to 'owner' ONLY if explicitly passed in params (e.g. from owner menu),
+  // otherwise defaults to 'customer' so user always sees their own placed bouquet orders!
   const [deliveredCelebrationOrder, setDeliveredCelebrationOrder] = useState(null);
   const [activeMode, setActiveMode] = useState(() => {
-    if (isOwnerAuthenticated) return 'owner';
     if (currentView?.params?.mode === 'owner') return 'owner';
+    if (currentView?.params?.mode === 'customer') return 'customer';
     return 'customer';
   });
+
+  useEffect(() => {
+    if (currentView?.params?.mode === 'owner') {
+      setActiveMode('owner');
+    } else if (currentView?.params?.mode === 'customer') {
+      setActiveMode('customer');
+    }
+  }, [currentView?.params?.mode]);
 
   // Owner PIN login state (for when unauthenticated owner switches to owner mode)
   const [enteredPin, setEnteredPin] = useState('');
@@ -180,16 +193,71 @@ export default function MyOrdersPage() {
     });
   }, [allOrders, ownerDateFilter, ownerSlotFilter, ownerSearch, todayStr]);
 
+  // Customer's personal orders placed on this device (merged with any live updates)
+  const myDeviceOrders = useMemo(() => {
+    const list = [...(customerOrders || [])];
+    const seenIds = new Set(list.map(o => String(o.orderId || o.order_id)));
+
+    const lastOrderId = typeof window !== 'undefined' ? localStorage.getItem('rb_last_order_id') : null;
+    (orders || []).forEach(o => {
+      const id = String(o.orderId || o.order_id);
+      if (seenIds.has(id)) {
+        const idx = list.findIndex(x => String(x.orderId || x.order_id) === id);
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...o };
+        }
+      } else if (lastOrderId && id === String(lastOrderId)) {
+        list.push(o);
+        seenIds.add(id);
+      }
+    });
+
+    return list;
+  }, [customerOrders, orders]);
+
   // Customer Filter Logic
   const cleanCustomerQuery = customerSearch.trim().toLowerCase();
-  const filteredCustomerOrders = (orders || []).filter((o) => {
-    if (!cleanCustomerQuery) return true;
-    const matchId = String(o.orderId || '').toLowerCase().includes(cleanCustomerQuery);
-    const matchPhone = String(o.customerPhone || '').includes(cleanCustomerQuery);
-    const matchName = String(o.customerName || '').toLowerCase().includes(cleanCustomerQuery);
-    return matchId || matchPhone || matchName;
-  });
-  const activeCustomerOrder = selectedCustomerOrder || filteredCustomerOrders[0];
+  const filteredCustomerOrders = useMemo(() => {
+    if (cleanCustomerQuery) {
+      // Search across ALL orders (device orders + all store/cloud orders)
+      const allPool = [...myDeviceOrders];
+      const seen = new Set(allPool.map(o => String(o.orderId || o.order_id)));
+      (orders || []).forEach(o => {
+        const id = String(o.orderId || o.order_id);
+        if (!seen.has(id)) {
+          allPool.push(o);
+          seen.add(id);
+        }
+      });
+
+      return allPool.filter((o) => {
+        const matchId = String(o.orderId || o.order_id || '').toLowerCase().includes(cleanCustomerQuery);
+        const matchPhone = String(o.customerPhone || o.recipientPhone || '').includes(cleanCustomerQuery);
+        const matchName = String(o.customerName || o.recipientName || '').toLowerCase().includes(cleanCustomerQuery);
+        return matchId || matchPhone || matchName;
+      });
+    }
+
+    // When NO search query is typed:
+    // If the customer has placed orders on this device, show those orders!
+    if (myDeviceOrders.length > 0) {
+      return myDeviceOrders;
+    }
+
+    // If no personal orders on this device, return empty list so empty state is displayed
+    return [];
+  }, [cleanCustomerQuery, myDeviceOrders, orders]);
+
+  const activeCustomerOrder = selectedCustomerOrder || filteredCustomerOrders[0] || myDeviceOrders[0] || null;
+
+  // Helper to resolve bouquet thumbnail image
+  const getItemImage = (item) => {
+    if (item?.image) return item.image;
+    const matched = (products || []).find(p => p.id === item?.id || p.id === item?.productId || p.title === item?.name);
+    if (matched?.images?.[0]) return matched.images[0];
+    if (matched?.image) return matched.image;
+    return '/images/bday_royal_blue_tulip_lily_card.jpg';
+  };
 
   // Owner PIN submit
   const handleOwnerPinSubmit = (e) => {
@@ -307,7 +375,20 @@ export default function MyOrdersPage() {
               }}
             >
               <Package size={16} />
-              <span>Customer Order Tracking</span>
+              <span>🛍️ My Placed Orders</span>
+              {myDeviceOrders.length > 0 && (
+                <span style={{
+                  background: activeMode === 'customer' ? '#000000' : 'var(--text-gold)',
+                  color: activeMode === 'customer' ? '#FFFFFF' : '#000000',
+                  fontSize: '0.72rem',
+                  fontWeight: 900,
+                  padding: '2px 7px',
+                  borderRadius: '10px',
+                  marginLeft: '2px'
+                }}>
+                  {myDeviceOrders.length}
+                </span>
+              )}
             </button>
 
             <button
@@ -329,7 +410,7 @@ export default function MyOrdersPage() {
               }}
             >
               <Truck size={16} />
-              <span>👑 Store Owner & Dispatch Hub</span>
+              <span>👑 Store Dispatch Hub</span>
               {activeOrdersCount > 0 && (
                 <span style={{
                   background: activeMode === 'owner' ? '#000000' : '#D4AF37',
@@ -1219,32 +1300,32 @@ export default function MyOrdersPage() {
         )}
 
         {/* =========================================================================
-            VIEW 2: CUSTOMER ORDER TRACKING
+            VIEW 2: CUSTOMER ORDER TRACKING (Flipkart & Meesho Experience)
             ========================================================================= */}
         {activeMode === 'customer' && (
           <div>
             {/* Header */}
-            <div style={{ marginBottom: '1.75rem' }}>
-              <span className="section-pretitle">Customer Portal</span>
-              <h1 className="font-serif-editorial" style={{ fontSize: '2.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
-                My Orders & Live Floral Tracking
+            <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+              <span className="section-pretitle">Customer Orders & Live Tracking</span>
+              <h1 className="font-serif-editorial" style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                My Bouquet Orders
               </h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem' }}>
-                Track live order status, doorstep delivery OTP, courier dispatch, and print tax invoices.
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', maxWidth: '600px', margin: '0 auto' }}>
+                Track live status, secret doorstep delivery OTP, express courier dispatch, and print tax invoices.
               </p>
             </div>
 
-            {/* Lookup Box */}
-            <div className="glass-panel" style={{ padding: '1.25rem', borderRadius: 'var(--radius-md)', marginBottom: '2rem' }}>
+            {/* Quick Lookup Box */}
+            <div className="glass-panel" style={{ padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem', maxWidth: '640px', margin: '0 auto 1.5rem auto' }}>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: '240px', display: 'flex', alignItems: 'center', background: 'var(--bg-alt)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', padding: '0 12px' }}>
-                  <Search size={16} color="var(--text-muted)" />
+                <div style={{ flex: 1, minWidth: '220px', display: 'flex', alignItems: 'center', background: 'var(--bg-alt)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', padding: '0 12px' }}>
+                  <Search size={16} color="var(--text-muted)" style={{ flexShrink: 0 }} />
                   <input 
                     type="text" 
-                    placeholder="Enter 10-digit Mobile Number or Order ID (e.g. RB-2026-XXXXXX)"
+                    placeholder="Search by Order ID (RB-XXXXXX) or Mobile..."
                     value={customerSearch}
                     onChange={(e) => setCustomerSearch(e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: 'none', fontSize: '0.9rem', outline: 'none' }}
+                    style={{ width: '100%', padding: '0.65rem 0.5rem', background: 'transparent', border: 'none', fontSize: '0.88rem', outline: 'none', color: 'var(--text-primary)' }}
                   />
                 </div>
                 {customerSearch && (
@@ -1252,246 +1333,428 @@ export default function MyOrdersPage() {
                     type="button" 
                     className="btn btn-outline btn-sm"
                     onClick={() => setCustomerSearch('')}
+                    style={{ fontSize: '0.78rem', padding: '0.5rem 0.85rem' }}
                   >
-                    Clear Search
+                    Clear
                   </button>
                 )}
               </div>
             </div>
 
+            {/* If No Orders Matched */}
             {filteredCustomerOrders.length === 0 ? (
-              <div className="glass-panel" style={{ padding: '4rem 1rem', textAlign: 'center', borderRadius: 'var(--radius-md)' }}>
-                <Package size={48} color="var(--text-muted)" style={{ margin: '0 auto 1rem auto' }} />
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-                  No Orders Found Matching "{customerSearch}"
-                </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                  Verify your mobile number or order reference, or explore our fresh bouquet collections.
-                </p>
-                <button 
-                  type="button" 
-                  className="btn btn-primary"
-                  onClick={() => navigateTo('shop')}
-                >
-                  Start Shopping Now
-                </button>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', alignItems: 'start' }}>
-                
-                {/* Orders List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Your Orders ({filteredCustomerOrders.length})
-                  </h3>
-
-                  {filteredCustomerOrders.map((ord) => {
-                    const isSelected = activeCustomerOrder?.orderId === ord.orderId;
-                    return (
-                      <div 
-                        key={ord.orderId}
-                        className="glass-panel"
-                        onClick={() => setSelectedCustomerOrder(ord)}
-                        style={{
-                          padding: '1.25rem',
-                          borderRadius: 'var(--radius-md)',
-                          cursor: 'pointer',
-                          border: isSelected ? '2px solid var(--text-gold)' : '1px solid var(--border-subtle)',
-                          background: isSelected ? 'var(--bg-accent-soft)' : 'var(--bg-surface)',
-                          transition: 'all 0.2s ease'
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                          <div>
-                            <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'monospace' }}>
-                              #{ord.orderId}
-                            </strong>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                              {new Date(ord.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </div>
-                          </div>
-
-                          <span style={{
-                            ...getStatusBadgeStyle(ord.status),
-                            padding: '3px 10px',
-                            borderRadius: 'var(--radius-full)',
-                            fontSize: '0.75rem',
-                            fontWeight: 700
-                          }}>
-                            ● {ord.status || 'Order Placed'}
-                          </span>
-                        </div>
-
-                        <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                          {(ord.items || []).map(i => `${i.name} (${i.quantity}x)`).join(', ')}
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.65rem' }}>
-                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                            Slot: <strong>{ord.deliverySlot?.split('(')[0] || 'Standard'}</strong>
-                          </span>
-                          <strong style={{ fontSize: '1.1rem', color: 'var(--text-accent)' }}>
-                            ₹{ord.total}
-                          </strong>
-                        </div>
-                      </div>
-                    );
-                  })}
+              <div className="glass-panel" style={{ padding: '3rem 1.5rem', textAlign: 'center', borderRadius: 'var(--radius-md)', maxWidth: '560px', margin: '0 auto' }}>
+                <div style={{
+                  width: '68px',
+                  height: '68px',
+                  borderRadius: '50%',
+                  background: 'rgba(212, 175, 55, 0.12)',
+                  border: '1.5px solid var(--border-gold)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.25rem auto'
+                }}>
+                  <ShoppingBag size={32} color="var(--text-gold)" />
                 </div>
 
-                {/* Selected Order Detailed View */}
-                {activeCustomerOrder && (
-                  <div className="glass-panel" style={{ padding: '1.75rem', borderRadius: 'var(--radius-md)', border: '1.5px solid var(--border-gold)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '1rem', marginBottom: '1.25rem' }}>
-                      <div>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-gold)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                          Live Order Details
-                        </span>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'monospace', margin: '2px 0 0 0' }}>
-                          {activeCustomerOrder.orderId}
-                        </h2>
-                      </div>
-
-                      <span style={{
-                        ...getStatusBadgeStyle(activeCustomerOrder.status),
-                        padding: '4px 12px',
-                        borderRadius: 'var(--radius-full)',
-                        fontSize: '0.8rem',
-                        fontWeight: 700
-                      }}>
-                        ● {activeCustomerOrder.status || 'Order Placed'}
-                      </span>
-                    </div>
-
-                    {/* Secret Delivery OTP Box */}
-                    <div style={{
-                      background: 'rgba(16, 185, 129, 0.08)',
-                      border: '1.5px dashed #10B981',
-                      borderRadius: 'var(--radius-sm)',
-                      padding: '1rem',
-                      marginBottom: '1.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between'
-                    }}>
-                      <div>
-                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', textTransform: 'uppercase' }}>
-                          Secret Delivery Handover OTP
-                        </div>
-                        <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#047857', fontFamily: 'monospace', letterSpacing: '3px' }}>
-                          {activeCustomerOrder.deliveryOtp || '4892'}
-                        </div>
-                      </div>
-                      <div style={{ maxWidth: '220px', fontSize: '0.74rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
-                        Share this code with the rider at your door only after receiving your bouquet.
-                      </div>
-                    </div>
-
-                    {/* Visual Progress Timeline */}
-                    <div style={{ marginBottom: '1.5rem' }}>
-                      <h4 style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--text-primary)' }}>
-                        Fulfillment Timeline
-                      </h4>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.2rem', textAlign: 'center' }}>
-                        {[
-                          { title: 'Placed', done: true },
-                          { title: 'Confirmed', done: activeCustomerOrder.status !== 'Order Placed' },
-                          { title: 'Packed', done: ['Packed', 'Shipped', 'Out for Delivery', 'Delivered'].includes(activeCustomerOrder.status) },
-                          { title: 'Shipped', done: ['Shipped', 'Out for Delivery', 'Delivered'].includes(activeCustomerOrder.status) },
-                          { title: 'Delivered', done: activeCustomerOrder.status === 'Delivered' }
-                        ].map((st, i) => (
-                          <div key={st.title} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{
-                              width: '28px',
-                              height: '28px',
-                              borderRadius: '50%',
-                              background: st.done ? '#10B981' : 'var(--bg-alt)',
-                              color: st.done ? '#FFF' : 'var(--text-muted)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              marginBottom: '4px',
-                              border: '1px solid var(--border-subtle)'
-                            }}>
-                              {st.done ? '✓' : i + 1}
-                            </div>
-                            <span style={{ fontSize: '0.68rem', fontWeight: st.done ? 700 : 500, color: st.done ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                              {st.title}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Courier / Shipping Tracking */}
-                    <div style={{ background: 'var(--bg-alt)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', marginBottom: '1.5rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
-                        <Truck size={15} color="var(--text-gold)" />
-                        <span>Courier & Dispatch Details</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        <div><strong>Courier Partner:</strong> {activeCustomerOrder.courier?.provider || 'Risika Blooms Dedicated Express Rider'}</div>
-                        <div><strong>Delivery Date:</strong> {activeCustomerOrder.deliveryDate || 'Scheduled for Today'}</div>
-                        <div><strong>Delivery Slot:</strong> {activeCustomerOrder.deliverySlot || 'Standard Delivery'}</div>
-                      </div>
-                    </div>
-
-                    {/* Destination & Recipient */}
-                    <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '3px' }}>
-                        Destination:
-                      </div>
-                      <div>Recipient: <strong>{activeCustomerOrder.recipientName || activeCustomerOrder.customerName}</strong></div>
-                      <div>Address: {activeCustomerOrder.deliveryAddress}</div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                {customerSearch.trim() ? (
+                  <>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                      No Orders Matching "{customerSearch}"
+                    </h3>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+                      Please verify your order reference number or 10-digit mobile number, or clear your search to see your bouquets.
+                    </p>
+                    <button 
+                      type="button" 
+                      className="btn btn-outline btn-sm"
+                      onClick={() => setCustomerSearch('')}
+                    >
+                      Clear Search Filter
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '0.45rem', color: 'var(--text-primary)' }}>
+                      No Orders Placed Yet
+                    </h3>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: 1.5 }}>
+                      You haven't placed any flower bouquet orders on this device yet. Browse our handcrafted luxury collections and make any occasion memorable!
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
                       <button 
                         type="button" 
-                        className="btn btn-gold btn-sm"
-                        onClick={() => window.print()}
+                        className="btn btn-primary"
+                        onClick={() => navigateTo('shop')}
+                        style={{ padding: '0.75rem 1.75rem', fontWeight: 700 }}
                       >
-                        <Printer size={14} />
-                        <span>Print Invoice</span>
+                        <span>🌸 Explore Bouquets & Shop Now</span>
+                        <ArrowRight size={16} />
                       </button>
 
-                      <button 
-                        type="button" 
-                        className="btn btn-outline btn-sm"
-                        onClick={() => navigateTo('contact')}
-                      >
-                        Contact Concierge
-                      </button>
-
-                      <button 
-                        type="button" 
-                        className="btn btn-gold btn-sm"
-                        onClick={() => {
-                          const item = activeCustomerOrder.items?.[0];
-                          const prod = (products || []).find(p => p.id === (item?.productId || item?.id)) || (products || [])[0];
-                          openWriteReviewModal(prod);
-                        }}
+                      <button
+                        type="button"
+                        onClick={() => setCustomerSearch('RB-784291')}
                         style={{
-                          background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                          background: 'transparent',
                           border: 'none',
-                          color: '#FFFFFF',
-                          fontWeight: 700,
+                          color: 'var(--text-gold)',
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          marginTop: '0.5rem'
+                        }}
+                      >
+                        Preview Demo Order Tracking (RB-784291)
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              /* List of Customer Order Cards (Flipkart & Meesho Mobile Style) */
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '780px', margin: '0 auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                    Showing {filteredCustomerOrders.length} {filteredCustomerOrders.length === 1 ? 'Order' : 'Orders'}
+                  </span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    Live Doorstep Delivery Tracking Active
+                  </span>
+                </div>
+
+                {filteredCustomerOrders.map((ord) => {
+                  const targetPhone = ord.recipientPhone || ord.customerPhone || '';
+                  const cleanPhone = String(targetPhone).replace(/\D/g, '');
+                  const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+                  const slotMeta = getSlotMeta(ord.deliverySlot);
+                  const fullAddress = ord.deliveryAddress || `${ord.houseNo || ''} ${ord.streetAddress || ''} ${ord.landmark ? 'Near ' + ord.landmark : ''} ${ord.city || ''} ${ord.pincode || ''}`.trim();
+                  const googleMapsUrl = ord.locationUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress || 'New Delhi')}`;
+                  
+                  // Primary bouquet product for reviews
+                  const firstItem = ord.items?.[0];
+                  const primaryProduct = (products || []).find(p => p.id === (firstItem?.productId || firstItem?.id) || p.title === firstItem?.name) || (products || [])[0];
+
+                  return (
+                    <div 
+                      key={ord.orderId}
+                      className="glass-panel"
+                      style={{
+                        padding: '1.25rem',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1.5px solid var(--border-gold)',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+                        background: 'var(--bg-surface)'
+                      }}
+                    >
+                      {/* 1. Order Header: ID, Date, Status */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.85rem', marginBottom: '1rem' }}>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <strong style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontFamily: 'monospace' }}>
+                              #{ord.orderId}
+                            </strong>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(ord.orderId, `id-${ord.orderId}`)}
+                              title="Copy Order ID"
+                              style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '2px', display: 'inline-flex' }}
+                            >
+                              {copiedId === `id-${ord.orderId}` ? <Check size={14} color="#10B981" /> : <Copy size={14} />}
+                            </button>
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                            Placed on {new Date(ord.createdAt || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+
+                        <span style={{
+                          ...getStatusBadgeStyle(ord.status),
+                          padding: '4px 12px',
+                          borderRadius: 'var(--radius-full)',
+                          fontSize: '0.78rem',
+                          fontWeight: 800,
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '6px',
-                          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
-                        }}
-                      >
-                        <Camera size={14} />
-                        <span>⭐ Rate & Review with Photos</span>
-                      </button>
+                          gap: '5px'
+                        }}>
+                          <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'currentColor', display: 'inline-block' }}></span>
+                          <span>{ord.status || 'Order Placed'}</span>
+                        </span>
+                      </div>
 
+                      {/* 2. Secret Delivery Handover OTP Card */}
+                      <div style={{
+                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.05) 100%)',
+                        border: '1.5px dashed #10B981',
+                        borderRadius: 'var(--radius-sm)',
+                        padding: '0.85rem 1rem',
+                        marginBottom: '1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '0.65rem'
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#047857', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <KeyRound size={13} />
+                            <span>Secret Delivery Handover OTP</span>
+                          </div>
+                          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#047857', fontFamily: 'monospace', letterSpacing: '3px', marginTop: '1px' }}>
+                            {ord.deliveryOtp || '4892'}
+                          </div>
+                        </div>
+                        <div style={{ maxWidth: '240px', fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
+                          Share this 4-digit code with our rider at your doorstep only after receiving your bouquet.
+                        </div>
+                      </div>
+
+                      {/* 3. Visual Progress Stepper (Flipkart / Meesho Timeline) */}
+                      <div style={{ marginBottom: '1.25rem', background: 'var(--bg-alt)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.65rem' }}>
+                          Delivery Progress Tracker
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.15rem', textAlign: 'center' }}>
+                          {[
+                            { title: 'Placed', done: true },
+                            { title: 'Confirmed', done: ord.status !== 'Order Placed' },
+                            { title: 'Packed', done: ['Packed', 'Shipped', 'Out for Delivery', 'Delivered'].includes(ord.status) },
+                            { title: 'Out for Delivery', done: ['Out for Delivery', 'Delivered'].includes(ord.status) },
+                            { title: 'Delivered', done: ord.status === 'Delivered' }
+                          ].map((st, i) => (
+                            <div key={st.title} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                              <div style={{
+                                width: '26px',
+                                height: '26px',
+                                borderRadius: '50%',
+                                background: st.done ? '#10B981' : 'var(--bg-surface)',
+                                color: st.done ? '#FFF' : 'var(--text-muted)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                marginBottom: '4px',
+                                border: st.done ? '1.5px solid #10B981' : '1px solid var(--border-subtle)'
+                              }}>
+                                {st.done ? '✓' : i + 1}
+                              </div>
+                              <span style={{ fontSize: '0.64rem', fontWeight: st.done ? 800 : 500, color: st.done ? 'var(--text-primary)' : 'var(--text-muted)', lineHeight: 1.2 }}>
+                                {st.title}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 4. Products in this Order (with Bouquet Images) */}
+                      <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                          Ordered Bouquets ({ord.items?.length || 1})
+                        </div>
+
+                        {(ord.items && ord.items.length > 0 ? ord.items : [
+                          { name: 'Luxury Handcrafted Velvet Bouquet', price: ord.total || 1399, quantity: 1 }
+                        ]).map((item, idx) => {
+                          const itemImg = getItemImage(item);
+                          return (
+                            <div 
+                              key={idx}
+                              style={{
+                                display: 'flex',
+                                gap: '0.85rem',
+                                alignItems: 'center',
+                                padding: '0.65rem 0',
+                                borderBottom: idx < (ord.items?.length || 1) - 1 ? '1px solid var(--border-subtle)' : 'none'
+                              }}
+                            >
+                              <img 
+                                src={itemImg} 
+                                alt={item.name}
+                                style={{
+                                  width: '60px',
+                                  height: '60px',
+                                  borderRadius: '8px',
+                                  objectFit: 'cover',
+                                  border: '1.5px solid var(--border-subtle)',
+                                  flexShrink: 0
+                                }}
+                                onError={(e) => { e.target.src = '/images/bday_royal_blue_tulip_lily_card.jpg'; }}
+                              />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <h4 style={{ fontSize: '0.92rem', fontWeight: 700, margin: '0 0 2px 0', color: 'var(--text-primary)' }}>
+                                  {item.name}
+                                </h4>
+                                <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
+                                  {item.selectedColor && <span>Color: <strong>{item.selectedColor}</strong> • </span>}
+                                  <span>Qty: <strong>{item.quantity || 1}</strong></span>
+                                </div>
+                                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--text-accent)', marginTop: '2px' }}>
+                                  ₹{item.price * (item.quantity || 1)}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* 5. Schedule & Delivery Info */}
+                      <div style={{
+                        background: 'var(--bg-alt)',
+                        padding: '0.85rem',
+                        borderRadius: 'var(--radius-sm)',
+                        border: '1px solid var(--border-subtle)',
+                        marginBottom: '1rem',
+                        fontSize: '0.82rem',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                        gap: '0.75rem'
+                      }}>
+                        <div>
+                          <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                            Delivery Slot & Date
+                          </div>
+                          <div style={{ fontWeight: 800, color: slotMeta.color, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <span>{slotMeta.icon}</span>
+                            <span>{slotMeta.label}</span>
+                          </div>
+                          <div style={{ color: 'var(--text-secondary)', marginTop: '2px', fontSize: '0.78rem' }}>
+                            Scheduled for: <strong>{ord.deliveryDate ? new Date(ord.deliveryDate).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) : 'Today'}</strong>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                            Recipient & Destination
+                          </div>
+                          <div style={{ fontWeight: 800, color: 'var(--text-primary)', marginTop: '2px' }}>
+                            {ord.recipientName || ord.customerName || 'Valued Recipient'}
+                          </div>
+                          <div style={{ color: 'var(--text-secondary)', marginTop: '2px', fontSize: '0.78rem', lineHeight: 1.35 }}>
+                            {fullAddress || 'Address in confirmation'}
+                          </div>
+                          {fullAddress && (
+                            <a
+                              href={googleMapsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', color: 'var(--text-gold)', fontSize: '0.75rem', fontWeight: 700, marginTop: '4px', textDecoration: 'none' }}
+                            >
+                              <MapPin size={12} />
+                              <span>View Destination on Map</span>
+                              <ExternalLink size={10} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 6. Personalized Greeting Card (if present) */}
+                      {ord.giftMessage && (
+                        <div style={{
+                          background: 'rgba(212, 175, 55, 0.08)',
+                          border: '1.5px dashed var(--border-gold)',
+                          borderRadius: 'var(--radius-sm)',
+                          padding: '0.75rem 1rem',
+                          marginBottom: '1rem',
+                          fontSize: '0.82rem'
+                        }}>
+                          <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-gold)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '3px' }}>
+                            <Heart size={12} color="var(--text-gold)" fill="var(--text-gold)" />
+                            <span>Complimentary Gift Card Message:</span>
+                          </div>
+                          <div style={{ fontStyle: 'italic', color: 'var(--text-primary)', lineHeight: 1.4 }}>
+                            "{ord.giftMessage}"
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 7. Total & Payment */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem', marginBottom: '1rem' }}>
+                        <div>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Payment Mode: </span>
+                          <strong style={{ fontSize: '0.82rem', color: 'var(--text-primary)' }}>{ord.paymentMethod || 'Cash on Delivery'}</strong>
+                        </div>
+                        <div>
+                          <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginRight: '6px' }}>Total Amount:</span>
+                          <strong style={{ fontSize: '1.25rem', color: 'var(--text-accent)' }}>₹{ord.total}</strong>
+                        </div>
+                      </div>
+
+                      {/* 8. Action Buttons (Invoice, Review with Photos, WhatsApp Concierge) */}
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <button 
+                          type="button" 
+                          className="btn btn-outline btn-sm"
+                          onClick={() => window.print()}
+                          style={{ fontSize: '0.78rem', padding: '0.45rem 0.85rem' }}
+                        >
+                          <Printer size={13} />
+                          <span>Print Slip / Invoice</span>
+                        </button>
+
+                        <button 
+                          type="button" 
+                          className="btn btn-gold btn-sm"
+                          onClick={() => {
+                            if (openWriteReviewModal) {
+                              openWriteReviewModal(primaryProduct);
+                            }
+                          }}
+                          style={{
+                            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                            border: 'none',
+                            color: '#FFFFFF',
+                            fontWeight: 700,
+                            fontSize: '0.78rem',
+                            padding: '0.45rem 0.85rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                            boxShadow: '0 2px 8px rgba(16, 185, 129, 0.25)'
+                          }}
+                        >
+                          <Camera size={13} />
+                          <span>⭐ Rate & Review with Photos</span>
+                        </button>
+
+                        {cleanPhone && (
+                          <a
+                            href={`tel:${cleanPhone}`}
+                            className="btn btn-outline btn-sm"
+                            style={{ fontSize: '0.78rem', padding: '0.45rem 0.85rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                          >
+                            <Phone size={13} />
+                            <span>Call Concierge</span>
+                          </a>
+                        )}
+
+                        <a
+                          href={createWhatsAppUrl(`Hello! I need an update regarding my Rishika Blooms Order #${ord.orderId}.`, waPhone || brandConfig?.whatsappNumber)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm"
+                          style={{
+                            fontSize: '0.78rem',
+                            padding: '0.45rem 0.85rem',
+                            background: '#25D366',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontWeight: 700
+                          }}
+                        >
+                          <MessageCircle size={13} />
+                          <span>WhatsApp Update</span>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })}
               </div>
             )}
           </div>

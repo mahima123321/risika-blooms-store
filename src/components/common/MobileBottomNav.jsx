@@ -8,11 +8,16 @@ export default function MobileBottomNav() {
     navigateTo, 
     cartCount,
     isOwnerAuthenticated,
+    customerOrders,
     orders
   } = useShop();
 
   const activePage = currentView?.page || 'home';
-  const activeOrdersCount = (orders || []).filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled').length;
+  // Personal customer orders on this device
+  const activeCustomerOrdersCount = (customerOrders || []).filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled').length;
+  // Fallback to active store orders if owner mode
+  const activeOwnerOrdersCount = (orders || []).filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled').length;
+  const badgeCount = activeCustomerOrdersCount > 0 ? activeCustomerOrdersCount : (isOwnerAuthenticated ? activeOwnerOrdersCount : 0);
 
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
@@ -66,19 +71,17 @@ export default function MobileBottomNav() {
       <button 
         type="button"
         className={`mobile-nav-btn ${activePage === 'my-orders' || activePage === 'order-tracking' ? 'active' : ''}`}
-        onClick={() => navigateTo('my-orders', isOwnerAuthenticated ? { mode: 'owner' } : {})}
+        onClick={() => navigateTo('my-orders', { mode: 'customer' })}
       >
         <div className="mobile-nav-icon-wrapper">
-          <Truck size={20} color={isOwnerAuthenticated ? '#D4AF37' : 'currentColor'} />
-          {isOwnerAuthenticated && activeOrdersCount > 0 && (
-            <span className="mobile-nav-badge" style={{ backgroundColor: '#D4AF37', color: '#000000', fontSize: '0.62rem', fontWeight: 900 }}>
-              {activeOrdersCount}
+          <Truck size={20} />
+          {badgeCount > 0 && (
+            <span className="mobile-nav-badge" style={{ backgroundColor: activeCustomerOrdersCount > 0 ? '#10B981' : '#D4AF37', color: activeCustomerOrdersCount > 0 ? '#FFFFFF' : '#000000', fontSize: '0.62rem', fontWeight: 900 }}>
+              {badgeCount}
             </span>
           )}
         </div>
-        <span style={{ color: isOwnerAuthenticated ? '#D4AF37' : 'inherit', fontWeight: isOwnerAuthenticated ? 700 : 500 }}>
-          {isOwnerAuthenticated ? 'Dispatch' : 'Orders'}
-        </span>
+        <span>Orders</span>
       </button>
     </nav>
   );
