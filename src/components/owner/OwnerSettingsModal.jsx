@@ -1454,7 +1454,13 @@ export default function OwnerSettingsModal() {
                     );
                   }).length;
 
-                  const displayName = cat.name || cat.title || cat.heading || cat.categoryName || 'Exclusive Floral Collection';
+                  const displayName = (typeof cat.name === 'string' && cat.name.trim()) ||
+                                      (typeof cat.title === 'string' && cat.title.trim()) ||
+                                      (typeof cat.heading === 'string' && cat.heading.trim()) ||
+                                      (typeof cat.categoryName === 'string' && cat.categoryName.trim()) ||
+                                      (CATEGORIES.find((c) => c.id === cat.id || c.slug === cat.slug)?.name) ||
+                                      (cat.slug ? cat.slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'Exclusive Floral Collection');
+                  const categoryThumbImage = cat.image || cat.bannerImage || (CATEGORIES.find((c) => c.id === cat.id || c.slug === cat.slug)?.image) || '/images/red_roses_luxury_bouquet.jpg';
                   const cleanEn = displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
                   const cleanHi = (cat.nameHindi || '').toLowerCase().replace(/[^a-z0-9]/g, '');
                   const isDuplicateSubtitle = !cat.nameHindi || (cleanHi && cleanEn && cleanHi === cleanEn);
@@ -1463,7 +1469,7 @@ export default function OwnerSettingsModal() {
                     <div key={cat.id || cat.slug || idx} className="owner-category-item-card">
                       <div className="owner-category-top-row">
                         <img 
-                          src={cat.image || cat.bannerImage || '/images/red_roses_luxury_bouquet.jpg'} 
+                          src={categoryThumbImage} 
                           alt={displayName} 
                           className="owner-category-thumb"
                           onError={(e) => { e.target.src = '/images/red_roses_luxury_bouquet.jpg'; }}

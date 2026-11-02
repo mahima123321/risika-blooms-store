@@ -41,15 +41,38 @@ export function ShopProvider({ children }) {
     return [...PRODUCTS];
   });
 
+  // Helper to ensure every category always has valid name, image, and slug
+  const sanitizeCategoryItem = (cat) => {
+    if (!cat) return null;
+    const defaultMatch = INITIAL_CATEGORIES.find((d) => d.id === cat.id || d.slug === cat.slug);
+    const validName = (typeof cat.name === 'string' && cat.name.trim()) ||
+                      (typeof cat.title === 'string' && cat.title.trim()) ||
+                      (typeof cat.heading === 'string' && cat.heading.trim()) ||
+                      (typeof cat.categoryName === 'string' && cat.categoryName.trim()) ||
+                      defaultMatch?.name ||
+                      (cat.slug ? cat.slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'Floral Collection');
+    const validImage = cat.image || cat.bannerImage || defaultMatch?.image || '/images/red_roses_luxury_bouquet.jpg';
+    return {
+      ...defaultMatch,
+      ...cat,
+      name: validName,
+      image: validImage,
+      id: cat.id || defaultMatch?.id || `cat-${Date.now()}`,
+      slug: cat.slug || defaultMatch?.slug || validName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    };
+  };
+
   // Live reactive categories catalog (synced with localStorage)
   const [categories, setCategories] = useState(() => {
     try {
       const saved = localStorage.getItem('rb_custom_categories');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // If valid, contains all categories and all have valid names
-        if (Array.isArray(parsed) && parsed.length >= 10 && parsed.every((c) => c && c.name && String(c.name).trim().length > 0)) {
-          return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const sanitized = parsed.map(sanitizeCategoryItem).filter(Boolean);
+          if (sanitized.length >= 10) {
+            return sanitized;
+          }
         }
       }
     } catch (e) {
@@ -267,8 +290,11 @@ export function ShopProvider({ children }) {
     const unsubCategories = subscribeToCloudCategories(
       (cloudCats) => {
         if (cloudCats && cloudCats.length > 0) {
-          const activeCats = cloudCats.filter((c) => !c.isDeleted);
-          const deletedCatIds = new Set(cloudCats.filter((c) => c.isDeleted).map((c) => String(c.id || c.slug)));
+          const activeCats = cloudCats
+            .filter((c) => c && !c.isDeleted)
+            .map(sanitizeCategoryItem)
+            .filter(Boolean);
+          const deletedCatIds = new Set(cloudCats.filter((c) => c && c.isDeleted).map((c) => String(c.id || c.slug)));
           const cloudSlugs = new Set(activeCats.map((c) => String(c.id || c.slug)));
           const defaultRemaining = INITIAL_CATEGORIES.filter(
             (c) => !cloudSlugs.has(String(c.id || c.slug)) && !deletedCatIds.has(String(c.id || c.slug))

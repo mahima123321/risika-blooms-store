@@ -568,7 +568,7 @@ export default function Header() {
       {/* 4. Mobile Slide-Out Navigation Drawer */}
       {isMobileMenuOpen && (
         <div 
-          className="drawer-backdrop open mobile-drawer-backdrop" 
+          className="mobile-drawer-backdrop-portal" 
           onClick={() => setIsMobileMenuOpen(false)}
           onTouchMove={(e) => {
             if (e.target === e.currentTarget) {
@@ -577,7 +577,7 @@ export default function Header() {
           }}
         >
           <div 
-            className="mobile-nav-drawer glass-panel" 
+            className="mobile-nav-drawer" 
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
           >
@@ -671,28 +671,30 @@ export default function Header() {
                 <button type="button" className="mobile-drawer-link-subtle" onClick={() => handleNavClick('contact')}>
                   📞 Contact Customer Concierge
                 </button>
-                <button type="button" className="mobile-drawer-link-subtle" onClick={() => { setIsMobileMenuOpen(false); openWriteReviewModal(); }} style={{ color: "#D4AF37", fontWeight: 700 }}>
-                  📸 Write Feedback & Photo Review (Camera)
+                <button type="button" className="mobile-drawer-link-subtle" onClick={() => { setIsMobileMenuOpen(false); openWriteReviewModal(); }} style={{ color: "#D4AF37", fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Camera size={16} color="#D4AF37" />
+                  <span>Write Feedback & Photo Review</span>
                 </button>
               </div>
-
-              
 
               {/* Quick Utility Controls inside Drawer */}
               <div className="mobile-drawer-toggles">
                 <button 
                   type="button" 
-                  className="btn btn-outline btn-sm" 
+                  className="btn btn-outline btn-sm mobile-drawer-toggle-btn" 
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     openQrModal();
                   }} 
-                  style={{ flex: 1 }}
                 >
                   <QrCode size={14} />
-                  <span>QR Code & Scanner</span>
+                  <span>QR Scanner</span>
                 </button>
-                <button type="button" className="btn btn-outline btn-sm" onClick={toggleTheme} style={{ flex: 1 }}>
+                <button 
+                  type="button" 
+                  className="btn btn-outline btn-sm mobile-drawer-toggle-btn" 
+                  onClick={toggleTheme}
+                >
                   {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
                   <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
                 </button>
@@ -700,13 +702,7 @@ export default function Header() {
 
               {/* Store Owner Studio Panel - When Authenticated on Mobile */}
               {isOwnerAuthenticated ? (
-                <div style={{
-                  marginTop: '1.25rem',
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'rgba(212, 175, 55, 0.08)',
-                  border: '1.5px solid rgba(212, 175, 55, 0.3)'
-                }}>
+                <div className="mobile-drawer-owner-card">
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <Crown size={16} color="#D4AF37" />
@@ -717,102 +713,88 @@ export default function Header() {
                     <span style={{ fontSize: '0.72rem', color: '#10B981', fontWeight: 700 }}>● Active</span>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.45rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', width: '100%', boxSizing: 'border-box' }}>
                     <button
                       type="button"
-                      className="btn btn-gold btn-sm"
+                      className="btn btn-gold btn-sm mobile-owner-btn-delivery"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         navigateTo('my-orders', { mode: 'owner' });
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.84rem', fontWeight: 800, background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)', color: '#000000' }}
                     >
-                      <Truck size={15} style={{ marginRight: '6px' }} />
-                      <span>🚚 Delivery Schedule & Orders</span>
+                      <Truck size={15} style={{ flexShrink: 0 }} />
+                      <span>Delivery Schedule & Orders</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-item"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         openAddProductModal();
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.82rem', background: 'var(--bg-surface)' }}
                     >
                       <span>+ Add New Bouquet</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-item"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         openOwnerSettingsModal('categories');
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
                     >
                       <span>📁 Manage Categories</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-item"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         openOwnerSettingsModal('catalog');
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
                     >
                       <span>💐 Bouquet Catalog ({products?.length || 0})</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-item"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         openOwnerSettingsModal('payment');
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
                     >
                       <span>💳 Payment QR & Scanner Settings</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-item"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         openOwnerSettingsModal('numbers');
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.8rem', background: 'var(--bg-surface)' }}
                     >
                       <span>⚙️ Boutique & WhatsApp Settings</span>
                     </button>
 
                     <button
                       type="button"
-                      className="btn btn-outline btn-sm"
+                      className="btn btn-outline btn-sm mobile-owner-btn-exit"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         logoutOwner();
                       }}
-                      style={{ justifyContent: 'center', fontSize: '0.78rem', color: '#EF4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
                     >
                       <span>Exit Owner Mode</span>
                     </button>
                   </div>
                 </div>
               ) : (
-                <div style={{
-                  marginTop: '1.25rem',
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'rgba(212, 175, 55, 0.08)',
-                  border: '1.5px dashed rgba(212, 175, 55, 0.4)',
-                  textAlign: 'center'
-                }}>
+                <div className="mobile-drawer-owner-card" style={{ background: 'rgba(212, 175, 55, 0.08)', border: '1.5px dashed rgba(212, 175, 55, 0.4)', textAlign: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '0.35rem' }}>
                     <Crown size={16} color="#D4AF37" />
                     <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#D4AF37', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -829,7 +811,7 @@ export default function Header() {
                       setIsMobileMenuOpen(false);
                       openOwnerLogin();
                     }}
-                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.82rem', fontWeight: 800 }}
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.82rem', fontWeight: 800, borderRadius: 'var(--radius-full)' }}
                   >
                     👑 Store Owner Login (PIN: risika2026)
                   </button>
